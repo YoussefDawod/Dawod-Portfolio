@@ -238,6 +238,10 @@ export function useBGSAnimation({ canvasRef, imageRef, imageBehindRef, glowRef }
             lastWindowWidthRef.current = currentWidth;
         };
         window.addEventListener('resize', handleResize);
+        // Mobile Browser (iOS Safari, Chrome Android) feuern `resize` beim
+        // Toolbar-Ein/Ausblenden nicht zuverlässig. visualViewport ist hier präzise
+        // und verhindert, dass Canvas-Pixel-Auflösung und CSS-Größe auseinanderlaufen.
+        window.visualViewport?.addEventListener('resize', handleResize);
 
         // ===== VISIBILITY (Tab-Wechsel → RAF pausieren) =====
         let isTabVisible = true;
@@ -341,6 +345,7 @@ export function useBGSAnimation({ canvasRef, imageRef, imageBehindRef, glowRef }
             if (!isTouchDevice) { window.removeEventListener('mousemove', handleMouseMove); window.removeEventListener('mouseleave', handleMouseLeave); }
             window.removeEventListener('scroll', handleScroll);
             window.removeEventListener('resize', handleResize);
+            window.visualViewport?.removeEventListener('resize', handleResize);
             document.removeEventListener('click', handleFirstInteraction);
             document.removeEventListener('touchstart', handleFirstInteraction);
             document.documentElement.style.removeProperty('--home-dissolve');

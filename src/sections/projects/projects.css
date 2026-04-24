@@ -4,8 +4,10 @@
 
 /* --- Container ----------------------------------------- */
 .projects {
-  height: 100vh;  /* fallback für ältere Browser */
-  height: 100dvh; /* überschreibt vh in modernen Browsern */
+  /* Section erbt bereits min-height: 100dvh von App.css.
+     Hier fixieren wir die Höhe auf genau dvh, damit das interne Grid
+     (2fr/1fr) nicht wächst. */
+  height: 100dvh;
 }
 
 /* --- Desktop: Grid 1fr (main) + 280px (carousel) ------- */
