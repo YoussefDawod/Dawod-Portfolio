@@ -1,0 +1,31 @@
+/* ============================================================================
+   SKILL GROUP — Kategoriename + Badge-Liste
+   ============================================================================ */
+
+.skill-group {
+  --card-accent: var(--hi);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+}
+
+.skill-group-name {
+  font-size: clamp(0.75rem, 1vw, 0.85rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--hi);
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.2rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--hi) 12%, transparent);
+}
+
+.skill-group-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  height: 100%;
+}

@@ -1,0 +1,172 @@
+/* ============================================================================
+   ABOUT SECTION — Layout (Phase 3)
+   ============================================================================
+   Flächenlogik, Abstände, Grid-Systeme, responsive Breakpoints.
+   Komponentenspezifisches Styling liegt in den jeweiligen CSS-Dateien.
+   ============================================================================ */
+
+/* ============================================================================
+   DESKTOP (Default)
+   ============================================================================ */
+
+.about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 150vh;
+  padding: clamp(2rem, 3vh, 3rem) clamp(2rem, 6vw, 7rem);
+  gap: clamp(5rem, 7vh, 8rem);
+  color: var(--txt);
+  position: relative;
+  text-align: justify;
+}
+
+/* --- Dot-Grid Background Layer --- */
+.about-dot-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--brand) 14%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 28px 28px;
+  /* Oben stärker, rechts leicht abgeschwächt, nach unten transparent */
+  mask-image:
+    linear-gradient(to bottom, black 0%, black 35%, transparent 85%),
+    linear-gradient(to right, black 0%, black 80%, transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-image:
+    linear-gradient(to bottom, black 0%, black 35%, transparent 85%),
+    linear-gradient(to right, black 0%, black 60%, transparent 100%);
+  -webkit-mask-composite: source-in;
+}
+
+/* --- Alle Content-Blöcke über dem Dot-Grid --- */
+.about > *:not(.about-dot-grid) {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* ============================================================================
+   SCROLL-REVEAL — Block-Level Animations
+   ============================================================================
+   Jeder Block hat seinen eigenen IntersectionObserver. Erst wenn
+   .block-visible gesetzt wird, laufen die Animationen.
+   Cards / Skills: Stagger via --stagger Custom Property.
+   Timeline hat einen eigenen internen Observer.
+   ============================================================================ */
+
+/* Startzustand: unsichtbar */
+.about .section-header,
+.about-principles > div,
+.about .about-ai,
+.about-skills > div {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+/* --- SectionHeader --- */
+.block-visible > .section-header {
+  animation: fadeUp 0.8s ease forwards;
+}
+
+/* --- Principles Cards mit Stagger --- */
+.about-principles.block-visible > div {
+  animation: fadeUp 0.7s ease forwards;
+  animation-delay: calc(var(--stagger, 0) * 0.15s);
+}
+
+/* --- AI-Highlight --- */
+.about-ai.block-visible {
+  animation: fadeUp 0.8s ease forwards;
+}
+
+/* --- Skills Gruppen mit Stagger --- */
+.about-skills.block-visible > div {
+  animation: fadeUp 0.7s ease forwards;
+  animation-delay: calc(var(--stagger, 0) * 0.15s);
+}
+
+.about-skills .skill-badge-row {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.about-skills.block-visible .skill-badge-row {
+  animation: fadeUp 0.45s ease forwards;
+  animation-delay: calc(var(--stagger, 0) * 0.18s + var(--badge-stagger, 0) * 0.08s + 0.18s);
+}
+
+/* --- Block 2: Prinzipien (3 gleiche Spalten) --- */
+.about-principles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2vw, 1.5rem);
+  align-items: stretch;
+}
+
+.about-principles > div {
+  display: flex;
+  width: 100%;
+}
+
+/* --- Block 3: Skills (3 gleiche Spalten) --- */
+.about-skills {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  align-items: stretch;
+}
+
+.about-skills > div {
+  display: flex;
+  width: 100%;
+}
+
+/* ============================================================================
+   MOBILE (≤ 1024px)
+   ============================================================================ */
+@media (max-width: 1024px) {
+  .about {
+    min-height: 100dvh;
+    padding: 1rem clamp(1rem, 4vw, 1.5rem) clamp(2rem, 4vh, 3rem);
+    gap: clamp(3rem, 4vh, 4rem);
+  }
+
+  .about > *:not(.about-dot-grid) {
+    max-width: 100%;
+  }
+
+  .about-principles {
+    min-width: 100vw;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: clamp(0.6rem, 2vw, 0.9rem);
+    padding: 1.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .about-principles::-webkit-scrollbar {
+    display: none;
+  }
+
+  .about-principles > div {
+    flex: 0 0 85%;
+    scroll-snap-align: center;
+    min-width: 240px;
+  }
+
+  .about-skills {
+    grid-template-columns: 1fr;
+    gap: clamp(0.8rem, 2vw, 1rem);
+  }
+}

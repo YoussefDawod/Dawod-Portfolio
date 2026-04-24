@@ -1,0 +1,37 @@
+/* ================================================
+   GLASS CARD — Wiederverwendbares Card-Pattern
+   ================================================
+
+   Custom Properties:
+   --card-accent    Akzentfarbe (default: --brand)
+   --card-bg-mix    Hintergrund-Mischung (default: 5%)
+   --card-glow      Zusätzlicher Glow (default: none)
+
+   Beispiel:
+   <div class="glass-card" style="--card-accent: var(--hi)">
+================================================ */
+
+.glass-card {
+  padding: clamp(1rem, 2.5vw, 1.6rem);
+  background: color-mix(in srgb, var(--card-accent, var(--brand)) var(--card-bg-mix, 5%), transparent);
+  border: 1px solid color-mix(in srgb, var(--card-accent, var(--brand)) 25%, transparent);
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+  box-shadow: var(--card-glow, none);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: color-mix(in srgb, var(--card-accent, var(--brand)) 45%, transparent);
+  box-shadow:
+    0 4px 24px color-mix(in srgb, var(--card-accent, var(--brand)) 12%, transparent),
+    0 0 40px color-mix(in srgb, var(--card-accent, var(--brand)) 6%, transparent);
+  transform: translateY(-3px) scale(1.015);
+}
+
+/* --- Mobile --- */
+@media (max-width: 1024px) {
+  .glass-card {
+    padding: clamp(1rem, 3vw, 1.4rem);
+  }
+}

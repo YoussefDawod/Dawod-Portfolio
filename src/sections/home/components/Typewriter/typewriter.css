@@ -1,0 +1,63 @@
+.typewriter {
+  margin:  2rem 0 2rem 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "JetBrains Mono", ui-monospace, "Cascadia Code", "Fira Code", monospace;
+  font-weight: 600;
+  font-size: clamp(13px, 2.4vw, 32px);
+  line-height: 1;
+  opacity: 0;
+  animation: fadeUp 0.5s ease 0.5s forwards;
+}
+
+.typewriter-text {
+  color: var(--txt-brand);
+  min-width: 0;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--txt-brand);
+  animation: blink 0.75s step-end infinite;
+  will-change: opacity;
+}
+
+.typewriter-sep {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  background: color-mix(in srgb, var(--txt) 25%, transparent);
+}
+
+.typewriter-fixed {
+  color: color-mix(in srgb, var(--txt) 50%, transparent);
+  font-weight: 400;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+@media (max-width: 1023px) {
+  .typewriter {
+    font-size: clamp(14px, 3vw, 32px);
+    justify-content: center;
+    margin: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typewriter {
+    animation: none;
+    opacity: 1;
+  }
+
+  .typewriter-cursor {
+    animation: none;
+    opacity: 1;
+  }
+}

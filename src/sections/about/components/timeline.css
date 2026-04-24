@@ -1,0 +1,220 @@
+/* ============================================================================
+   TIMELINE — Horizontal (Desktop) · Vertikal (Mobile)
+   ============================================================================ */
+
+.timeline {
+  width: 100%;
+}
+
+.timeline-section-label {
+  text-align: center;
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--txt-brand);
+  margin-bottom: clamp(2.5rem, 4vh, 4rem);
+}
+
+/* --- Track (horizontal) -------------------------------------------------- */
+.timeline-track {
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  gap: clamp(1.5rem, 2.5vw, 2.5rem);
+}
+
+/* Horizontale Verbindungslinie */
+.timeline-track::before {
+  content: '';
+  position: absolute;
+  top: 24px;
+  left: 5%;
+  right: 5%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in srgb, var(--brand) 35%, transparent) 15%,
+    color-mix(in srgb, var(--brand) 35%, transparent) 85%,
+    transparent
+  );
+}
+
+/* --- Station (Card-Stil) ------------------------------------------------- */
+.timeline-station {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  gap: 1rem;
+  min-width: 0;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+
+  /* Scroll-Reveal: Startzustand */
+  opacity: 0;
+  transform: translateX(-20px);
+  transition-delay: calc(var(--station-index) * 0.15s);
+}
+
+.timeline-track.timeline-visible .timeline-station {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.timeline-card {
+  --card-accent: var(--station-color);
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.timeline-station:hover .timeline-card {
+  border-color: color-mix(in srgb, var(--station-color) 45%, transparent);
+  box-shadow:
+    0 4px 24px color-mix(in srgb, var(--station-color) 12%, transparent),
+    0 0 40px color-mix(in srgb, var(--station-color) 6%, transparent);
+  transform: translateY(-3px) scale(1.015);
+}
+
+/* --- Icon-Kreis ---------------------------------------------------------- */
+.timeline-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--bg) 94%, black 6%);
+  border: 2px solid color-mix(in srgb, var(--station-color) 70%, transparent);
+  z-index: 1;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.timeline-icon-wrap:hover {
+  border-color: color-mix(in srgb, var(--station-color) 85%, transparent);
+}
+
+.timeline-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+  color: var(--station-color);
+}
+
+/* Letzte Station (Heute): Puls-Effekt */
+.timeline-station:last-child .timeline-icon-wrap {
+  animation: glow-pulse 3s ease-in-out infinite;
+  --glow-brand-soft: color-mix(in srgb, var(--station-color) 20%, transparent);
+  --glow-brand: color-mix(in srgb, var(--station-color) 35%, transparent);
+  --glow-brand-subtle: color-mix(in srgb, var(--station-color) 10%, transparent);
+}
+
+/* --- Text-Elemente ------------------------------------------------------- */
+.timeline-period {
+  font-size: clamp(0.7rem, 0.9vw, 0.8rem);
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--txt-soft);
+  margin-bottom: 0.25rem;
+}
+
+.timeline-label {
+  font-size: clamp(0.75rem, 1vw, 0.88rem);
+  font-weight: 600;
+  color: var(--station-color);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+}
+
+.timeline-title {
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  font-weight: 700;
+  color: var(--txt);
+  line-height: 1.3;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-text {
+  font-size: clamp(0.8rem, 1vw, 0.9rem);
+  line-height: 1.6;
+  color: var(--txt-soft);
+  max-width: 28ch;
+  text-align: center;
+}
+
+/* ============================================================================
+   MOBILE (≤ 1024px) — Vertikal, Linie links
+   ============================================================================ */
+@media (max-width: 1024px) {
+  .timeline-track {
+    flex-direction: column;
+    padding-left: 3rem;
+    gap: clamp(2rem, 3vh, 3rem);
+  }
+
+  /* Vertikale Linie links */
+  .timeline-track::before {
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    right: auto;
+    width: 1px;
+    height: auto;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      color-mix(in srgb, var(--brand) 35%, transparent) 10%,
+      color-mix(in srgb, var(--brand) 35%, transparent) 90%,
+      transparent
+    );
+  }
+
+  .timeline-station {
+    align-items: flex-start;
+    text-align: left;
+    flex: none;
+    transform: translateY(15px);
+    gap: 0.85rem;
+  }
+
+  .timeline-track.timeline-visible .timeline-station {
+    transform: translateY(0);
+  }
+
+  .timeline-card {
+    width: 100%;
+    align-items: flex-start;
+    text-align: left;
+    min-height: auto;
+  }
+
+  .timeline-icon-wrap {
+    position: relative;
+    left: -0.45rem;
+    width: 44px;
+    height: 44px;
+    flex-basis: 44px;
+  }
+
+  .timeline-text {
+    max-width: none;
+    text-align: justify;
+  }
+}
+
+/* ============================================================================
+   REDUCED MOTION
+   ============================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .timeline-station {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

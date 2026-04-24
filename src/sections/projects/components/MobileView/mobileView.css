@@ -1,0 +1,244 @@
+/* ================================================
+   MOBILE VIEW — Standard-Ansicht (Zustand 1)
+   ================================================ */
+
+.mobile-view {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* --- Scrollable Content -------------------------------- */
+.mobile-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* --- Category + Counter Row ---------------------------- */
+.mobile-category-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-category {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+  color: var(--txt-soft);
+  text-transform: uppercase;
+}
+
+.mobile-counter {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--txt-soft);
+  font-variant-numeric: tabular-nums;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* --- Title --------------------------------------------- */
+.mobile-title {
+  font-size: clamp(1.6rem, 7vw, 2.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--txt);
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* --- Tech Badges --------------------------------------- */
+.mobile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mobile-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--badge-color, var(--txt-soft));
+  border: 1px solid color-mix(in srgb, var(--badge-color, var(--brd-hi)) 40%, transparent);
+  border-radius: 4px;
+  padding: 3px 8px;
+  background: color-mix(in srgb, var(--badge-color, var(--brand)) 6%, transparent);
+}
+
+.mobile-badge-icon {
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+/* --- Preview Thumbnail --------------------------------- */
+.mobile-preview {
+  border: 1px solid var(--brd);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surf);
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.mobile-preview:active {
+  border-color: var(--txt-brand);
+}
+
+.mobile-preview-bar {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  background: var(--surf-hi);
+  border-bottom: 1px solid var(--brd);
+}
+
+.mobile-preview-url {
+  font-size: 9px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--txt-soft);
+}
+
+.mobile-preview-live {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ok);
+  padding: 1px 6px;
+  border: 1px solid var(--ok);
+  border-radius: 3px;
+}
+
+.mobile-preview-frame {
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.mobile-preview-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  font-size: 10px;
+  color: var(--txt-brand);
+  background: color-mix(in srgb, var(--brand) 6%, var(--surf));
+  border-top: 1px solid var(--brd);
+}
+
+.mobile-hint-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brand);
+  display: block;
+}
+
+/* --- Description --------------------------------------- */
+.mobile-desc {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--txt-soft);
+  font-family: 'Space Grotesk', sans-serif;
+  margin: 0;
+}
+
+/* --- Links --------------------------------------------- */
+.mobile-links {
+  display: flex;
+  gap: 10px;
+  padding-bottom: 0.5rem;
+}
+
+.mobile-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.mobile-link--primary {
+  flex: 2;
+  background: var(--brand);
+  color: var(--txt-on-brand);
+}
+
+.mobile-link--primary:active {
+  background: var(--brand-dk);
+}
+
+.mobile-link--secondary {
+  flex: 1;
+  background: transparent;
+  color: var(--txt-soft);
+  border: 1px solid var(--brd);
+}
+
+.mobile-link--secondary:active {
+  background: var(--surf-hi);
+}
+
+.mobile-link--disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* --- Tablet: Buttons untereinander --------------------- */
+@media (min-width: 600px) and (max-width: 1023px) {
+  .mobile-links {
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .mobile-link--primary,
+  .mobile-link--secondary {
+    flex: unset;
+  }
+}
+
+/* --- Dots Navigation ----------------------------------- */
+.mobile-dots {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 0;
+  border-top: 1px solid var(--brd);
+}
+
+.mobile-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--surf-hi);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.mobile-dot.is-active {
+  background: var(--brand);
+  transform: scale(1.3);
+}

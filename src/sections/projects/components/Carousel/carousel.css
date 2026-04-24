@@ -1,0 +1,48 @@
+/* ================================================
+   CAROUSEL — Infinite Auto-Scroll (JS-driven)
+   ================================================ */
+
+/* --- Wrapper ------------------------------------------- */
+.carousel-wrap {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  cursor: default;
+}
+
+/* --- Track (JS steuert transform) ---------------------- */
+.carousel-track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  will-change: transform;
+}
+
+/* --- Gradient-Fades (optische Schatten links/rechts) --- */
+.carousel-fade {
+  position: absolute;
+  top: 0;
+  width: 100px;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.carousel-fade--left {
+  left: 0;
+  background: linear-gradient(to right, var(--bg) 0%, transparent 100%);
+}
+
+.carousel-fade--right {
+  right: 0;
+  background: linear-gradient(to left, var(--bg) 0%, transparent 100%);
+}
+
+/* --- Reduced motion: Track bleibt statisch ------------- */
+@media (prefers-reduced-motion: reduce) {
+  .carousel-track {
+    transform: none !important;
+  }
+}

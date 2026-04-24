@@ -1,0 +1,38 @@
+/* ============================================================================
+   SKILL BADGE — Icon + Name + Originalfarbe + Glow-Hover
+   ============================================================================
+   --skill-color wird inline als Custom Property gesetzt.
+   Wenn null → Fallback auf --txt-brand (gold-warm).
+   ============================================================================ */
+
+.skill-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 0;
+  width: 100%;
+  transition: opacity 0.3s ease;
+}
+
+.skill-badge-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+  color: var(--txt-soft);
+  transition: color 0.3s ease, filter 0.3s ease;
+}
+
+.skill-badge-name {
+  font-size: clamp(0.88rem, 1.15vw, 1rem);
+  color: var(--txt-soft);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Hover: Icon + Name leuchten in Originalfarbe */
+.skill-badge:hover .skill-badge-icon,
+.skill-badge:hover .skill-badge-name {
+  color: var(--skill-color, var(--txt-brand));
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--skill-color, var(--brand)) 15%, transparent));
+  cursor: default;
+}
+

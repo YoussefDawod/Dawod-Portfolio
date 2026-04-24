@@ -1,0 +1,84 @@
+/* ================================================
+   CAROUSEL CARD
+   ================================================ */
+
+.carousel-card {
+  flex: 0 0 400px;
+  height: 250px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+
+  background: var(--surf);
+  border: 1px solid var(--brd);
+  border-radius: 8px;
+
+  transition:
+    border-color 0.25s ease,
+    background   0.25s ease;
+
+  user-select: none;
+}
+
+.carousel-card:hover {
+  background: var(--bg-alt);
+  border-color: color-mix(in srgb, var(--project-primary, var(--brand)) 40%, var(--brd));
+}
+
+.carousel-card.is-active {
+  border-color: var(--txt-brand);
+  background: color-mix(in srgb, var(--brand) 8%, var(--surf));
+}
+
+/* --- Top Row: Nummer + Tech ---------------------------- */
+.cc-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cc-num {
+  font-size: 11px;
+  color: var(--txt-soft);
+  opacity: 0.5;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+}
+
+.cc-tech {
+  font-size: 10px;
+  color: var(--txt-soft);
+  opacity: 0.45;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* --- Thumbnail ----------------------------------------- */
+.cc-thumb {
+  flex: 1;
+  margin: 10px 0;
+  border-radius: 4px;
+  background: color-mix(
+    in srgb,
+    var(--project-primary, var(--brand)) 35%,
+    var(--surf)
+  );
+}
+
+/* --- Titel --------------------------------------------- */
+.cc-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--txt-soft);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.carousel-card.is-active .cc-title {
+  color: var(--txt-brand);
+}

@@ -1,0 +1,32 @@
+/* ================================================
+   PROJECTS SECTION — Layout Root
+   ================================================ */
+
+/* --- Container ----------------------------------------- */
+.projects {
+  height: 100vh;  /* fallback für ältere Browser */
+  height: 100dvh; /* überschreibt vh in modernen Browsern */
+}
+
+/* --- Desktop: Grid 1fr (main) + 280px (carousel) ------- */
+@media (min-width: 1024px) {
+  .projects {
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+  }
+
+  .projects-main {
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+    min-height: 0; /* allow shrinking within 1fr */
+  }
+}
+
+/* --- Mobile: volle Höhe, MobileView selbst regelt Layout  */
+@media (max-width: 1023px) {
+  .projects {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+}

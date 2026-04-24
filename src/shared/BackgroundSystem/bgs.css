@@ -1,0 +1,43 @@
+.background-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  display: block;
+}
+
+/* Profile Image — Oberer Teil (Kopf): VOR Canvas + Tokens */
+.bgs-profile-front {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0; /* Versteckt bis JS das Styling übernimmt — verhindert Flash */
+  will-change: transform, opacity, clip-path, filter;
+  /* Shadow wird von JS gesetzt (image.js IMAGE_SHADOWS) */
+}
+
+/* Profile Image — Unterer Teil (Body): HINTER Canvas + Tokens, Fade-Out */
+.bgs-profile-behind {
+  position: fixed;
+  pointer-events: none;
+  z-index: -2;
+  opacity: 0; /* Versteckt bis JS das Styling übernimmt — verhindert Flash */
+  will-change: transform, opacity, clip-path;
+}
+
+/* Glow Ring hinter dem Bild */
+.bgs-image-glow {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--brand) 15%, transparent) 0%,
+    color-mix(in srgb, var(--brand) 6%, transparent) 50%,
+    transparent 75%);
+  will-change: transform, opacity;
+}

@@ -1,0 +1,136 @@
+/* ================================================
+   INFO PANEL — Linke Seite im Desktop-Split
+   ================================================ */
+
+.info-panel {
+  padding: clamp(1.5rem, 2vw, 2rem) clamp(2rem, 3vw, 3rem) clamp(2rem, 3vw, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow: hidden;
+
+  /* Transition-Hooks (Phase 3) */
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+.info-panel.is-leaving {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+/* --- Counter ------------------------------------------- */
+.info-counter {
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  color: var(--txt-brand);
+  font-variant-numeric: tabular-nums;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* --- Titel --------------------------------------------- */
+.info-title {
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--txt);
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* --- Tech-Badges (Icon + Name + Originalfarbe) --------- */
+.info-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.info-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  color: var(--badge-color, var(--txt-soft));
+  border: 1px solid color-mix(in srgb, var(--badge-color, var(--brd-hi)) 45%, transparent);
+  border-radius: 4px;
+  padding: 5px 12px;
+  background: color-mix(in srgb, var(--badge-color, var(--brand)) 6%, transparent);
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.info-badge:hover {
+  border-color: color-mix(in srgb, var(--badge-color, var(--brd-hi)) 70%, transparent);
+  background: color-mix(in srgb, var(--badge-color, var(--brand)) 12%, transparent);
+}
+
+.info-badge-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* --- Beschreibung -------------------------------------- */
+.info-desc {
+    max-width: 600px;
+  font-size: clamp(1rem, 1.1vw, 2rem);
+  line-height: 1.85;
+  color: var(--txt-soft);
+  text-align: justify;
+  flex: 1;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* --- Links --------------------------------------------- */
+.info-links {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.info-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: clamp(0.9rem, 1.1vw, 1.5rem);
+  font-family: 'Space Grotesk', sans-serif;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  width: fit-content;
+}
+
+.info-link--primary {
+  font-weight: 600;
+  color: var(--txt-brand);
+}
+
+.info-link--primary:hover {
+  text-decoration: underline;
+}
+
+.info-link--secondary {
+  font-weight: 400;
+  color: var(--txt-soft);
+}
+
+.info-link--secondary:hover {
+  color: var(--txt);
+}
+
+.info-link--disabled {
+  opacity: 0.3;
+  pointer-events: none;
+  cursor: default;
+}
+
+/* --- Reduced motion ------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .info-panel {
+    transition: opacity 0.15s ease;
+    transform: none !important;
+  }
+}

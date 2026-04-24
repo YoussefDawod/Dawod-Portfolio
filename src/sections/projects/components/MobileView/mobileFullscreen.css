@@ -1,0 +1,119 @@
+/* ================================================
+   MOBILE FULLSCREEN — Zustand 2: Vollbild Preview
+   ================================================ */
+
+/* --- Overlay ------------------------------------------- */
+.mfs-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  animation: mfsSlideUp 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes mfsSlideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0.6;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* --- Top Bar ------------------------------------------- */
+.mfs-topbar {
+  flex-shrink: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--brd);
+}
+
+.mfs-close {
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--txt-brand);
+  background: transparent;
+  border: 1px solid var(--txt-brand);
+  border-radius: 4px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.mfs-close:active {
+  background: color-mix(in srgb, var(--brand) 12%, transparent);
+}
+
+.mfs-url {
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--txt-soft);
+}
+
+/* --- Content (Iframe) ---------------------------------- */
+.mfs-content {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  background: var(--surf);
+}
+
+/* --- Bottom Bar ---------------------------------------- */
+.mfs-bottombar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 1rem;
+  border-top: 1px solid var(--brd);
+}
+
+.mfs-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  border: none;
+}
+
+.mfs-btn--ghost {
+  background: transparent;
+  color: var(--txt-soft);
+  border: 1px solid var(--brd);
+}
+
+.mfs-btn--ghost:active {
+  background: var(--surf-hi);
+}
+
+.mfs-btn--primary {
+  background: var(--brand);
+  color: var(--txt-on-brand);
+}
+
+.mfs-btn--primary:active {
+  background: var(--brand-dk);
+}
+
+/* --- Reduced motion ------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .mfs-overlay {
+    animation: none;
+  }
+}

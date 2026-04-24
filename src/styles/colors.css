@@ -1,0 +1,204 @@
+/* ================================================
+   DESIGN TOKENS — Yellow-based Palette
+   ================================================
+
+   INHALT:
+   L0  →  Raw Palette       (nur hier Farben ändern)
+   L1  →  Tonal Scale       (automatisch, nie direkt nutzen)
+   L2  →  Tokens            (diese im Code verwenden)
+
+   FARBPALETTE:
+   brand      → Goldgelb    #F5A800  (Hauptfarbe)
+   accent     → Navy        #1A2233  (Kontrast)
+   hi         → Bernstein   #E8720C  (analog, wärmer)
+   neu        → Tiefschwarz #1C1A14  (warmer Unterton)
+   neu2       → Dunkelgrau  #2C2A1E  (warmer Unterton)
+================================================ */
+
+:root {
+  /* ================================================
+     L0 — RAW PALETTE
+     Nur diese 8 Werte ändern.
+  ================================================ */
+
+  --brand: #f5a800;
+  --accent: #1a2233;
+  --hi: #e8720c;
+  --neu: #0e0c09;
+  --neu2: #1b1a13;
+
+  --ok: #2ecc71;
+  --warn: #f39c12;
+  --err: #e74c3c;
+
+  /* ================================================
+     L1 — TONAL SCALE
+     Automatisch aus L0 generiert.
+     Nicht direkt im CSS verwenden!
+  ================================================ */
+
+  --brand-lt: color-mix(in srgb, var(--brand) 25%, white);
+  --brand-md: var(--brand);
+  --brand-dk: color-mix(in srgb, var(--brand) 55%, black);
+
+  --accent-lt: color-mix(in srgb, var(--accent) 25%, white);
+  --accent-md: var(--accent);
+  --accent-dk: color-mix(in srgb, var(--accent) 55%, black);
+
+  --hi-lt: color-mix(in srgb, var(--hi) 25%, white);
+  --hi-md: var(--hi);
+  --hi-dk: color-mix(in srgb, var(--hi) 55%, black);
+
+  --neu-lt2: color-mix(in srgb, var(--neu) 10%, white);
+  --neu-lt: color-mix(in srgb, var(--neu) 30%, white);
+  --neu-md: var(--neu);
+  --neu-dk: color-mix(in srgb, var(--neu) 50%, black);
+  --neu-dk2: color-mix(in srgb, var(--neu) 80%, black);
+
+  --neu2-lt2: color-mix(in srgb, var(--neu2) 10%, white);
+  --neu2-lt: color-mix(in srgb, var(--neu2) 30%, white);
+  --neu2-md: var(--neu2);
+  --neu2-dk: color-mix(in srgb, var(--neu2) 50%, black);
+  --neu2-dk2: color-mix(in srgb, var(--neu2) 80%, black);
+
+  /* ================================================
+     L2 — TOKENS  (Dark Mode default)
+     Nur diese im Code verwenden.
+  ================================================ */
+
+  /* --- Backgrounds --- */
+  --bg: var(--neu-dk2);
+  --bg-alt: var(--neu2-dk2);
+  --surf: var(--neu-dk);
+  --surf-hi: var(--neu2-dk);
+
+  /* --- Text --- */
+  --txt: var(--neu-lt2);
+  --txt-soft: var(--neu-lt);
+  --txt-brand: var(--brand-md);
+  --txt-on-brand: var(--neu-dk2);
+
+  /* --- Borders & Focus --- */
+  --brd: var(--neu-dk);
+  --brd-hi: var(--brand-dk);
+  --focus: var(--brand-md);
+
+  /* --- Buttons --- */
+  --btn-brand: var(--brand-md);
+  --btn-brand-hover: var(--brand-dk);
+
+  --btn-hi: var(--hi-md);
+  --btn-hi-hover: var(--hi-dk);
+
+  /* --- Disabled State --- */
+  --disabled-bg: color-mix(in srgb, var(--neu-md) 40%, transparent);
+  --disabled-txt: var(--neu-dk);
+
+  /* --- Inputs --- */
+  --input-bg: var(--surf);
+  --input-brd: var(--brd);
+  --input-brd-focus: var(--focus);
+
+  /* --- Gradients --- */
+  --grad-brand: linear-gradient(135deg, var(--brand-lt), var(--brand-dk));
+  --grad-hi: linear-gradient(135deg, var(--hi-lt), var(--hi-dk));
+  --grad-warm: linear-gradient(135deg, var(--brand-md), var(--hi-dk));
+  --grad-dark: linear-gradient(180deg, var(--neu-dk2), var(--neu2-dk2));
+  --grad-glow: radial-gradient(
+    ellipse at top,
+    color-mix(in srgb, var(--brand) 20%, transparent),
+    transparent 70%
+  );
+
+  /* --- Shadows --- */
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.7);
+  --shadow-brand: 0 4px 20px color-mix(in srgb, var(--brand) 45%, transparent);
+  --shadow-accent: 0 4px 20px color-mix(in srgb, var(--accent) 40%, transparent);
+  --shadow-hi: 0 4px 20px color-mix(in srgb, var(--hi) 40%, transparent);
+
+  /* --- Blur --- */
+  --blur-sm: blur(4px);
+  --blur-md: blur(12px);
+  --blur-lg: blur(24px);
+
+  /* --- Glassmorphism --- */
+  --glass-bg: color-mix(
+    in srgb,
+    var(--brand) 6%,
+    color-mix(in srgb, var(--neu-md) 70%, transparent)
+  );
+  --glass-brd: color-mix(in srgb, var(--brand) 25%, transparent);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+  /* --- Overlays --- */
+  --overlay-soft: rgba(0, 0, 0, 0.4);
+  --overlay-hard: rgba(0, 0, 0, 0.75);
+
+  /* --- Home Section --- */
+  --home-bg: #111009;
+  --home-dot-opacity: 18%;
+  --home-glow-opacity: 0.07;
+}
+
+/* --- Text Selection --- */
+::selection {
+  background: color-mix(in srgb, var(--brand) 35%, transparent);
+  color: var(--neu-dk2);
+}
+
+/* ================================================
+   LIGHT MODE — nur L2 wird überschrieben
+================================================ */
+@media (prefers-color-scheme: light) {
+  :root {
+    /* --- Backgrounds --- */
+    --bg: var(--neu-lt2);
+    --bg-alt: var(--neu2-lt2);
+    --surf: var(--neu-lt);
+    --surf-hi: var(--neu2-lt);
+
+    /* --- Text --- */
+    --txt: var(--neu-dk2);
+    --txt-soft: var(--neu-dk);
+
+    /* --- Borders --- */
+    --brd: var(--neu-lt);
+    --brd-hi: var(--brand-md);
+
+    /* --- Disabled State --- */
+    --disabled-bg: color-mix(in srgb, var(--neu-lt) 60%, transparent);
+    --disabled-txt: var(--neu-lt);
+
+    /* --- Gradients --- */
+    --grad-dark: linear-gradient(180deg, var(--neu-lt2), var(--neu2-lt2));
+    --grad-glow: radial-gradient(
+      ellipse at top,
+      color-mix(in srgb, var(--brand) 15%, transparent),
+      transparent 70%
+    );
+
+    /* --- Shadows --- */
+    --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.16);
+    --shadow-brand: 0 4px 20px color-mix(in srgb, var(--brand) 30%, transparent);
+    --shadow-accent: 0 4px 20px
+      color-mix(in srgb, var(--accent) 20%, transparent);
+    --shadow-hi: 0 4px 20px color-mix(in srgb, var(--hi) 25%, transparent);
+
+    /* --- Glassmorphism --- */
+    --glass-bg: color-mix(
+      in srgb,
+      var(--brand) 8%,
+      color-mix(in srgb, var(--neu-lt2) 75%, transparent)
+    );
+    --glass-brd: color-mix(in srgb, var(--brand) 30%, transparent);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+
+    /* --- Overlays --- */
+    --overlay-soft: rgba(0, 0, 0, 0.25);
+    --overlay-hard: rgba(0, 0, 0, 0.55);
+  }
+}
