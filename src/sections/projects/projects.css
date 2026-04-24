@@ -4,10 +4,10 @@
 
 /* --- Container ----------------------------------------- */
 .projects {
-  /* Section erbt bereits min-height: 100dvh von App.css.
-     Hier fixieren wir die Höhe auf genau dvh, damit das interne Grid
-     (2fr/1fr) nicht wächst. */
-  height: 100dvh;
+  /* Section #projects ist bereits 100svh (siehe App.css).
+     Wir nutzen 100% relativ dazu, damit das interne Grid (2fr/1fr)
+     immer genau die Section ausfüllt — ohne weitere viewport-Berechnungen. */
+  height: 100%;
 }
 
 /* --- Desktop: Grid 1fr (main) + 280px (carousel) ------- */

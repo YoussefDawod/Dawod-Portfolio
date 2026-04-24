@@ -7,17 +7,8 @@
 }
 
 /* =========================================
-   GLOBAL LAYOUT — saubere Höhen-Kaskade
+   GLOBAL LAYOUT
    ========================================= */
-
-/* html + body + #root bilden die Höhen-Basis.
-   Nur hier wird die Viewport-Höhe gesetzt — alles darunter
-   kann via `height: 100%` oder `min-height: 100%` arbeiten. */
-html,
-body,
-#root {
-  height: 100%;
-}
 
 html {
   scroll-behavior: smooth;
@@ -30,18 +21,17 @@ html::-webkit-scrollbar {
   display: none;
 }
 
+/* Wichtig: body bekommt KEIN festes height — er wächst mit dem Inhalt.
+   Dadurch streckt sich der Hintergrund-Gradient EINMAL über die ganze Seite,
+   anstatt sich pro Section optisch zu wiederholen. */
 body {
-  /* dvh = dynamische Viewport-Höhe, folgt dem sichtbaren Bereich.
-     Alle modernen Browser (seit 2022) unterstützen dvh — kein vh-Fallback nötig. */
   min-height: 100dvh;
   font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
   color: var(--txt);
   background: var(--grad-dark);
 }
 
-/* Content-Container */
 main {
-  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
@@ -49,7 +39,21 @@ main {
 /* Einheitlicher Navbar-Abstand */
 main > section {
   padding-top: 5rem;
-  /* Eine einzige Regel für alle Sections: mindestens viewport-hoch,
-     darf aber bei längerem Inhalt wachsen (z.B. Contact-Formular auf Mobile). */
-  min-height: 100dvh;
 }
+
+/* =========================================
+   SECTION-HÖHEN
+
+   Wir verwenden bewusst `svh` (smallest viewport height) statt `dvh`:
+   - `dvh` rechnet sich bei jedem Pixel Toolbar-Bewegung neu aus →
+     erzwingt Layout-Reflow während die Mobile-Toolbar ein-/ausfährt →
+     spürbarer Ruckler.
+   - `svh` ist konstant (= viewport mit sichtbarer Toolbar). Wenn die
+     Toolbar verschwindet, entsteht einfach etwas Platz darunter — kein Reflow.
+
+   Home/Projects haben feste Höhe, About/Contact dürfen für längeren
+   Inhalt auf Mobile wachsen. */
+#home     { height: 100svh; }
+#about    { min-height: 100svh; }
+#projects { height: 100svh; }
+#contact  { min-height: 100svh; }

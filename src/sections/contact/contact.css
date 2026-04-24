@@ -4,7 +4,11 @@
 
 .contact-wrapper {
     width: 100%;
-    min-height: 100%; /* Nimmt die Höhe der Parent-Section */
+    /* Section hat min-height: 100svh + padding-top: 5rem.
+       Damit der Wrapper im Desktop vertikal zentriert wirkt und auf
+       Mobile sauber wächst, geben wir ihm dieselbe Mindesthöhe abzüglich
+       des Section-Paddings. svh statt dvh — keine Toolbar-Reflows. */
+    min-height: calc(100svh - 5rem);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -338,7 +342,10 @@
         width: 100%;
         overflow-x: hidden;
         align-items: flex-start;
-        min-height: auto; /* Keine erzwungene Mindesthöhe auf Mobile */
+        /* Auf Mobile darf der Wrapper mit dem Formular wachsen,
+           bleibt aber mindestens viewport-hoch — verhindert die Lücke
+           unter dem Formular, die im Screenshot sichtbar war. */
+        min-height: calc(100svh - 5rem);
     }
     
     .contact-content {
