@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import toast from 'react-hot-toast';
-import { formFields, web3forms, submitText } from '../../contactData.js';
+import { formFields, web3forms, submitText, consentField } from '../../contactData.js';
 
 const initialValues = Object.fromEntries(formFields.map((f) => [f.id, '']));
 const initialErrors = Object.fromEntries(formFields.map((f) => [f.id, null]));
@@ -16,6 +16,8 @@ const initialErrors = Object.fromEntries(formFields.map((f) => [f.id, null]));
 export function useContactForm() {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(initialErrors);
+  const [consent, setConsent] = useState(false);
+  const [consentError, setConsentError] = useState(null);
   // Honeypot — Bots füllen das Feld aus, echte User nicht
   const [honeypot, setHoneypot] = useState('');
   const [status, setStatus] = useState('idle');
@@ -45,9 +47,16 @@ export function useContactForm() {
     return firstInvalidId;
   }, [values]);
 
+  const handleConsentChange = useCallback((checked) => {
+    setConsent(checked);
+    if (checked) setConsentError(null);
+  }, []);
+
   const reset = useCallback(() => {
     setValues(initialValues);
     setErrors(initialErrors);
+    setConsent(false);
+    setConsentError(null);
     setHoneypot('');
     setStatus('idle');
   }, []);
@@ -63,9 +72,13 @@ export function useContactForm() {
       }
 
       const firstInvalid = validateAll();
-      if (firstInvalid) {
+      const consentMissing = !consent;
+      if (consentMissing) setConsentError(consentField.errorText);
+
+      if (firstInvalid || consentMissing) {
         toast.error(submitText.validationToast);
-        document.getElementById(firstInvalid)?.focus();
+        if (firstInvalid) document.getElementById(firstInvalid)?.focus();
+        else document.getElementById(consentField.id)?.focus();
         return;
       }
 
@@ -115,6 +128,9 @@ export function useContactForm() {
   return {
     values,
     errors,
+    consent,
+    consentError,
+    handleConsentChange,
     status,
     honeypot,
     setHoneypot,

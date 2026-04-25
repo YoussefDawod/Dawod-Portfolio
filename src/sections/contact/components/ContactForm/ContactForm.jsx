@@ -1,6 +1,7 @@
 import { FaPaperPlane } from 'react-icons/fa';
 import FormField from '../FormField/FormField.jsx';
-import { formFields, submitText } from '../../contactData.js';
+import ConsentCheckbox from '../ConsentCheckbox/ConsentCheckbox.jsx';
+import { formFields, submitText, consentField } from '../../contactData.js';
 import { useContactForm } from './useContactForm.js';
 import './contactForm.css';
 
@@ -8,6 +9,9 @@ function ContactForm() {
   const {
     values,
     errors,
+    consent,
+    consentError,
+    handleConsentChange,
     status,
     honeypot,
     setHoneypot,
@@ -46,6 +50,22 @@ function ContactForm() {
             disabled={isSubmitting}
           />
         ))}
+
+        <ConsentCheckbox
+          id={consentField.id}
+          checked={consent}
+          onChange={handleConsentChange}
+          label={consentField.label}
+          linkText={consentField.linkText}
+          linkHref={consentField.linkHref}
+          labelEnd={consentField.labelEnd}
+          error={consentError}
+          disabled={isSubmitting}
+        />
+
+        {consentField.footnote && (
+          <p className="contact-form__footnote">{consentField.footnote}</p>
+        )}
 
         {/* Honeypot — visuell versteckt, für Bots sichtbar im DOM */}
         <input

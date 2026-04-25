@@ -78,6 +78,20 @@ export const formFields = [
   },
 ];
 
+/**
+ * DSGVO-Einwilligungs-Checkbox.
+ * `linkHref` jetzt Platzhalter — bei fertiger Datenschutzseite anpassen.
+ */
+export const consentField = {
+  id: 'consent',
+  label: 'Ich stimme der Verarbeitung meiner personenbezogenen Daten gemäß der\u00A0',
+  linkText: 'Datenschutzerklärung',
+  linkHref: '/datenschutz',
+  labelEnd: '\u00A0zu.*',
+  footnote: '* Daten werden ausschließlich zur Beantwortung Ihrer Anfrage verwendet.',
+  errorText: 'Bitte akzeptiere die Datenschutzerklärung.',
+};
+
 export const submitText = {
   idleLabel: 'Nachricht Senden',
   sendingLabel: 'Wird gesendet …',
