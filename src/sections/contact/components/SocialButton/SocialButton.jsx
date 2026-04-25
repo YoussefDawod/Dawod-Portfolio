@@ -1,3 +1,4 @@
+import { FaArrowRight } from 'react-icons/fa';
 import './socialButton.css';
 
 function SocialButton({ icon: Icon, label, href, className = '' }) {
@@ -10,8 +11,9 @@ function SocialButton({ icon: Icon, label, href, className = '' }) {
       className={`social-btn ${className}`.trim()}
       aria-label={label}
     >
-      <Icon aria-hidden="true" />
-      <span>{label}</span>
+      <Icon className="social-btn__icon" aria-hidden="true" />
+      <span className="social-btn__label">{label}</span>
+      <FaArrowRight className="social-btn__arrow" aria-hidden="true" />
     </a>
   );
 }

@@ -1,4 +1,4 @@
-import { FaPaperPlane } from 'react-icons/fa';
+import { FaArrowRight } from 'react-icons/fa';
 import FormField from '../FormField/FormField.jsx';
 import ConsentCheckbox from '../ConsentCheckbox/ConsentCheckbox.jsx';
 import { formFields, submitText, consentField } from '../../contactData.js';
@@ -34,6 +34,8 @@ function ContactForm() {
   return (
     <article className="contact-card form-card">
       <form className="contact-form" onSubmit={handleSubmit} onKeyDown={onKeyDown} noValidate>
+        <span className="contact-form__eyebrow">Schreib mir</span>
+
         {formFields.map((f) => (
           <FormField
             key={f.id}
@@ -43,6 +45,7 @@ function ContactForm() {
             rows={f.rows}
             autoComplete={f.autoComplete}
             accent={f.accent}
+            maxLength={f.maxLength}
             value={values[f.id]}
             onChange={(v) => setField(f.id, v)}
             onBlur={() => blurField(f.id)}
@@ -50,22 +53,6 @@ function ContactForm() {
             disabled={isSubmitting}
           />
         ))}
-
-        <ConsentCheckbox
-          id={consentField.id}
-          checked={consent}
-          onChange={handleConsentChange}
-          label={consentField.label}
-          linkText={consentField.linkText}
-          linkHref={consentField.linkHref}
-          labelEnd={consentField.labelEnd}
-          error={consentError}
-          disabled={isSubmitting}
-        />
-
-        {consentField.footnote && (
-          <p className="contact-form__footnote">{consentField.footnote}</p>
-        )}
 
         {/* Honeypot — visuell versteckt, für Bots sichtbar im DOM */}
         <input
@@ -79,19 +66,37 @@ function ContactForm() {
           aria-hidden="true"
         />
 
-        <button
-          type="submit"
-          className="contact-form__submit"
-          disabled={isSubmitting}
-          aria-busy={isSubmitting}
-        >
-          <span>{isSubmitting ? submitText.sendingLabel : submitText.idleLabel}</span>
-          {isSubmitting ? (
-            <span className="contact-form__spinner" aria-hidden="true" />
-          ) : (
-            <FaPaperPlane className="contact-form__submit-icon" aria-hidden="true" />
+        <div className="contact-form__footer">
+          <ConsentCheckbox
+            id={consentField.id}
+            checked={consent}
+            onChange={handleConsentChange}
+            label={consentField.label}
+            linkText={consentField.linkText}
+            linkHref={consentField.linkHref}
+            labelEnd={consentField.labelEnd}
+            error={consentError}
+            disabled={isSubmitting}
+          />
+
+          {consentField.footnote && (
+            <p className="contact-form__footnote">{consentField.footnote}</p>
           )}
-        </button>
+
+          <button
+            type="submit"
+            className="contact-form__submit"
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
+          >
+            <span>{isSubmitting ? submitText.sendingLabel : submitText.idleLabel}</span>
+            {isSubmitting ? (
+              <span className="contact-form__spinner" aria-hidden="true" />
+            ) : (
+              <FaArrowRight className="contact-form__submit-icon" aria-hidden="true" />
+            )}
+          </button>
+        </div>
       </form>
     </article>
   );

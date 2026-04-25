@@ -1,13 +1,37 @@
-/* ================================================
-   CONTACT FORM
-   ================================================ */
+/* =========================================================
+   CONTACT FORM — Stack mit Submit-Pill
+   ========================================================= */
+
+.form-card {
+  display: flex;
+  flex-direction: column;
+}
 
 .contact-form {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   height: 100%;
-  justify-content: center;
+}
+
+.contact-form__eyebrow {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--brand) 80%, var(--txt-soft));
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.contact-form__eyebrow::before {
+  content: '';
+  width: 1.75rem;
+  height: 1px;
+  background: color-mix(in srgb, var(--brand) 60%, transparent);
 }
 
 /* Honeypot: visuell versteckt, aber im DOM für Bots sichtbar */
@@ -20,65 +44,93 @@
   pointer-events: none;
 }
 
-/* --- Submit Button --- */
+/* Footer-Bereich (Consent + Footnote + Submit) */
+.contact-form__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.contact-form__footnote {
+  font-size: 0.72rem;
+  color: var(--txt-soft);
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* --- Submit Button (Pill mit Slide-Pfeil) --- */
 .contact-form__submit {
-  margin-top: 1rem;
-  padding: 1rem 2rem;
-  background: transparent;
-  border: 1px solid var(--btn-brand);
-  color: var(--btn-brand);
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 700;
-  font-size: 0.9rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
+  position: relative;
+  align-self: flex-start;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 1rem;
-  border-radius: 50px;
-  transition: all 0.3s ease;
-  position: relative;
+  padding: 1rem 2rem 1rem 1.75rem;
+  background: var(--btn-brand);
+  border: 1px solid var(--btn-brand);
+  border-radius: 999px;
+  color: var(--txt-on-brand);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
   overflow: hidden;
-  align-self: flex-start;
+  isolation: isolate;
+  box-shadow: var(--shadow-brand);
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.35s ease,
+    background 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .contact-form__submit::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--btn-brand);
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
+  background: linear-gradient(135deg, var(--brand), var(--hi));
+  transform: translateX(-101%);
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
   z-index: -1;
 }
 
 .contact-form__submit:hover:not(:disabled) {
-  color: var(--txt-on-brand);
-  box-shadow: var(--shadow-brand);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px color-mix(in srgb, var(--brand) 55%, transparent);
 }
 
 .contact-form__submit:hover:not(:disabled)::before {
   transform: translateX(0);
 }
 
+.contact-form__submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
 .contact-form__submit:focus-visible {
   outline: 2px solid var(--focus);
-  outline-offset: 3px;
+  outline-offset: 4px;
 }
 
 .contact-form__submit:disabled {
   opacity: 0.7;
   cursor: progress;
+  box-shadow: none;
 }
 
 .contact-form__submit-icon {
-  transition: transform 0.3s ease;
+  font-size: 1rem;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .contact-form__submit:hover:not(:disabled) .contact-form__submit-icon {
-  transform: translateX(3px) translateY(-3px);
+  transform: translateX(4px);
 }
 
 /* --- Spinner --- */
@@ -86,8 +138,8 @@
   width: 1rem;
   height: 1rem;
   border-radius: 50%;
-  border: 2px solid color-mix(in srgb, var(--btn-brand) 30%, transparent);
-  border-top-color: var(--btn-brand);
+  border: 2px solid color-mix(in srgb, var(--txt-on-brand) 30%, transparent);
+  border-top-color: var(--txt-on-brand);
   animation: contact-form-spin 0.7s linear infinite;
 }
 
@@ -95,26 +147,28 @@
   to { transform: rotate(360deg); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .contact-form__spinner { animation-duration: 1.5s; }
-  .contact-form__submit::before { transition: none; }
-}
-
+/* --- Mobile --- */
 @media (max-width: 1023px) {
-  .contact-form { gap: 1rem; }
+  .contact-form { gap: 1.5rem; }
+
+  .contact-form__footer {
+    gap: 1rem;
+  }
+
   .contact-form__submit {
     width: 100%;
-    margin-top: 0.5rem;
-    padding: 0.8rem;
-    font-size: 0.85rem;
+    justify-content: center;
+    padding: 0.95rem 1.5rem;
+    font-size: 0.8rem;
   }
 }
 
-/* --- Fußnote --- */
-.contact-form__footnote {
-  font-size: 0.75rem;
-  color: var(--txt-muted, var(--txt-soft));
-  letter-spacing: 0.02em;
-  line-height: 1.4;
-  margin: 0;
+@media (prefers-reduced-motion: reduce) {
+  .contact-form__submit,
+  .contact-form__submit::before,
+  .contact-form__submit-icon {
+    transition: none;
+  }
+  .contact-form__spinner { animation-duration: 1.5s; }
+  .contact-form__submit:hover:not(:disabled) { transform: none; }
 }

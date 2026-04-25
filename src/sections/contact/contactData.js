@@ -72,6 +72,7 @@ export const formFields = [
     type: 'textarea',
     label: 'Nachricht',
     rows: 4,
+    maxLength: 1000,
     accent: 'var(--field-message-accent)',
     validate: (v) =>
       v.trim().length >= 10 ? null : 'Bitte mindestens 10 Zeichen.',

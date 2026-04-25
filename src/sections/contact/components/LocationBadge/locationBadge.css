@@ -1,42 +1,74 @@
+/* =========================================================
+   LOCATION BADGE — Pill mit pulsierendem grünen Dot
+   Verbesserte Glow-Aura und smoother Pulse.
+   ========================================================= */
+
 .location-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.4rem 0.8rem;
-  border: 1px solid var(--brd);
-  border-radius: 50px;
-  background: color-mix(in srgb, var(--surf) 50%, transparent);
+  gap: 0.55rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--ok) 35%, var(--brd));
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--ok) 8%, transparent),
+    color-mix(in srgb, var(--surf) 70%, transparent)
+  );
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--txt-soft);
-  transition: all 0.3s ease;
+  color: var(--txt);
+  transition:
+    border-color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .location-badge:hover {
-  border-color: var(--brd-hi);
-  color: var(--txt);
-  background: var(--surf);
+  border-color: color-mix(in srgb, var(--ok) 60%, var(--brd));
   transform: translateY(-1px);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--ok) 25%, transparent);
 }
 
 .location-badge__dot {
-  width: 6px;
-  height: 6px;
-  background-color: var(--ok);
+  position: relative;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok), transparent 30%);
-  animation: location-badge-pulse 2s infinite;
+  background: var(--ok);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--ok) 75%, transparent);
 }
 
-@keyframes location-badge-pulse {
-  0%   { transform: scale(0.95); box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok), transparent 30%); }
-  70%  { transform: scale(1);    box-shadow: 0 0 0 6px color-mix(in srgb, var(--ok), transparent 100%); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok), transparent 100%); }
+/* Innerer Kern (statisch hell) */
+.location-badge__dot::before {
+  content: '';
+  position: absolute;
+  inset: 1.5px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ok) 30%, white);
+}
+
+/* Äußerer Pulse-Ring */
+.location-badge__dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--ok);
+  opacity: 0.55;
+  animation: location-pulse 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes location-pulse {
+  0%   { transform: scale(0.6);  opacity: 0.55; }
+  70%  { transform: scale(2);    opacity: 0;    }
+  100% { transform: scale(2);    opacity: 0;    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .location-badge__dot { animation: none; }
+  .location-badge__dot::after { animation: none; }
+  .location-badge { transition: none; }
 }

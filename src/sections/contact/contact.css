@@ -1,33 +1,56 @@
-/* =========================================
-   CONTACT — Section-Layout
-   Card-, Form- und Badge-Styles liegen in den jeweiligen
-   Komponenten-CSS-Dateien.
-   ========================================= */
+/* =========================================================
+   CONTACT — Section Layout (Editorial Studio)
+   Header & LocationBadge bleiben aus älterem Design erhalten.
+   ========================================================= */
 
 .contact-wrapper {
   width: 100%;
-  /* Section ist 100svh + padding-top: 5rem (App.css). Wrapper füllt den Rest. */
   min-height: calc(100svh - 5rem);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: clamp(1rem, 4vw, 3rem);
   position: relative;
   z-index: 10;
+  isolation: isolate;
+}
+
+/* Subtiles Brand-Glow im Hintergrund — diagonal */
+.contact-wrapper::before,
+.contact-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+.contact-wrapper::before {
+  background: radial-gradient(
+    600px circle at 85% 15%,
+    color-mix(in srgb, var(--brand) 10%, transparent),
+    transparent 70%
+  );
+}
+.contact-wrapper::after {
+  background: radial-gradient(
+    500px circle at 15% 85%,
+    color-mix(in srgb, var(--hi) 8%, transparent),
+    transparent 70%
+  );
 }
 
 .contact-content {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1280px;
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: clamp(2rem, 4vw, 3.5rem);
 }
 
-/* --- Header --- */
+/* ====== Header (BLEIBT) ====== */
 .contact-header {
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 
 .contact-header__title {
@@ -37,7 +60,7 @@
   color: var(--txt);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 1rem;
+  margin: 0 0 1rem;
   line-height: 1.1;
 }
 
@@ -66,67 +89,110 @@
 }
 
 .contact-header__subtitle {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--txt-soft);
-  max-width: 600px;
+  max-width: 56ch;
   margin: 0 auto;
   line-height: 1.6;
 }
 
-/* --- Grid --- */
+/* ====== Asymmetrisches Grid ====== */
 .contact-grid {
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 2rem;
+  grid-template-columns: 5fr 7fr;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
   width: 100%;
+  align-items: stretch;
 }
 
-/* --- Card-Basis (Glass) --- */
+/* ====== Card-Basis (geteilt) ====== */
 .contact-card {
-  background: color-mix(in srgb, var(--surf) 50%, transparent);
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--surf-hi) 70%, transparent),
+    color-mix(in srgb, var(--surf) 55%, transparent)
+  );
   backdrop-filter: var(--blur-md);
   -webkit-backdrop-filter: var(--blur-md);
   border: 1px solid var(--brd);
-  border-radius: 24px;
-  padding: 3rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  border-radius: 18px;
+  padding: clamp(1.5rem, 2.5vw, 2.75rem);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Akzent-Linie oben (gold gradient) */
+.contact-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--brand) 70%, transparent) 30%,
+    color-mix(in srgb, var(--hi) 70%, transparent) 70%,
+    transparent
+  );
+  opacity: 0.7;
+  transition: opacity 0.4s ease;
 }
 
 .contact-card:hover {
-  border-color: var(--brd-hi);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--brand) 30%, var(--brd));
+  box-shadow: var(--shadow-lg), 0 0 30px color-mix(in srgb, var(--brand) 8%, transparent);
+  transform: translateY(-3px);
 }
 
+.contact-card:hover::before {
+  opacity: 1;
+}
+
+/* ====== Mobile (≤ 1023px) ====== */
 @media (max-width: 1023px) {
   .contact-wrapper {
     padding: 1rem;
-    overflow-x: hidden;
     align-items: flex-start;
+    overflow-x: hidden;
   }
 
   .contact-content {
-    gap: 1.5rem;
-  }
-
-  .contact-grid {
-    gap: 1rem;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .contact-card {
-    padding: 1.25rem;
-    border-radius: 12px;
+    gap: 1.25rem;
   }
 
   .contact-header__title {
-    font-size: 1.5rem;
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
     margin-bottom: 0.5rem;
   }
 
   .contact-header__subtitle {
-    font-size: 0.85rem;
-    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .contact-card {
+    padding: 1.25rem;
+    border-radius: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-card,
+  .contact-card::before {
+    transition: none;
+  }
+  .contact-card:hover {
+    transform: none;
   }
 }

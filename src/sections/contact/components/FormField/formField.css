@@ -1,18 +1,22 @@
-/* ================================================
-   FORM FIELD — Floating Label + Field-Akzentfarbe
-   --field-accent wird per Inline-Style gesetzt.
-   ================================================ */
+/* =========================================================
+   FORM FIELD — Floating Label, animierte Underline + Glow
+   --field-accent kommt per Inline-Style aus contactData.
+   ========================================================= */
 
 .form-field {
   position: relative;
   width: 100%;
-  /* Fallback falls --field-accent nicht gesetzt */
   --field-accent: var(--focus);
+}
+
+/* Inneres Wrapper für Glow ohne Layout-Shift */
+.form-field__inner {
+  position: relative;
 }
 
 .form-field__control {
   width: 100%;
-  padding: 1rem 0;
+  padding: 1.15rem 0 0.65rem;
   font-size: 1rem;
   color: var(--txt);
   background: transparent;
@@ -31,42 +35,108 @@
 
 .form-field__label {
   position: absolute;
-  top: 1rem;
+  top: 1.15rem;
   left: 0;
-  color: var(--txt-soft);
   pointer-events: none;
-  font-size: 1rem;
-  transition: top 0.25s ease, font-size 0.25s ease, color 0.25s ease,
-    letter-spacing 0.25s ease;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem;
+  color: var(--txt-soft);
+  letter-spacing: 0.01em;
+  transition:
+    top 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+    font-size 0.28s ease,
+    color 0.28s ease,
+    letter-spacing 0.28s ease,
+    transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 /* Floating-Label aktiv: Focus oder ausgefüllt */
 .form-field__control:focus ~ .form-field__label,
 .form-field__control:not(:placeholder-shown) ~ .form-field__label {
-  top: -0.8rem;
-  font-size: 0.8rem;
+  top: -0.4rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: var(--field-accent);
-  letter-spacing: 0.05em;
+  transform: translateY(0);
 }
 
-/* Underline-Animation */
+/* Underline — Track (ruhend) */
 .form-field__line {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 0;
+  right: 0;
   height: 2px;
+  background: transparent;
+  overflow: hidden;
+}
+
+/* Underline — Fill (animiert) */
+.form-field__line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    var(--field-accent),
+    color-mix(in srgb, var(--field-accent) 30%, transparent)
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.form-field__control:focus ~ .form-field__line::after,
+.form-field__control:not(:placeholder-shown) ~ .form-field__line::after {
+  transform: scaleX(1);
+}
+
+/* Akzent-Punkt links (Statusindikator) */
+.form-field__dot {
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
   background: var(--field-accent);
-  transition: width 0.4s ease;
+  transform: scale(0);
+  transform-origin: center;
+  box-shadow: 0 0 12px var(--field-accent);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1.4);
 }
 
-.form-field__control:focus ~ .form-field__line {
-  width: 100%;
+.form-field__control:focus ~ .form-field__dot {
+  transform: scale(1);
 }
 
-/* Card-Glow: dezenter Akzent-Schein wenn Feld fokussiert */
+/* Glow-Aura beim Focus */
 .form-field:focus-within {
-  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--field-accent) 25%, transparent));
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--field-accent) 22%, transparent));
+}
+
+/* Counter (rechts unten, optional) */
+.form-field__counter {
+  position: absolute;
+  right: 0;
+  bottom: -1.4rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--txt-soft);
+  opacity: 0;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.form-field:focus-within .form-field__counter,
+.form-field--has-value .form-field__counter {
+  opacity: 0.85;
+}
+
+.form-field__counter--limit {
+  color: var(--err);
+  opacity: 1;
 }
 
 /* Error-State */
@@ -78,10 +148,25 @@
   color: var(--err);
 }
 
+.form-field--error .form-field__line::after {
+  background: linear-gradient(
+    90deg,
+    var(--err),
+    color-mix(in srgb, var(--err) 35%, transparent)
+  );
+  transform: scaleX(1);
+}
+
+.form-field--error .form-field__dot {
+  background: var(--err);
+  box-shadow: 0 0 12px var(--err);
+  transform: scale(1);
+}
+
 .form-field__error {
   display: block;
-  margin-top: 0.4rem;
-  font-size: 0.8rem;
+  margin-top: 0.7rem;
+  font-size: 0.78rem;
   color: var(--err);
   letter-spacing: 0.02em;
 }
@@ -90,18 +175,20 @@
   .form-field__control {
     /* iOS: 16px verhindert Auto-Zoom */
     font-size: 16px;
-    padding: 0.6rem 0;
+    padding: 0.95rem 0 0.5rem;
   }
   .form-field__label {
-    font-size: 0.85rem;
-    top: 0.6rem;
+    font-size: 0.9rem;
+    top: 0.95rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .form-field__control,
   .form-field__label,
-  .form-field__line {
+  .form-field__line::after,
+  .form-field__dot,
+  .form-field__counter {
     transition: none;
   }
 }
