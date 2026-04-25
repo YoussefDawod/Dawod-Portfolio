@@ -37,7 +37,15 @@ export function useBGSAnimation({ canvasRef, imageRef, imageBehindRef, glowRef }
 
         const { ctx, resize } = setupCanvas(canvas);
         ctxRef.current = ctx;
+
+        // Alle Zustandsrefs auf Ausgangswert zurücksetzen.
+        // Notwendig weil React StrictMode im Dev-Mode Effects zweimal ausführt:
+        // mount → cleanup → mount. Ohne Reset überleben ANIMATION_MODE und
+        // scrollRef.currentSection den zweiten Mount, tokensRef wird aber neu
+        // auf createHomeTokens() gesetzt → inkonsistenter Zustand → Crash.
         tokensRef.current = createHomeTokens();
+        ANIMATION_MODE.current = null;
+        scrollRef.current.currentSection = null;
 
         let animationFrameId;
         let lastTime = performance.now();
