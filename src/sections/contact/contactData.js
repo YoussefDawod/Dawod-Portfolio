@@ -1,13 +1,18 @@
 /* ================================================
-   CONTACT DATA — Zentrale Inhaltsdatei für die Contact Section
+   CONTACT DATA — Zentrale Inhaltsdatei
    ================================================ */
 
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 
+export const recipient = {
+  email: 'dawod@yellowdeveloper.de',
+};
+
 export const header = {
   title: "Let's",
   highlight: 'Connect',
-  subtitle: 'Haben Sie eine Idee oder ein Projekt? Lassen Sie uns gemeinsam etwas Großartiges entwickeln.',
+  subtitle:
+    'Haben Sie eine Idee oder ein Projekt? Lassen Sie uns gemeinsam etwas Großartiges entwickeln.',
 };
 
 export const info = {
@@ -17,16 +22,77 @@ export const info = {
 };
 
 export const socials = [
-  { icon: FaGithub, label: 'GitHub', href: 'https://github.com/YoussefDawod', className: 'github' },
-  { icon: FaLinkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/youssef-dawod-203273215/', className: 'linkedin' },
-  { icon: FaEnvelope, label: 'Email', href: 'mailto:youssefdawod93@gmail.com', className: 'email' },
+  {
+    icon: FaGithub,
+    label: 'GitHub',
+    href: 'https://github.com/YoussefDawod',
+    className: 'github',
+  },
+  {
+    icon: FaLinkedin,
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/youssef-dawod-203273215/',
+    className: 'linkedin',
+  },
+  {
+    icon: FaEnvelope,
+    label: 'Email',
+    href: `mailto:${recipient.email}`,
+    className: 'email',
+  },
 ];
 
-export const form = {
-  fields: [
-    { id: 'name', type: 'text', label: 'Name' },
-    { id: 'email', type: 'email', label: 'Email' },
-    { id: 'message', type: 'textarea', label: 'Nachricht', rows: 4 },
-  ],
-  submitLabel: 'Nachricht Senden',
+/**
+ * Form-Felder mit Validierungs-Regeln und Akzentfarben.
+ * `accent` referenziert eine CSS-Variable aus styles/colors.css —
+ * jedes Feld bekommt im Focus-State seine eigene Farbe.
+ */
+export const formFields = [
+  {
+    id: 'name',
+    type: 'text',
+    label: 'Name',
+    autoComplete: 'name',
+    accent: 'var(--field-name-accent)',
+    validate: (v) => (v.trim().length >= 2 ? null : 'Bitte mindestens 2 Zeichen.'),
+  },
+  {
+    id: 'email',
+    type: 'email',
+    label: 'Email',
+    autoComplete: 'email',
+    accent: 'var(--field-email-accent)',
+    validate: (v) =>
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
+        ? null
+        : 'Bitte eine gültige Email-Adresse.',
+  },
+  {
+    id: 'message',
+    type: 'textarea',
+    label: 'Nachricht',
+    rows: 4,
+    accent: 'var(--field-message-accent)',
+    validate: (v) =>
+      v.trim().length >= 10 ? null : 'Bitte mindestens 10 Zeichen.',
+  },
+];
+
+export const submitText = {
+  idleLabel: 'Nachricht Senden',
+  sendingLabel: 'Wird gesendet …',
+  successToast: 'Nachricht gesendet — vielen Dank!',
+  errorToast: 'Senden fehlgeschlagen. Bitte später erneut versuchen.',
+  validationToast: 'Bitte prüfe die markierten Felder.',
+};
+
+/**
+ * Web3Forms Endpoint. Access-Key kommt aus der Env-Var
+ * VITE_WEB3FORMS_KEY (siehe .env.example).
+ */
+export const web3forms = {
+  endpoint: 'https://api.web3forms.com/submit',
+  accessKey: import.meta.env.VITE_WEB3FORMS_KEY ?? '',
+  subject: 'Neue Nachricht über Portfolio',
+  fromName: 'Portfolio Kontaktformular',
 };

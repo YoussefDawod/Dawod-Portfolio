@@ -5,6 +5,7 @@ import About from "./sections/about/About.jsx";
 import Projects from "./sections/projects/Projects.jsx";
 import Contact from "./sections/contact/Contact.jsx";
 import BGS from "./shared/BackgroundSystem/BGS.jsx";
+import AppToaster from "./shared/Toaster/Toaster.jsx";
 import "./styles/colors.css";
 import "./styles/glow.css";
 import "./styles/glass-card.css";
@@ -28,7 +29,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <>
       <BGS/>
       <Navbar />
       <main>
@@ -37,7 +38,8 @@ function App() {
         <section id="projects" data-section="PROJECTS"><Projects /></section>
         <section id="contact" data-section="CONTACT"><Contact /></section>
       </main>
-    </div>
+      <AppToaster />
+    </>
   );
 }
 

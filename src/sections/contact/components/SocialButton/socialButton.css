@@ -1,0 +1,50 @@
+.social-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: var(--surf);
+  border: 1px solid var(--brd);
+  border-radius: 12px;
+  color: var(--txt);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.social-btn span {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+}
+
+.social-btn svg {
+  font-size: 1.2rem;
+  color: var(--txt-soft);
+  transition: color 0.3s ease;
+}
+
+.social-btn:hover {
+  background: var(--surf-hi);
+  border-color: var(--brd-hi);
+  transform: translateX(5px);
+}
+
+.social-btn:hover svg {
+  color: var(--txt-brand);
+}
+
+.social-btn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+@media (max-width: 1023px) {
+  .social-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 0.8rem;
+    font-size: 0.8rem;
+    justify-content: center;
+  }
+}

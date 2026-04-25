@@ -1,0 +1,107 @@
+/* ================================================
+   FORM FIELD — Floating Label + Field-Akzentfarbe
+   --field-accent wird per Inline-Style gesetzt.
+   ================================================ */
+
+.form-field {
+  position: relative;
+  width: 100%;
+  /* Fallback falls --field-accent nicht gesetzt */
+  --field-accent: var(--focus);
+}
+
+.form-field__control {
+  width: 100%;
+  padding: 1rem 0;
+  font-size: 1rem;
+  color: var(--txt);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--brd);
+  outline: none;
+  font-family: inherit;
+  resize: none;
+  transition: border-color 0.3s ease;
+}
+
+.form-field__control:disabled {
+  color: var(--disabled-txt);
+  cursor: not-allowed;
+}
+
+.form-field__label {
+  position: absolute;
+  top: 1rem;
+  left: 0;
+  color: var(--txt-soft);
+  pointer-events: none;
+  font-size: 1rem;
+  transition: top 0.25s ease, font-size 0.25s ease, color 0.25s ease,
+    letter-spacing 0.25s ease;
+}
+
+/* Floating-Label aktiv: Focus oder ausgefüllt */
+.form-field__control:focus ~ .form-field__label,
+.form-field__control:not(:placeholder-shown) ~ .form-field__label {
+  top: -0.8rem;
+  font-size: 0.8rem;
+  color: var(--field-accent);
+  letter-spacing: 0.05em;
+}
+
+/* Underline-Animation */
+.form-field__line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--field-accent);
+  transition: width 0.4s ease;
+}
+
+.form-field__control:focus ~ .form-field__line {
+  width: 100%;
+}
+
+/* Card-Glow: dezenter Akzent-Schein wenn Feld fokussiert */
+.form-field:focus-within {
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--field-accent) 25%, transparent));
+}
+
+/* Error-State */
+.form-field--error .form-field__control {
+  border-bottom-color: var(--err);
+}
+
+.form-field--error .form-field__label {
+  color: var(--err);
+}
+
+.form-field__error {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--err);
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 1023px) {
+  .form-field__control {
+    /* iOS: 16px verhindert Auto-Zoom */
+    font-size: 16px;
+    padding: 0.6rem 0;
+  }
+  .form-field__label {
+    font-size: 0.85rem;
+    top: 0.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-field__control,
+  .form-field__label,
+  .form-field__line {
+    transition: none;
+  }
+}

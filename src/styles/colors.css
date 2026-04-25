@@ -99,6 +99,11 @@
   --input-brd: var(--brd);
   --input-brd-focus: var(--focus);
 
+  /* --- Form Field Accents (lebendige Form, jeder Felder eigene Farbe) --- */
+  --field-name-accent:    var(--ok);
+  --field-email-accent:   var(--btn-hi);
+  --field-message-accent: var(--brand-md);
+
   /* --- Gradients --- */
   --grad-brand: linear-gradient(135deg, var(--brand-lt), var(--brand-dk));
   --grad-hi: linear-gradient(135deg, var(--hi-lt), var(--hi-dk));

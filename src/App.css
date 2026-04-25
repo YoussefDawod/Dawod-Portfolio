@@ -43,17 +43,8 @@ main > section {
 
 /* =========================================
    SECTION-HÖHEN
-
-   Wir verwenden bewusst `svh` (smallest viewport height) statt `dvh`:
-   - `dvh` rechnet sich bei jedem Pixel Toolbar-Bewegung neu aus →
-     erzwingt Layout-Reflow während die Mobile-Toolbar ein-/ausfährt →
-     spürbarer Ruckler.
-   - `svh` ist konstant (= viewport mit sichtbarer Toolbar). Wenn die
-     Toolbar verschwindet, entsteht einfach etwas Platz darunter — kein Reflow.
-
-   Home/Projects haben feste Höhe, About/Contact dürfen für längeren
-   Inhalt auf Mobile wachsen. */
-#home     { height: 100svh; }
-#about    { min-height: 100svh; }
-#projects { height: 100svh; }
-#contact  { min-height: 100svh; }
+*/
+#home     { height: 100dvh; }
+#about    { min-height: 100dvh; }
+#projects { height: 100dvh; }
+#contact  { min-height: 100dvh; }

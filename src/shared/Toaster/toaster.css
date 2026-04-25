@@ -1,0 +1,25 @@
+/* ================================================
+   TOASTER — react-hot-toast Theme
+   Nutzt ausschließlich Design-Tokens.
+   ================================================ */
+
+.app-toast {
+  background: color-mix(in srgb, var(--surf) 92%, transparent);
+  color: var(--txt);
+  border: 1px solid var(--brd);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow-md);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+}
+
+.app-toast--success {
+  border-color: color-mix(in srgb, var(--ok) 50%, transparent);
+}
+
+.app-toast--error {
+  border-color: color-mix(in srgb, var(--err) 60%, transparent);
+}

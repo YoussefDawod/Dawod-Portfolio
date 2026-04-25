@@ -1,0 +1,42 @@
+.location-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--brd);
+  border-radius: 50px;
+  background: color-mix(in srgb, var(--surf) 50%, transparent);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--txt-soft);
+  transition: all 0.3s ease;
+}
+
+.location-badge:hover {
+  border-color: var(--brd-hi);
+  color: var(--txt);
+  background: var(--surf);
+  transform: translateY(-1px);
+}
+
+.location-badge__dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--ok);
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok), transparent 30%);
+  animation: location-badge-pulse 2s infinite;
+}
+
+@keyframes location-badge-pulse {
+  0%   { transform: scale(0.95); box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok), transparent 30%); }
+  70%  { transform: scale(1);    box-shadow: 0 0 0 6px color-mix(in srgb, var(--ok), transparent 100%); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok), transparent 100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .location-badge__dot { animation: none; }
+}
