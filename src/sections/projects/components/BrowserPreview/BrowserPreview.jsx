@@ -1,35 +1,37 @@
 import { useRef, useCallback } from 'react';
 import { IoChevronBack, IoChevronForward, IoReload } from 'react-icons/io5';
 import IframeScaler from './IframeScaler.jsx';
+import { getDomain } from '../../projectsUtils.js';
 import './browserPreview.css';
 
-function getDomain(url) {
-  if (!url) return '—';
-  try { return new URL(url).hostname; } catch { return url; }
-}
-
-function BrowserPreview({ project, iframeLoaded, onIframeLoad, isLeaving }) {
+function BrowserPreview({ project, iframeLoaded, onIframeLoad }) {
   const iframeRef = useRef(null);
   const domain = getDomain(project.liveUrl);
 
   const handleBack = useCallback(() => {
-    try { iframeRef.current?.contentWindow?.history.back(); } catch {}
+    try { iframeRef.current?.contentWindow?.history.back(); } catch { /* cross-origin: noop */ }
   }, []);
 
   const handleForward = useCallback(() => {
-    try { iframeRef.current?.contentWindow?.history.forward(); } catch {}
+    try { iframeRef.current?.contentWindow?.history.forward(); } catch { /* cross-origin: noop */ }
   }, []);
 
   const handleReload = useCallback(() => {
     try {
       const iframe = iframeRef.current;
-      if (iframe) { iframe.src = iframe.src; }
-    } catch {}
+      if (iframe) { const src = iframe.src; iframe.src = src; }
+    } catch { /* cross-origin: noop */ }
   }, []);
 
   return (
-    <div className={`browser-preview${isLeaving ? ' is-leaving' : ''}`}>
+    <div
+      className="browser-preview"
+      style={{ '--project-primary': project.primaryColor }}
+    >
       <div className="browser-frame">
+        {/* Project-Wechsel löst durch key-basierten Remount eine kurze
+            farbige Pulse-Animation aus — der iframe darunter bleibt stabil. */}
+        <span key={project.id} className="browser-frame__pulse" aria-hidden="true" />
 
         <div className="browser-toolbar">
           <div className="browser-nav">

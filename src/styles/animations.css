@@ -33,16 +33,22 @@
   50%      { transform: translateY(5px); }
 }
 
-@keyframes skeletonShimmer {
-  from { background-position: -600px 0; }
-  to   { background-position:  600px 0; }
-}
-
 /* ================================================
-   REDUCED MOTION
+   REDUCED MOTION — Policy
    ================================================
 
-   Jede Komponente regelt ihre eigene Reduced-Motion-
-   Logik lokal (z.B. home.css, typewriter.css).
-   Hier keine globale Policy — Spezifität bleibt sauber.
+   Wir nutzen keinen globalen `*`-Override (würde !important verlangen,
+   weil der Universal-Selektor 0 Spezifität hat und von jeder Klassen-
+   regel geschlagen wird).
+
+   Stattdessen:
+   - Komponenten mit Animationen/Transitions definieren ihren eigenen
+     `@media (prefers-reduced-motion: reduce)`-Block direkt neben der
+     animierten Regel (siehe navbar.css, carousel.css, infoPanel.css,
+     browserPreview.css).
+   - JS-/Canvas-Animationen prüfen `matchMedia` direkt
+     (siehe useBGSAnimation.js, Carousel.jsx).
+   - Globales `scroll-behavior` ist hier ohnehin nicht nötig, da
+     usePageSnap bereits `behavior: 'instant'` für Wrap-Jumps verwendet.
    ================================================ */
+

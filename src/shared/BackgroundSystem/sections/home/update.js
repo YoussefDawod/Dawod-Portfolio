@@ -11,6 +11,7 @@ import {
 } from '../../shared/core.js';
 
 import { TOKEN_FORMATION_DURATION, RING_SPACING_FACTOR, RING_OFFSET_FACTOR } from '../../shared/constants.js';
+import { contentMaskFactor } from '../../engine/contentMask.js';
 
 import {
     DISSOLVE_START,
@@ -79,13 +80,19 @@ export function updateHomeTokens(tokens = [], deltaTime = 0.016, scrollProgress 
         token.opacity = !token.spawned ? 0
             : token.formationProgress < 1 ? EASE_OUT_CUBIC(token.formationProgress) : 1;
 
-        // Dissolve (per-token, nur nach Formation)
-        if (globalDissolve > 0 && token.formationProgress >= 1) {
-            token.dissolveProgress = Math.max(0, Math.min(1, globalDissolve));
-        } else if (token.formationProgress < 1) {
+        // Dissolve (Train-Flow: per-token Stagger + Half-Rotation Boost)
+        // Outer Layer 2 verlässt zuerst, Inner Layer 0 zuletzt.
+        // Innerhalb jeder Gruppe wave-stagger über indexInLayer.
+        if (token.formationProgress < 1) {
             token.dissolveProgress = 0;
         } else {
-            token.dissolveProgress = Math.max(0, token.dissolveProgress - dt * 2);
+            const delay = token.dissolveDelay ?? 0;
+            const duration = token.dissolveDuration ?? 1;
+            const localDissolve = Math.max(0, Math.min(1, (globalDissolve - delay) / duration));
+            // Smooth decay beim Zurückscrollen
+            token.dissolveProgress = (localDissolve > token.dissolveProgress)
+                ? localDissolve
+                : Math.max(localDissolve, token.dissolveProgress - dt * 2);
         }
 
         // ===== POSITION =====
@@ -102,14 +109,16 @@ export function updateHomeTokens(tokens = [], deltaTime = 0.016, scrollProgress 
 
         let posX, posY;
 
-        // Formation: Zentrum → Orbit (mit Swirl)
+        // Phase 1: Formation aus dem Außenraum (nicht mehr aus der Mitte).
+        // Jeder Token erscheint an seiner Orbit-Position, leicht weiter
+        // außen, und settelt sanft mit minimalem Swirl ein.
         if (token.formationProgress < 1) {
             const t = EASE_OUT_CUBIC(token.formationProgress);
-            const swirl = (1 - t) * SWIRL_ANGLE;
-            const tX = centerNorm.x + (Math.cos(token.orbitAngle + swirl) * currentRadius) / cssWidth;
-            const tY = centerNorm.y + (Math.sin(token.orbitAngle + swirl) * currentRadius) / cssHeight;
-            posX = centerNorm.x + (tX - centerNorm.x) * t;
-            posY = centerNorm.y + (tY - centerNorm.y) * t;
+            const outerScale = 1 + (1 - t) * 0.28;     // 1.28× → 1.00×
+            const swirl = (1 - t) * SWIRL_ANGLE * 0.20; // sehr dezent
+            const r = currentRadius * outerScale;
+            posX = centerNorm.x + (Math.cos(token.orbitAngle + swirl) * r) / cssWidth;
+            posY = centerNorm.y + (Math.sin(token.orbitAngle + swirl) * r) / cssHeight;
         } else {
             posX = orbitX;
             posY = orbitY;
@@ -149,6 +158,15 @@ export function updateHomeTokens(tokens = [], deltaTime = 0.016, scrollProgress 
 
         // Rotation & Breathing
         token.rotation += token.rotationSpeed * dt;
+
+        // Train-Flow Half-Rotation Boost: peakt bei dissolveProgress=0.5,
+        // kehrt zurück bei 1. Delta zur Vorframe wird auf rotation addiert,
+        // damit der Effekt "transient" bleibt und sich nicht akkumuliert.
+        const newBoost = Math.sin(token.dissolveProgress * Math.PI) * (Math.PI / 4);
+        const prevBoost = token.dissolveRotBoost ?? 0;
+        token.rotation += (newBoost - prevBoost);
+        token.dissolveRotBoost = newBoost;
+
         token.breathPhase += token.breathSpeed * dt;
         if (token.breathPhase > TAU) token.breathPhase -= TAU;
 
@@ -156,6 +174,9 @@ export function updateHomeTokens(tokens = [], deltaTime = 0.016, scrollProgress 
         const edgeDist = Math.min(token.renderX, 1 - token.renderX, token.renderY, 1 - token.renderY);
         token.wrapOpacity = (edgeDist < EDGE_FADE_ZONE) ? Math.max(0, edgeDist / EDGE_FADE_ZONE) : 1;
         token.opacity *= token.wrapOpacity;
+
+        // Phase 1: Inhalts-Respekt-Mask
+        token.opacity *= contentMaskFactor(token.renderX, token.renderY);
     });
 
     return tokens;

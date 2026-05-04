@@ -60,10 +60,10 @@ export const skillGroups = [
   {
     name: 'Frontend — mein Zuhause',
     skills: [
-      { name: 'React',        icon: SiReact,        color: '#61DAFB' },
-      { name: 'JavaScript',   icon: SiJavascript,   color: '#F7DF1E' },
-      { name: 'CSS / SCSS',   icon: SiCss3,         color: '#1572B6' },
       { name: 'HTML',         icon: SiHtml5,        color: '#E34F26' },
+      { name: 'CSS / SCSS',   icon: SiCss3,         color: '#1572B6' },
+      { name: 'JavaScript',   icon: SiJavascript,   color: '#F7DF1E' },
+      { name: 'React',        icon: SiReact,        color: '#61DAFB' },
       { name: 'Tailwind CSS', icon: SiTailwindcss,  color: '#06B6D4' },
       { name: 'Bootstrap',    icon: SiBootstrap,    color: '#7952B3' },
       { name: 'DOM',          icon: TbBinaryTree,   color: null      },

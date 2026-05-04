@@ -1,21 +1,21 @@
-/**
- * Section Transitions — Pure Functions für Section-Wechsel
+﻿/**
+ * Section Transitions â€” Pure Functions fÃ¼r Section-Wechsel
  * Berechnet neue Animation-Tokens basierend auf Scroll-Richtung
  */
 
 import { createHomeTokens, convertHomeTokensToAbout } from '../sections/home/tokens.js';
-import { convertAboutToHome, convertAboutToProjects } from '../sections/about/convert.js';
-import { createProjectsForms, convertProjectsToAbout } from '../sections/projects/index.js';
-import { createContactNodes, convertContactToProjects } from '../sections/contact/index.js';
+import { convertAboutToHome } from '../sections/about/convert.js';
+import { createProjectsForms } from '../sections/projects/index.js';
+import { createContactNodes } from '../sections/contact/index.js';
 
-export const SECTION_ORDER = ['YD', 'ABOUT', 'PROJECTS', 'CONTACT'];
+const SECTION_ORDER = ['YD', 'ABOUT', 'PROJECTS', 'CONTACT'];
 const SECTION_MODES = { YD: 'home', ABOUT: 'about', PROJECTS: 'projects', CONTACT: 'contact' };
 
 /**
- * Berechnet neue Tokens + Modus für einen Section-Wechsel.
+ * Berechnet neue Tokens + Modus fÃ¼r einen Section-Wechsel.
  * @returns {{ mode: string, tokens: Array|Object, justReturned: boolean }}
  */
-export function computeSectionTransition(prevSection, newSection, prevTokens) {
+function computeSectionTransition(prevSection, newSection, prevTokens) {
     const prevIdx = SECTION_ORDER.indexOf(prevSection);
     const newIdx = SECTION_ORDER.indexOf(newSection);
     const isForward = newIdx > prevIdx;
@@ -23,9 +23,17 @@ export function computeSectionTransition(prevSection, newSection, prevTokens) {
 
     switch (newSection) {
         case 'YD': {
-            const tokens = (prevSection === 'ABOUT' && !isForward)
-                ? createHomeTokens({ previousTokens: convertAboutToHome(prevTokens) })
-                : createHomeTokens({ previousTokens: prevTokens });
+            let prev;
+            if (prevSection === 'ABOUT' && !isForward) {
+                prev = convertAboutToHome(prevTokens);
+            } else if (prevSection === 'CONTACT') {
+                // BGS-Tausch: Contact rendert das Projects-Grid (Forms-State).
+                // â†’ saubere Re-Creation, kein Token-Array zum Konvertieren.
+                prev = [];
+            } else {
+                prev = prevTokens;
+            }
+            const tokens = createHomeTokens({ previousTokens: prev });
             return { mode, tokens, justReturned: true };
         }
         case 'ABOUT': {
@@ -33,39 +41,35 @@ export function computeSectionTransition(prevSection, newSection, prevTokens) {
             if (prevSection === 'YD' && isForward) {
                 tokens = convertHomeTokensToAbout(prevTokens);
             } else if (prevSection === 'PROJECTS' && !isForward) {
-                tokens = convertProjectsToAbout(prevTokens);
+                // BGS-Tausch: Projects rendert Linien-Tokens (kein Forms-State).
+                // â†’ frische Home-Tokens â†’ Chaos-Konvertierung.
+                tokens = convertHomeTokensToAbout(createHomeTokens());
             } else {
                 tokens = convertHomeTokensToAbout(createHomeTokens({ previousTokens: prevTokens }));
             }
             return { mode, tokens, justReturned: false };
         }
         case 'PROJECTS': {
-            let prev;
-            if (prevSection === 'ABOUT' && isForward) {
-                prev = convertAboutToProjects(prevTokens);
-            } else if (prevSection === 'CONTACT' && !isForward) {
-                prev = convertContactToProjects(prevTokens);
-            } else {
-                prev = prevTokens;
-            }
-            return { mode, tokens: createProjectsForms({ previousTokens: prev }), justReturned: false };
+            // BGS-Tausch: Projects-Bereich rendert das Linien-Token-System.
+            return { mode, tokens: createContactNodes({ previousTokens: [] }), justReturned: false };
         }
         case 'CONTACT':
-            return { mode, tokens: createContactNodes({ previousTokens: prevTokens }), justReturned: false };
+            // BGS-Tausch: Contact-Bereich rendert das Projects-Grid.
+            return { mode, tokens: createProjectsForms({ previousTokens: [] }), justReturned: false };
         default:
             return { mode: 'home', tokens: createHomeTokens({ previousTokens: prevTokens }), justReturned: false };
     }
 }
 
 /**
- * Vollständiger Section-Wechsel: Aktualisiert scrollRef und berechnet Tokens.
+ * VollstÃ¤ndiger Section-Wechsel: Aktualisiert scrollRef und berechnet Tokens.
  * @returns {null|{ mode: string, tokens: Array|Object, justReturned: boolean }}
  */
 export function handleSectionChange(newSection, scrollRef, tokensRef, animationModeRef) {
     const prevSection = scrollRef.current.currentSection;
     if (prevSection === newSection) return null;
 
-    // Scroll-Referenzdaten für neue Section
+    // Scroll-Referenzdaten fÃ¼r neue Section
     const sectionEl = document.querySelector(`section[data-section="${newSection}"]`);
     if (sectionEl) {
         const rect = sectionEl.getBoundingClientRect();

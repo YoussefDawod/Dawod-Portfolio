@@ -1,0 +1,128 @@
+﻿/* =========================================================
+   INFO COLUMN — Card-less Editorial Stack
+   Pure Typografie, Hairlines statt Borders.
+   ========================================================= */
+
+.info-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-right: var(--space-3);
+  position: relative;
+}
+
+/* Hairline rechts (nur Desktop) — trennt Info von Form */
+.info-col::after {
+  content: '';
+  position: absolute;
+  top: var(--space-1);
+  bottom: var(--space-1);
+  right: 0;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in srgb, var(--txt-soft) 25%, transparent) 20%,
+    color-mix(in srgb, var(--txt-soft) 25%, transparent) 80%,
+    transparent
+  );
+}
+
+/* --- Eyebrow --- */
+.info-col__eyebrow {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--brand) 80%, var(--txt-soft));
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.info-col__eyebrow::before {
+  content: '';
+  width: var(--space-3);
+  height: 1px;
+  background: color-mix(in srgb, var(--brand) 60%, transparent);
+}
+
+/* --- Heading --- */
+.info-col__heading {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--txt);
+  margin: 0;
+  max-width: 18ch;
+}
+
+/* --- Body-Text --- */
+.info-col__text {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--txt-soft);
+  max-width: 38ch;
+  margin: 0;
+}
+
+/* --- Location-Badge Wrapper --- */
+.info-col__location {
+  margin-top: var(--space-1);
+}
+
+/* --- Socials --- */
+.info-col__socials-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-3);
+}
+
+.info-col__socials-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--txt-soft);
+}
+
+.info-col__socials {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Mobile --- */
+@media (max-width: 1024px) {
+  .info-col {
+    padding-right: 0;
+    gap: var(--space-2);
+  }
+
+  .info-col::after {
+    display: none;
+  }
+
+  .info-col__heading {
+    font-size: 1.4rem;
+    max-width: 100%;
+  }
+
+  .info-col__text {
+    font-size: 0.9rem;
+    max-width: 100%;
+  }
+
+  .info-col__socials-wrap {
+    padding-top: var(--space-2);
+  }
+}

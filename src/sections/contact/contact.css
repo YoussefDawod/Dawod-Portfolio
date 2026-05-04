@@ -1,77 +1,69 @@
 /* =========================================================
-   CONTACT — Section Layout (Editorial Studio)
-   Header & LocationBadge bleiben aus älterem Design erhalten.
+   CONTACT — Editorial, Premium, Card-less
+   - Fibonacci-Spacing
+   - Goldener Schnitt 38.2 / 61.8
+   - YD-Lens mit Maus-Tracking, blended mit BGS
+   - Reveal-Choreografie via IntersectionObserver
    ========================================================= */
 
-.contact-wrapper {
+.contact {
+  position: relative;
   width: 100%;
-  min-height: calc(100svh - 5rem);
+  height: 100%;
+  min-height: calc(100svh - var(--navbar-h, 5rem));
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1rem, 4vw, 3rem);
-  position: relative;
-  z-index: 10;
+  padding: var(--space-4) var(--space-3);
   isolation: isolate;
+  overflow: hidden;
 }
 
-/* Subtiles Brand-Glow im Hintergrund — diagonal */
-.contact-wrapper::before,
-.contact-wrapper::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-}
-.contact-wrapper::before {
-  background: radial-gradient(
-    600px circle at 85% 15%,
-    color-mix(in srgb, var(--brand) 10%, transparent),
-    transparent 70%
-  );
-}
-.contact-wrapper::after {
-  background: radial-gradient(
-    500px circle at 15% 85%,
-    color-mix(in srgb, var(--hi) 8%, transparent),
-    transparent 70%
-  );
-}
-
-.contact-content {
+.contact__inner {
   width: 100%;
   max-width: 1280px;
   display: flex;
   flex-direction: column;
-  gap: clamp(2rem, 4vw, 3.5rem);
-}
-
-/* ====== Header (BLEIBT) ====== */
-.contact-header {
-  text-align: center;
-  margin-bottom: 0;
-}
-
-.contact-header__title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(2rem, 5vw, 4.5rem);
-  font-weight: 700;
-  color: var(--txt);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin: 0 0 1rem;
-  line-height: 1.1;
-}
-
-.contact-header__highlight {
-  color: transparent;
-  -webkit-text-stroke: 1px var(--txt-brand);
+  gap: var(--space-5);
   position: relative;
+  z-index: 2;
+}
+
+/* =========================================================
+   HEADER — Index, Title (mit Hover-Effekt), Rule
+   ========================================================= */
+
+.contact__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  text-align: center;
+  align-items: center;
+}
+
+.contact__title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--txt);
+  margin: 0;
+}
+
+.contact__title-word {
   display: inline-block;
 }
 
-.contact-header__highlight::after {
+.contact__title-highlight {
+  position: relative;
+  display: inline-block;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--txt-brand);
+}
+
+.contact__title-highlight::after {
   content: attr(data-text);
   position: absolute;
   left: 0;
@@ -79,120 +71,190 @@
   color: var(--txt-brand);
   width: 0%;
   overflow: hidden;
-  transition: width 0.5s ease-in-out;
   white-space: nowrap;
   border-right: 2px solid var(--txt-brand);
+  transition: width 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.contact-wrapper:hover .contact-header__highlight::after {
+.contact:hover .contact__title-highlight::after {
   width: 100%;
 }
 
-.contact-header__subtitle {
-  font-size: 1.05rem;
-  color: var(--txt-soft);
-  max-width: 56ch;
-  margin: 0 auto;
-  line-height: 1.6;
+.contact__rule {
+  width: var(--space-5);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--txt-brand), transparent);
+  margin-top: var(--space-2);
 }
 
-/* ====== Asymmetrisches Grid ====== */
-.contact-grid {
+/* =========================================================
+   GRID — Goldener Schnitt 38.2 / 61.8
+   ========================================================= */
+
+.contact__grid {
   display: grid;
-  grid-template-columns: 5fr 7fr;
-  gap: clamp(1.25rem, 2.5vw, 2rem);
+  grid-template-columns: 38.2fr 61.8fr;
+  gap: var(--space-5);
   width: 100%;
   align-items: stretch;
 }
 
-/* ====== Card-Basis (geteilt) ====== */
-.contact-card {
-  position: relative;
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--surf-hi) 70%, transparent),
-    color-mix(in srgb, var(--surf) 55%, transparent)
-  );
-  backdrop-filter: var(--blur-md);
-  -webkit-backdrop-filter: var(--blur-md);
-  border: 1px solid var(--brd);
-  border-radius: 18px;
-  padding: clamp(1.5rem, 2.5vw, 2.75rem);
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
+.contact__column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================================
+   REVEAL — Stagger via --reveal-delay
+   ========================================================= */
+
+.contact .reveal {
+  opacity: 0;
+  transform: translateY(18px);
   transition:
-    border-color 0.4s ease,
-    box-shadow 0.4s ease,
-    transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
 }
 
-/* Akzent-Linie oben (gold gradient) */
-.contact-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in srgb, var(--brand) 70%, transparent) 30%,
-    color-mix(in srgb, var(--hi) 70%, transparent) 70%,
-    transparent
-  );
-  opacity: 0.7;
-  transition: opacity 0.4s ease;
-}
-
-.contact-card:hover {
-  border-color: color-mix(in srgb, var(--brand) 30%, var(--brd));
-  box-shadow: var(--shadow-lg), 0 0 30px color-mix(in srgb, var(--brand) 8%, transparent);
-  transform: translateY(-3px);
-}
-
-.contact-card:hover::before {
+.contact[data-revealed='true'] .reveal {
   opacity: 1;
+  transform: none;
 }
 
-/* ====== Mobile (≤ 1023px) ====== */
-@media (max-width: 1023px) {
-  .contact-wrapper {
-    padding: 1rem;
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  .contact {
+    padding: var(--space-3) var(--space-2);
     align-items: flex-start;
-    overflow-x: hidden;
+    overflow: hidden;
   }
 
-  .contact-content {
-    gap: 1.25rem;
+  .contact__inner {
+    gap: var(--space-4);
   }
 
-  .contact-header__title {
-    font-size: clamp(1.6rem, 7vw, 2.2rem);
-    margin-bottom: 0.5rem;
-  }
-
-  .contact-header__subtitle {
-    font-size: 0.9rem;
-  }
-
-  .contact-grid {
+  .contact__grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: var(--space-4);
   }
 
-  .contact-card {
-    padding: 1.25rem;
-    border-radius: 14px;
+  .contact__title {
+    font-size: clamp(2rem, 9vw, 3rem);
+  }
+
+  .contact__rule {
+    width: var(--space-4);
   }
 }
+
+/* =========================================================
+   FOOTER — Copyright + Rechtliche Links
+   ========================================================= */
+
+.contact__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-3);
+  border-top: 1px solid color-mix(in srgb, var(--txt-soft) 12%, transparent);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.68rem;
+  color: var(--txt-soft);
+  letter-spacing: 0.08em;
+  gap: var(--space-3);
+}
+
+.contact__footer-copy {
+  opacity: 0.6;
+}
+
+.contact__footer-nav {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.contact__footer-nav a {
+  color: var(--txt-soft);
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 0.25s ease, color 0.25s ease;
+}
+
+.contact__footer-nav a:hover {
+  opacity: 1;
+  color: var(--txt-brand);
+}
+
+@media (max-width: 600px) {
+  .contact__footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+}
+
+/* =========================================================
+   SECTION ANIMATION — data-anim System (wie Projects)
+   ========================================================= */
+
+@keyframes ct-head-in  { from { transform: translateY(30px);  opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes ct-head-out { from { transform: none; opacity: 1; } to { transform: translateY(-30px); opacity: 0; } }
+@keyframes ct-col-in   { from { transform: translateY(60px);  opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes ct-col-out  { from { transform: none; opacity: 1; } to { transform: translateY(-60px); opacity: 0; } }
+@keyframes ct-init     { from { transform: translateY(8px);   opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* --- Enter Forward (kommt von Projects = scrollt nach unten) --- */
+.contact[data-anim="enter-fwd"] .contact__header              { animation: ct-head-in 380ms var(--ease-glide)   0ms both; }
+.contact[data-anim="enter-fwd"] .contact__column:first-child  { animation: ct-col-in  380ms var(--ease-glide)  60ms both; }
+.contact[data-anim="enter-fwd"] .contact__column:last-child   { animation: ct-col-in  380ms var(--ease-glide) 120ms both; }
+
+/* --- Enter Backward (kommt von potentieller zukünftiger Section) --- */
+.contact[data-anim="enter-bwd"] .contact__header              { animation: ct-head-in 380ms var(--ease-glide)   0ms both; }
+.contact[data-anim="enter-bwd"] .contact__column:first-child  { animation: ct-col-in  380ms var(--ease-glide)  60ms both; }
+.contact[data-anim="enter-bwd"] .contact__column:last-child   { animation: ct-col-in  380ms var(--ease-glide) 120ms both; }
+
+/* --- Exit Forward --- */
+.contact[data-anim="exit-fwd"] .contact__header               { animation: ct-head-out 200ms ease-in   0ms both; }
+.contact[data-anim="exit-fwd"] .contact__column:first-child   { animation: ct-col-out  230ms ease-in  40ms both; }
+.contact[data-anim="exit-fwd"] .contact__column:last-child    { animation: ct-col-out  230ms ease-in  70ms both; }
+
+/* --- Exit Backward --- */
+.contact[data-anim="exit-bwd"] .contact__header               { animation: ct-head-out 200ms ease-in   0ms both; }
+.contact[data-anim="exit-bwd"] .contact__column:first-child   { animation: ct-col-out  230ms ease-in  40ms both; }
+.contact[data-anim="exit-bwd"] .contact__column:last-child    { animation: ct-col-out  230ms ease-in  70ms both; }
+
+/* --- Init (Seite lädt direkt auf Contact) --- */
+.contact[data-anim="init"] .contact__header             { animation: ct-init 500ms var(--ease-glide)   0ms both; }
+.contact[data-anim="init"] .contact__column:first-child { animation: ct-init 500ms var(--ease-glide)  80ms both; }
+.contact[data-anim="init"] .contact__column:last-child  { animation: ct-init 500ms var(--ease-glide) 160ms both; }
+
+/* Reveal-Übergang deaktivieren solange data-anim aktiv (section-Anim übernimmt) */
+.contact[data-anim] .contact__header .reveal,
+.contact[data-anim] .contact__column .reveal {
+  transition: none;
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-  .contact-card,
-  .contact-card::before {
+  .contact .reveal,
+  .contact__title-highlight::after {
     transition: none;
   }
-  .contact-card:hover {
+  .contact .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .contact[data-anim] .contact__header,
+  .contact[data-anim] .contact__column {
+    animation: none;
+    opacity: 1;
     transform: none;
   }
 }

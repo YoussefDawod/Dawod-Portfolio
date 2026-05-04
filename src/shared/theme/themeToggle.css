@@ -1,0 +1,95 @@
+/* ================================================
+   THEME TOGGLE — floating token (oben rechts)
+   Gleiche visuelle Sprache wie Navbar: kein Glas,
+   kein Border — nur Icon + filter: drop-shadow glow.
+================================================ */
+
+.theme-toggle {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.5rem;
+  z-index: 1000;
+
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: color-mix(in srgb, var(--txt-soft) 70%, transparent);
+  font-size: 1.25rem;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+
+  filter: drop-shadow(0 0 0px transparent);
+  transition:
+    color     0.25s ease,
+    filter    0.25s ease,
+    transform 0.2s  cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme-toggle:hover {
+  color: var(--txt);
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 7px color-mix(in srgb, var(--txt-brand) 65%, transparent));
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* Icon-Stack: Sun + Moon übereinander, Crossfade je nach State */
+.theme-toggle__icon {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity   var(--dur-2) var(--ease-soft),
+    transform var(--dur-2) var(--ease-soft);
+}
+
+/* Default = dark → Mond sichtbar, Sonne versteckt */
+.theme-toggle[data-theme-state="dark"] .theme-toggle__icon--moon {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+.theme-toggle[data-theme-state="dark"] .theme-toggle__icon--sun {
+  opacity: 0;
+  transform: rotate(-60deg) scale(0.5);
+}
+
+/* Light → Sonne sichtbar, Mond versteckt */
+.theme-toggle[data-theme-state="light"] .theme-toggle__icon--sun {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+  color: var(--brand-md);
+}
+.theme-toggle[data-theme-state="light"] .theme-toggle__icon--moon {
+  opacity: 0;
+  transform: rotate(60deg) scale(0.5);
+}
+
+/* Mobile: safe-area aware */
+@media (max-width: 1024px) {
+  .theme-toggle {
+    top: max(1rem, calc(env(safe-area-inset-top, 0px) + 0.6rem));
+    right: max(1rem, calc(env(safe-area-inset-right, 0px) + 1rem));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle {
+    transition: none;
+    transform: none;
+  }
+  .theme-toggle__icon {
+    transition: none;
+  }
+}

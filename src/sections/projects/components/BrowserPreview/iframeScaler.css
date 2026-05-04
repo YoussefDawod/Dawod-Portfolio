@@ -1,6 +1,4 @@
-/* ================================================
-   IFRAME SCALER — Skalierter Iframe Container
-   ================================================ */
+/* iframeScaler.css — Skalierter iframe Container */
 
 .iframe-scaler {
   width: 100%;
@@ -26,7 +24,7 @@
   gap: 0.4rem;
   background: color-mix(
     in srgb,
-    var(--project-primary, var(--brand)) 6%,
+    var(--project-primary) 6%,
     var(--surf)
   );
 }

@@ -122,7 +122,7 @@ export function useContactForm() {
         setStatus('error');
       }
     },
-    [values, honeypot, validateAll, reset]
+    [values, honeypot, validateAll, reset, consent]
   );
 
   return {

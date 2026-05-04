@@ -2,10 +2,8 @@ import { useId } from 'react';
 import './formField.css';
 
 /**
- * Wiederverwendbares Form-Feld mit Floating-Label, animierter Underline,
- * Akzent-Punkt und optionalem Zeichen-Counter.
- *
- * Akzentfarbe wird via CSS-Variable `--field-accent` (Inline-Style) injiziert.
+ * FormField — kein Card, nur Hairline + großes Type.
+ * --field-accent inline injiziert.
  */
 function FormField({
   id,
@@ -39,35 +37,30 @@ function FormField({
     disabled,
     autoComplete,
     maxLength,
-    placeholder: ' ', // notwendig für :placeholder-shown Logik
+    placeholder: ' ',
     'aria-required': required,
     'aria-invalid': hasError,
     'aria-describedby': hasError ? errorId : undefined,
-    className: 'form-field__control',
+    className: 'field__control',
   };
 
   const classes = [
-    'form-field',
-    hasError && 'form-field--error',
-    hasValue && 'form-field--has-value',
+    'field',
+    hasError && 'field--error',
+    hasValue && 'field--has-value',
   ]
     .filter(Boolean)
     .join(' ');
 
   return (
     <div className={classes} style={{ '--field-accent': accent }}>
-      {isTextarea ? (
-        <textarea rows={rows} {...commonProps} />
-      ) : (
-        <input type={type} {...commonProps} />
-      )}
-      <label htmlFor={id} className="form-field__label">{label}</label>
-      <span className="form-field__line" aria-hidden="true" />
-      <span className="form-field__dot" aria-hidden="true" />
+      {isTextarea ? <textarea rows={rows} {...commonProps} /> : <input type={type} {...commonProps} />}
+      <label htmlFor={id} className="field__label">{label}</label>
+      <span className="field__line" aria-hidden="true" />
 
       {showCounter && (
         <span
-          className={`form-field__counter${atLimit ? ' form-field__counter--limit' : ''}`}
+          className={`field__counter${atLimit ? ' field__counter--limit' : ''}`}
           aria-live="polite"
         >
           {value.length} / {maxLength}
@@ -75,7 +68,7 @@ function FormField({
       )}
 
       {hasError && (
-        <span id={errorId} className="form-field__error" role="alert">
+        <span id={errorId} className="field__error" role="alert">
           {error}
         </span>
       )}

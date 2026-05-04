@@ -1,41 +1,43 @@
-/* =========================================================
-   CONTACT FORM — Stack mit Submit-Pill
+﻿/* =========================================================
+   CONTACT FORM — Editorial, Card-less
    ========================================================= */
 
-.form-card {
+.cform {
   display: flex;
   flex-direction: column;
-}
-
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  gap: var(--space-4);
+  width: 100%;
   height: 100%;
+  position: relative;
 }
 
-.contact-form__eyebrow {
+.cform__eyebrow {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: color-mix(in srgb, var(--brand) 80%, var(--txt-soft));
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  margin: 0;
+  gap: var(--space-2);
 }
 
-.contact-form__eyebrow::before {
+.cform__eyebrow::before {
   content: '';
-  width: 1.75rem;
+  width: var(--space-3);
   height: 1px;
   background: color-mix(in srgb, var(--brand) 60%, transparent);
 }
 
-/* Honeypot: visuell versteckt, aber im DOM für Bots sichtbar */
-.contact-form__honeypot {
+.cform__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Honeypot */
+.cform__honeypot {
   position: absolute;
   left: -9999px;
   width: 1px;
@@ -44,131 +46,126 @@
   pointer-events: none;
 }
 
-/* Footer-Bereich (Consent + Footnote + Submit) */
-.contact-form__footer {
+/* Footer */
+.cform__footer {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--space-3);
   margin-top: auto;
-  padding-top: 0.5rem;
+  padding-top: var(--space-3);
+  border-top: 1px solid color-mix(in srgb, var(--txt-soft) 14%, transparent);
 }
 
-.contact-form__footnote {
-  font-size: 0.72rem;
+.cform__footnote {
+  font-size: 0.7rem;
   color: var(--txt-soft);
   letter-spacing: 0.02em;
   line-height: 1.5;
   margin: 0;
-  opacity: 0.8;
+  opacity: 0.75;
 }
 
-/* --- Submit Button (Pill mit Slide-Pfeil) --- */
-.contact-form__submit {
+/* =========================================================
+   SUBMIT — Gefüllter Brand-Button mit Glow
+   ========================================================= */
+
+.cform__submit {
   position: relative;
   align-self: flex-start;
   display: inline-flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 2rem 1rem 1.75rem;
-  background: var(--btn-brand);
-  border: 1px solid var(--btn-brand);
-  border-radius: 999px;
+  gap: var(--space-2);
+  padding: 0.7rem 1.6rem;
+  background: var(--brand);
+  border: 1px solid var(--brand);
+  border-radius: var(--r-sm);
   color: var(--txt-on-brand);
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
-  font-size: 0.85rem;
-  letter-spacing: 0.15em;
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   cursor: pointer;
   overflow: hidden;
   isolation: isolate;
-  box-shadow: var(--shadow-brand);
   transition:
-    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 0.35s ease,
-    background 0.3s ease,
-    border-color 0.3s ease;
+    box-shadow  var(--dur-1) var(--ease-micro),
+    transform   var(--dur-1) var(--ease-micro),
+    background  var(--dur-1) var(--ease-micro);
 }
 
-.contact-form__submit::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--brand), var(--hi));
-  transform: translateX(-101%);
-  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
-  z-index: -1;
+.cform__submit:hover:not(:disabled) {
+  background: var(--btn-brand-hover);
+  border-color: var(--btn-brand-hover);
+  box-shadow:
+    0 0 16px var(--glow-brand),
+    0 0 40px var(--glow-brand-soft);
+  transform: translateY(-1px);
 }
 
-.contact-form__submit:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 28px color-mix(in srgb, var(--brand) 55%, transparent);
-}
-
-.contact-form__submit:hover:not(:disabled)::before {
-  transform: translateX(0);
-}
-
-.contact-form__submit:active:not(:disabled) {
+.cform__submit:active:not(:disabled) {
   transform: translateY(0);
+  box-shadow: 0 0 8px var(--glow-brand-soft);
 }
 
-.contact-form__submit:focus-visible {
+.cform__submit:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 4px;
 }
 
-.contact-form__submit:disabled {
-  opacity: 0.7;
+.cform__submit:disabled {
+  opacity: 0.65;
   cursor: progress;
-  box-shadow: none;
 }
 
-.contact-form__submit-icon {
-  font-size: 1rem;
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+.cform__submit-label {
+  position: relative;
 }
 
-.contact-form__submit:hover:not(:disabled) .contact-form__submit-icon {
+.cform__submit-arrow {
+  font-size: 0.85rem;
+  transition: transform var(--dur-1) var(--ease-micro);
+}
+
+.cform__submit:hover:not(:disabled) .cform__submit-arrow {
+  transform: translateX(3px);
+}
+
+.cform__submit:hover:not(:disabled) .cform__submit-arrow {
   transform: translateX(4px);
 }
 
-/* --- Spinner --- */
-.contact-form__spinner {
-  width: 1rem;
-  height: 1rem;
+/* Spinner */
+.cform__spinner {
+  width: 0.85rem;
+  height: 0.85rem;
   border-radius: 50%;
-  border: 2px solid color-mix(in srgb, var(--txt-on-brand) 30%, transparent);
-  border-top-color: var(--txt-on-brand);
-  animation: contact-form-spin 0.7s linear infinite;
+  border: 2px solid color-mix(in srgb, var(--txt-brand) 30%, transparent);
+  border-top-color: var(--txt-brand);
+  animation: cform-spin 0.7s linear infinite;
 }
 
-@keyframes contact-form-spin {
+@keyframes cform-spin {
   to { transform: rotate(360deg); }
 }
 
-/* --- Mobile --- */
-@media (max-width: 1023px) {
-  .contact-form { gap: 1.5rem; }
+@media (max-width: 1024px) {
+  .cform { gap: var(--space-3); }
+  .cform__fields { gap: var(--space-3); }
 
-  .contact-form__footer {
-    gap: 1rem;
-  }
-
-  .contact-form__submit {
+  .cform__submit {
     width: 100%;
     justify-content: center;
-    padding: 0.95rem 1.5rem;
-    font-size: 0.8rem;
+    padding: var(--space-2) var(--space-3);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .contact-form__submit,
-  .contact-form__submit::before,
-  .contact-form__submit-icon {
+  .cform__submit,
+  .cform__submit::before,
+  .cform__submit-arrow {
     transition: none;
   }
-  .contact-form__spinner { animation-duration: 1.5s; }
-  .contact-form__submit:hover:not(:disabled) { transform: none; }
+  .cform__spinner { animation-duration: 1.5s; }
+  .cform__submit:hover:not(:disabled) { transform: none; }
 }

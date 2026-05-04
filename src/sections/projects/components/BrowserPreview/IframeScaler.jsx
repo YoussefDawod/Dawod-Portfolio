@@ -30,11 +30,7 @@ const IframeScaler = forwardRef(function IframeScaler(
     return () => observer.disconnect();
   }, [naturalW]);
 
-  /*
-   * Iframe-src erst setzen, wenn der Container sichtbar wird.
-   * → Verhindert, dass ein Cookie-Banner o. Ä. beim Seiten-Laden
-   *   focus() aufruft und die Seite zum iframe scrollt.
-   */
+  // Lazy: src erst setzen wenn sichtbar → kein ungewollter Focus-Scroll beim Laden
   useEffect(() => {
     if (!containerRef.current || !project.liveUrl) return;
     const io = new IntersectionObserver(

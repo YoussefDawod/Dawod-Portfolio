@@ -8,6 +8,7 @@ import {
     TAU,
     BREAKPOINTS,
 } from '../../shared/core.js';
+import { contentMaskFactor } from '../../engine/contentMask.js';
 
 // =============================================================================
 // CONSTANTS
@@ -16,6 +17,12 @@ import {
 const WRAP_FADE_ZONE = 0.18;
 const WRAP_MARGIN = 0.15;
 const VERTICAL_FLOAT_RANGE = 0.05;
+
+/* Slide-Kick: zusätzliche Horizontal-Geschwindigkeit (in normalisierten
+   Einheiten pro Sekunde) bei kick=±1. Wird von About.jsx beim Slide-Wechsel
+   ausgelöst und im Hook exponentiell abklingen lassen. Wert ist bewusst
+   spürbar aber dezent — Tokens sollen "mitreagieren", nicht wegfliegen. */
+const SLIDE_KICK_SPEED = 0.45;
 
 // Text-Area Dampening (reduziert Opacity von Tokens hinter dem Text)
 const TEXT_WIDTH_MOBILE = 600;
@@ -57,6 +64,10 @@ export function updateAboutTokens(tokens = [], deltaTime = 0.016, mouseX = null,
         : Boolean(typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
     const orientation = options.orientation || { beta: 0, gamma: 0 };
     const cssWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
+    /* Slide-Kick: signiert (+1 = Tokens nach rechts, -1 = nach links).
+       depthScale skaliert pro Token → vordere Tokens reagieren stärker
+       als tiefere → echter Parallax-Look. */
+    const slideKick = options.scrollKick || 0;
 
     tokens.forEach((token) => {
         token.age += dt;
@@ -80,6 +91,14 @@ export function updateAboutTokens(tokens = [], deltaTime = 0.016, mouseX = null,
 
         // Horizontal drift mit sanftem Wrapping
         token.driftX -= token.driftSpeed * dt;
+
+        /* Slide-Kick: kurzer Beschleunigungs-Schub in Gegenrichtung.
+           depthScale (≈0.5..1.5) gibt Parallax-Tiefe — vordere Tokens
+           bewegen sich stärker, Hintergrund-Tokens dezenter. */
+        if (slideKick !== 0) {
+            const depth = token.depthScale ?? 1;
+            token.driftX += slideKick * SLIDE_KICK_SPEED * depth * dt;
+        }
 
         if (token.driftX < -WRAP_MARGIN) {
             token.driftX = 1 + WRAP_MARGIN;
@@ -152,7 +171,10 @@ export function updateAboutTokens(tokens = [], deltaTime = 0.016, mouseX = null,
             textDampen = cssWidth < BREAKPOINTS.DESKTOP ? DAMPEN_MOBILE : DAMPEN_DESKTOP;
         }
 
-        token.opacity = token.wrapOpacity * (token.opacityMultiplier ?? 1.0) * textDampen;
+        // Phase 1: Inhalts-Respekt-Mask (zusätzlich zur Text-Area)
+        const mask = contentMaskFactor(token.renderX, token.renderY);
+
+        token.opacity = token.wrapOpacity * (token.opacityMultiplier ?? 1.0) * textDampen * mask;
     });
 
     return tokens;

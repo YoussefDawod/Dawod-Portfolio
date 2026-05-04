@@ -1,87 +1,56 @@
 /**
- * Contact Animation — Draw & Convert
+ * Contact Section — Draw
+ * Tokens werden gerendert wie in Home (Font + Glow), aber ohne sichtbare
+ * Bahnen (Linien sind unsichtbar).
  */
 
-import { TAU } from '../../shared/core.js';
+import {
+    DEFAULT_COLORS,
+    BREAKPOINTS,
+} from '../../shared/core.js';
+import { globalTextCache } from '../../shared/rendering.js';
+import { BREATH_AMOUNT } from '../../shared/constants.js';
 
-// =============================================================================
-// DRAW MESSAGE FLOW
-// =============================================================================
+const FONT_SIZE_FACTOR = 0.55;
+const MIN_VISIBLE_OPACITY = 0.04;
+const GLOW_BLUR_FACTOR = 0.35;
 
-export function drawContactNodes(ctx, state) {
-    if (!ctx || !state) return;
+export function drawContactNodes(ctx, tokens = []) {
+    if (!ctx || !Array.isArray(tokens) || tokens.length === 0) return;
 
-    const width = ctx.canvas.clientWidth || window.innerWidth;
-    const height = ctx.canvas.clientHeight || window.innerHeight;
+    const w = ctx.canvas.clientWidth || window.innerWidth;
+    const h = ctx.canvas.clientHeight || window.innerHeight;
+    const isMobile = w < BREAKPOINTS.DESKTOP;
 
-    // 1. Connections
-    state.connections.forEach(conn => {
-        const x1 = conn.p1.x * width, y1 = conn.p1.y * height;
-        const x2 = conn.p2.x * width, y2 = conn.p2.y * height;
-        const alpha = conn.strength * 0.2 + conn.mouseBoost * 0.4;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.imageSmoothingEnabled = true;
 
-        ctx.strokeStyle = conn.p1.color;
-        ctx.lineWidth = 1 + conn.mouseBoost;
-        ctx.globalAlpha = alpha;
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-    });
+    tokens.forEach((token) => {
+        if (token.opacity < MIN_VISIBLE_OPACITY) return;
 
-    // 2. Trails
-    state.particles.forEach(particle => {
-        if (particle.trail.length < 2) return;
-        for (let i = 1; i < particle.trail.length; i++) {
-            const pos = particle.trail[i];
-            const prev = particle.trail[i - 1];
-            ctx.strokeStyle = particle.color;
-            ctx.lineWidth = particle.size * 0.5;
-            ctx.globalAlpha = particle.opacity * (1 - i / particle.trail.length) * 0.3;
-            ctx.beginPath();
-            ctx.moveTo(prev.x * width, prev.y * height);
-            ctx.lineTo(pos.x * width, pos.y * height);
-            ctx.stroke();
+        const breathScale = 1 + Math.sin(token.breathPhase) * BREATH_AMOUNT;
+        const drawScale = (token.depthScale || 1) * breathScale;
+
+        const fontSize = Math.floor(token.radius * FONT_SIZE_FACTOR);
+        const cached = globalTextCache.get(token.label, fontSize, token.baseColor || DEFAULT_COLORS.pri);
+
+        ctx.save();
+        ctx.translate(token.renderX * w, token.renderY * h);
+        ctx.rotate(token.rotation);
+        ctx.globalAlpha = token.opacity;
+        ctx.scale(drawScale, drawScale);
+
+        if (!isMobile) {
+            ctx.shadowColor = token.glowColor || DEFAULT_COLORS.acc;
+            ctx.shadowBlur = token.radius * GLOW_BLUR_FACTOR;
         }
+
+        ctx.drawImage(cached, -cached.width / 2, -cached.height / 2);
+        if (!isMobile) ctx.shadowBlur = 0;
+        ctx.restore();
     });
 
-    // 3. Particles
-    state.particles.forEach(particle => {
-        const x = particle.x * width, y = particle.y * height;
-        ctx.fillStyle = particle.color;
-        ctx.globalAlpha = particle.opacity;
-        ctx.beginPath();
-        ctx.arc(x, y, particle.size, 0, TAU);
-        ctx.fill();
-
-        if (particle.mouseInfluence > 0.1) {
-            ctx.globalAlpha = particle.mouseInfluence * 0.3;
-            ctx.beginPath();
-            ctx.arc(x, y, particle.size * 2.5, 0, TAU);
-            ctx.fill();
-        }
-    });
-
-    ctx.globalAlpha = 1.0;
-}
-
-// =============================================================================
-// CONVERT CONTACT → PROJECTS
-// =============================================================================
-
-export function convertContactToProjects(contactState = {}) {
-    const particles = contactState.particles || [];
-
-    const points = particles.map((p) => ({
-        x: p.x, y: p.y,
-        targetX: p.x, targetY: p.y,
-        startX: p.x, startY: p.y,
-        transitionProgress: 1, active: false, hover: 0,
-        config: { gridSpacing: 0.12, maxConnections: 14, connectionChance: 0.015 },
-    }));
-
-    return {
-        points, connections: [], timer: 0,
-        config: { gridSpacing: 0.12, maxConnections: 14, connectionChance: 0.015 },
-    };
+    ctx.restore();
+    ctx.globalAlpha = 1;
 }

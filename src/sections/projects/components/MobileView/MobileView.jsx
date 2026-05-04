@@ -3,16 +3,12 @@ import { IoOpenOutline } from 'react-icons/io5';
 import { FiGithub } from 'react-icons/fi';
 import { useSwipe } from './useSwipe.js';
 import IframeScaler from '../BrowserPreview/IframeScaler.jsx';
+import { getDomain, formatCounter } from '../../projectsUtils.js';
 import './mobileView.css';
-
-function getDomain(url) {
-  if (!url) return '—';
-  try { return new URL(url).hostname; } catch { return url; }
-}
 
 function MobileView({ project, index, total, onSwitch, onOpenFullscreen }) {
   const swipeRef = useRef(null);
-  const counter = `${String(index + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+  const counter = formatCounter(index, total);
 
   useSwipe(swipeRef, {
     onSwipeLeft:  () => onSwitch(index + 1),
@@ -20,7 +16,11 @@ function MobileView({ project, index, total, onSwitch, onOpenFullscreen }) {
   });
 
   return (
-    <div className="mobile-view" ref={swipeRef}>
+    <div
+      className="mobile-view"
+      ref={swipeRef}
+      style={{ '--project-primary': project.primaryColor }}
+    >
 
       {/* --- Scrollable Content ------------------------- */}
       <div className="mobile-scroll">

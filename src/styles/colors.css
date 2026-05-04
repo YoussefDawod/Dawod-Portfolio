@@ -8,11 +8,11 @@
    L2  →  Tokens            (diese im Code verwenden)
 
    FARBPALETTE:
-   brand      → Goldgelb    #F5A800  (Hauptfarbe)
-   accent     → Navy        #1A2233  (Kontrast)
-   hi         → Bernstein   #E8720C  (analog, wärmer)
-   neu        → Tiefschwarz #1C1A14  (warmer Unterton)
-   neu2       → Dunkelgrau  #2C2A1E  (warmer Unterton)
+   brand      → Amber Gold    #E8A800  (Hauptfarbe)
+   accent     → Deep Forest   #0C1A0F  (Luxus-Folie: Gold auf Waldgrün — Rolex-Schema)
+   hi         → Burnt Sienna  #AD4A15  (erdiger Rotton — klare Progression in grad-warm)
+   neu        → Warm Obsidian #070605  (warmer Tiefschwarz-Hauch)
+   neu2       → Warm Espresso #0F0D0A  (dunkles Warm-Braun, satter als neu)
 ================================================ */
 
 :root {
@@ -21,11 +21,15 @@
      Nur diese 8 Werte ändern.
   ================================================ */
 
-  --brand: #f5a800;
-  --accent: #1a2233;
-  --hi: #e8720c;
-  --neu: #0e0c09;
-  --neu2: #1b1a13;
+  --brand: #ffae00;
+  --accent: #0a4796;
+  --hi: #d85711;
+  --neu: #070605;
+  --neu2: #0F0D0A;
+
+  /* BGS-spezifisch: 3. Token-Farbe (Saffron Gold).
+     Helles Safrangelb — poppt auf dunklem Forest-Canvas, bleibt in der Goldpalette. */
+  --bgs-c3: #F3C83D;
 
   --ok: #2ecc71;
   --warn: #f39c12;
@@ -99,10 +103,25 @@
   --input-brd: var(--brd);
   --input-brd-focus: var(--focus);
 
-  /* --- Form Field Accents (lebendige Form, jeder Felder eigene Farbe) --- */
-  --field-name-accent:    var(--ok);
-  --field-email-accent:   var(--btn-hi);
-  --field-message-accent: var(--brand-md);
+  /* --- Form Field Accents (vereinheitlicht: ein warmer Gold-Akzent) --- */
+  --field-accent: var(--brand-md);
+  --field-name-accent:    var(--field-accent);
+  --field-email-accent:   var(--field-accent);
+  --field-message-accent: var(--field-accent);
+
+  /* --- Navy / Accent (sekundäre Tiefe, Footer, Code-Akzente) --- */
+  --accent-soft: color-mix(in srgb, var(--accent) 40%, transparent);
+  --accent-line: color-mix(in srgb, var(--accent) 60%, transparent);
+  --accent-bg:   color-mix(in srgb, var(--accent) 18%, var(--neu-dk2));
+
+  /* --- Fibonacci Spacing Scale (8pt-Grid × φ) --- */
+  --space-1:   0.5rem;   /*  8px  */
+  --space-2:   0.8125rem;/* 13px  */
+  --space-3:   1.3125rem;/* 21px  */
+  --space-4:   2.125rem; /* 34px  */
+  --space-5:   3.4375rem;/* 55px  */
+  --space-6:   5.5625rem;/* 89px  */
+  --space-7:   9rem;     /* 144px */
 
   /* --- Gradients --- */
   --grad-brand: linear-gradient(135deg, var(--brand-lt), var(--brand-dk));
@@ -142,7 +161,7 @@
   --overlay-hard: rgba(0, 0, 0, 0.75);
 
   /* --- Home Section --- */
-  --home-bg: #111009;
+  --home-bg: #070605;
   --home-dot-opacity: 18%;
   --home-glow-opacity: 0.07;
 }
@@ -154,56 +173,95 @@
 }
 
 /* ================================================
-   LIGHT MODE — nur L2 wird überschrieben
+   LIGHT MODE — wird via [data-theme="light"] aktiv
+   gesetzt durch ThemeProvider (System-Default + Toggle)
 ================================================ */
-@media (prefers-color-scheme: light) {
-  :root {
-    /* --- Backgrounds --- */
-    --bg: var(--neu-lt2);
-    --bg-alt: var(--neu2-lt2);
-    --surf: var(--neu-lt);
-    --surf-hi: var(--neu2-lt);
+:root[data-theme="light"] {
+    /* --- Backgrounds — warme Pergament-Töne, harmonieren mit Gold-Brand --- */
+    --bg:      #f7f4ee;
+    --bg-alt:  #f0ece3;
+    --surf:    #e7e1d5;
+    --surf-hi: #dcd5c7;
 
     /* --- Text --- */
-    --txt: var(--neu-dk2);
-    --txt-soft: var(--neu-dk);
+    --txt:      #1a1714;
+    --txt-soft: #6b6560;
 
     /* --- Borders --- */
-    --brd: var(--neu-lt);
+    --brd:    #d0c9be;
     --brd-hi: var(--brand-md);
 
     /* --- Disabled State --- */
-    --disabled-bg: color-mix(in srgb, var(--neu-lt) 60%, transparent);
-    --disabled-txt: var(--neu-lt);
+    --disabled-bg:  color-mix(in srgb, var(--brd) 50%, transparent);
+    --disabled-txt: #a09a93;
+
+    /* --- Home Section --- */
+    --home-dot-opacity: 34%;
+    --home-bg:          #f7f4ee;
+    --home-glow-opacity: 0.12;
 
     /* --- Gradients --- */
-    --grad-dark: linear-gradient(180deg, var(--neu-lt2), var(--neu2-lt2));
+    --grad-dark: linear-gradient(180deg, #f7f4ee, #f0ece3);
     --grad-glow: radial-gradient(
       ellipse at top,
-      color-mix(in srgb, var(--brand) 15%, transparent),
+      color-mix(in srgb, var(--brand) 18%, transparent),
       transparent 70%
     );
 
-    /* --- Shadows --- */
-    --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.08);
-    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.12);
-    --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.16);
-    --shadow-brand: 0 4px 20px color-mix(in srgb, var(--brand) 30%, transparent);
-    --shadow-accent: 0 4px 20px
-      color-mix(in srgb, var(--accent) 20%, transparent);
+    /* --- Shadows — etwas kontrastreicher auf hellem Untergrund --- */
+    --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.10);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.22);
+    --shadow-brand: 0 4px 20px color-mix(in srgb, var(--brand-dk) 45%, transparent);
+    --shadow-accent: 0 4px 20px color-mix(in srgb, var(--accent) 20%, transparent);
     --shadow-hi: 0 4px 20px color-mix(in srgb, var(--hi) 25%, transparent);
 
-    /* --- Glassmorphism --- */
-    --glass-bg: color-mix(
-      in srgb,
-      var(--brand) 8%,
-      color-mix(in srgb, var(--neu-lt2) 75%, transparent)
-    );
-    --glass-brd: color-mix(in srgb, var(--brand) 30%, transparent);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    /* --- Glassmorphism — warmes Milchglas --- */
+    --glass-bg:     rgba(247, 243, 235, 0.88);
+    --glass-brd:    color-mix(in srgb, var(--brand) 40%, transparent);
+    --glass-shadow: 0 4px 20px rgba(0, 0, 0, 0.10), 0 1px 4px rgba(0, 0, 0, 0.05);
 
     /* --- Overlays --- */
-    --overlay-soft: rgba(0, 0, 0, 0.25);
-    --overlay-hard: rgba(0, 0, 0, 0.55);
+    --overlay-soft: rgba(0, 0, 0, 0.20);
+    --overlay-hard: rgba(0, 0, 0, 0.50);
+
+    /* --- Navy Accent (Light) --- */
+    --accent-soft: color-mix(in srgb, var(--accent) 25%, transparent);
+    --accent-line: color-mix(in srgb, var(--accent) 45%, transparent);
+    --accent-bg:   color-mix(in srgb, var(--accent) 8%, #f7f4ee);
+}
+
+/* System-Default: wenn KEIN Theme explizit gesetzt UND OS auf hell steht */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg:      #f7f4ee;
+    --bg-alt:  #f0ece3;
+    --surf:    #e7e1d5;
+    --surf-hi: #dcd5c7;
+    --txt:      #1a1714;
+    --txt-soft: #6b6560;
+    --brd:    #d0c9be;
+    --brd-hi: var(--brand-md);
+    --disabled-bg:  color-mix(in srgb, #d0c9be 50%, transparent);
+    --disabled-txt: #a09a93;
+    --home-dot-opacity: 34%;
+    --home-bg:          #f7f4ee;
+    --home-glow-opacity: 0.12;
+    --grad-dark: linear-gradient(180deg, #f7f4ee, #f0ece3);
+    --grad-glow: radial-gradient(ellipse at top, color-mix(in srgb, var(--brand) 18%, transparent), transparent 70%);
+    --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.10);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.22);
+    --shadow-brand: 0 4px 20px color-mix(in srgb, var(--brand-dk) 45%, transparent);
+    --shadow-accent: 0 4px 20px color-mix(in srgb, var(--accent) 20%, transparent);
+    --shadow-hi: 0 4px 20px color-mix(in srgb, var(--hi) 25%, transparent);
+    --glass-bg:     rgba(247, 243, 235, 0.88);
+    --glass-brd:    color-mix(in srgb, var(--brand) 40%, transparent);
+    --glass-shadow: 0 4px 20px rgba(0, 0, 0, 0.10), 0 1px 4px rgba(0, 0, 0, 0.05);
+    --overlay-soft: rgba(0, 0, 0, 0.20);
+    --overlay-hard: rgba(0, 0, 0, 0.50);
+    --accent-soft: color-mix(in srgb, var(--accent) 25%, transparent);
+    --accent-line: color-mix(in srgb, var(--accent) 45%, transparent);
+    --accent-bg:   color-mix(in srgb, var(--accent) 8%, #f7f4ee);
   }
 }

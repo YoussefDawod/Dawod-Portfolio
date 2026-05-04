@@ -12,7 +12,7 @@ function ConsentCheckbox({ id, checked, onChange, label, linkText, linkHref, lab
 
   return (
     <div className={`consent-checkbox${hasError ? ' consent-checkbox--error' : ''}`}>
-      <label className="consent-checkbox__label" htmlFor={id}>
+      <label className="consent-checkbox__label">
         <input
           type="checkbox"
           id={id}

@@ -1,0 +1,71 @@
+/* ================================================
+   TOKENS — Single Source of Truth (Phase 0)
+   ================================================
+
+   Globale Design-Tokens für RHYTHMUS, FORM und ZEIT.
+   Farben & Tonal-Scale leben in colors.css.
+
+   Reihenfolge der Importe in main.jsx:
+     1. tokens.css        ← hier (Form, Zeit, Rhythmus)
+     2. colors.css        ← Farben, Theme-Switch
+     3. animations.css    ← Keyframes + Reduced-Motion
+     4. glow.css          ← Glow-Aliase
+     5. glass-card.css    ← Card-Pattern
+     6. buttons.css       ← Button-Basis
+================================================ */
+
+:root {
+  /* ──────────────────────────────────────────────
+     RADIUS — eine klare Hierarchie, keine Ausreißer
+     ────────────────────────────────────────────── */
+  --r-xs:   4px;    /* Marker, sehr kleine Chips */
+  --r-sm:   8px;    /* Buttons, Inputs, Tooltips */
+  --r-md:   14px;   /* Karten (Default) */
+  --r-lg:   20px;   /* Hero-Container, große Panels */
+  --r-pill: 999px;  /* Pills, Badges */
+
+  /* ──────────────────────────────────────────────
+     EASING — drei Charaktere, alle weich
+     ────────────────────────────────────────────── */
+  --ease-soft:  cubic-bezier(0.22, 0.61, 0.36, 1);   /* Reveals, Layout-Atmen */
+  --ease-glide: cubic-bezier(0.65, 0.05, 0.36, 1);   /* Section-Übergänge, BGS */
+  --ease-micro: cubic-bezier(0.20, 0.80, 0.20, 1);   /* Hover, Mikro-Interaktion */
+
+  /* ──────────────────────────────────────────────
+     DURATION — drei Stufen, konsistent
+     ────────────────────────────────────────────── */
+  --dur-1: 0.25s;   /* Mikro: Hover, Focus */
+  --dur-2: 0.55s;   /* Standard: Reveals, Cards */
+  --dur-3: 0.85s;   /* Statement: Hero, Section-Übergänge */
+
+  /* ──────────────────────────────────────────────
+     STAGGER — eine Schrittweite für alles
+     ────────────────────────────────────────────── */
+  --stagger-step: 90ms;
+
+  /* ──────────────────────────────────────────────
+     CONTAINER & SECTION-RHYTHMUS
+     ────────────────────────────────────────────── */
+  --container-narrow: 1100px;
+  --container-wide:   1280px;
+  --section-py:       clamp(5rem, 10vh, 9rem);   /* Section-Padding (oben/unten) */
+  --navbar-h:         5rem;                       /* Navbar-Höhenkonstante */
+
+  /* ──────────────────────────────────────────────
+     TYPOGRAPHIE-SKALA
+     ────────────────────────────────────────────── */
+  --fs-eyebrow: clamp(0.75rem, 1.6vw, 0.95rem);
+  --fs-body:    clamp(0.95rem, 1.2vw, 1.05rem);
+  --fs-lead:    clamp(1rem, 1.4vw, 1.2rem);
+  --fs-h3:      clamp(1.05rem, 1.6vw, 1.25rem);
+  --fs-h2:      clamp(1.8rem, 3.5vw, 2.8rem);
+  --fs-h1:      clamp(2.5rem, 7vw, 5rem);
+  --fs-display: clamp(2.25rem, 9vw, 7rem);   /* Hero — Cap bei 112px */
+
+  /* ──────────────────────────────────────────────
+     LETTER-SPACING
+     ────────────────────────────────────────────── */
+  --ls-eyebrow: 0.14em;   /* All-Caps-Eyebrow */
+  --ls-caps:    0.08em;   /* Standard-Caps */
+  --ls-tight:   -0.01em;  /* Display-Headings */
+}

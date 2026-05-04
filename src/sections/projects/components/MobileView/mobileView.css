@@ -1,6 +1,4 @@
-/* ================================================
-   MOBILE VIEW — Standard-Ansicht (Zustand 1)
-   ================================================ */
+/* mobileView.css — Mobile Projektansicht */
 
 .mobile-view {
   height: 100%;
@@ -30,17 +28,18 @@
 }
 
 .mobile-category {
+  font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
   letter-spacing: 0.15em;
   font-weight: 600;
-  color: var(--txt-soft);
+  color: color-mix(in srgb, var(--project-primary) 80%, var(--txt-soft));
   text-transform: uppercase;
 }
 
 .mobile-counter {
   font-size: 10px;
   letter-spacing: 0.12em;
-  color: var(--txt-soft);
+  color: color-mix(in srgb, var(--project-primary) 75%, var(--txt-soft));
   font-variant-numeric: tabular-nums;
   font-family: 'JetBrains Mono', monospace;
 }
@@ -50,7 +49,7 @@
   font-size: clamp(1.6rem, 7vw, 2.2rem);
   font-weight: 800;
   line-height: 1.1;
-  color: var(--txt);
+  color: var(--project-primary);
   margin: 0;
   font-family: 'Space Grotesk', sans-serif;
 }
@@ -72,7 +71,7 @@
   border: 1px solid color-mix(in srgb, var(--badge-color, var(--brd-hi)) 40%, transparent);
   border-radius: 4px;
   padding: 3px 8px;
-  background: color-mix(in srgb, var(--badge-color, var(--brand)) 6%, transparent);
+  background: color-mix(in srgb, var(--badge-color) 6%, transparent);
 }
 
 .mobile-badge-icon {
@@ -82,16 +81,19 @@
 
 /* --- Preview Thumbnail --------------------------------- */
 .mobile-preview {
-  border: 1px solid var(--brd);
+  border: 1px solid color-mix(in srgb, var(--project-primary) 32%, var(--brd));
   border-radius: 8px;
   overflow: hidden;
   background: var(--surf);
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  box-shadow:
+    0 0 40px -10px color-mix(in srgb, var(--project-primary) 18%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--project-primary) 10%, transparent);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .mobile-preview:active {
-  border-color: var(--txt-brand);
+  border-color: color-mix(in srgb, var(--project-primary) 60%, var(--brd));
 }
 
 .mobile-preview-bar {
@@ -100,14 +102,14 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 10px;
-  background: var(--surf-hi);
-  border-bottom: 1px solid var(--brd);
+  background: color-mix(in srgb, var(--project-primary) 10%, var(--surf-hi));
+  border-bottom: 1px solid color-mix(in srgb, var(--project-primary) 22%, var(--brd));
 }
 
 .mobile-preview-url {
   font-size: 9px;
   font-family: 'JetBrains Mono', monospace;
-  color: var(--txt-soft);
+  color: color-mix(in srgb, var(--project-primary) 45%, var(--txt-soft));
 }
 
 .mobile-preview-live {
@@ -134,16 +136,16 @@
   gap: 6px;
   padding: 8px;
   font-size: 10px;
-  color: var(--txt-brand);
-  background: color-mix(in srgb, var(--brand) 6%, var(--surf));
-  border-top: 1px solid var(--brd);
+  color: color-mix(in srgb, var(--project-primary) 70%, var(--txt));
+  background: color-mix(in srgb, var(--project-primary) 8%, var(--surf));
+  border-top: 1px solid color-mix(in srgb, var(--project-primary) 22%, var(--brd));
 }
 
 .mobile-hint-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--brand);
+  background: var(--project-primary);
   display: block;
 }
 
@@ -179,19 +181,20 @@
 
 .mobile-link--primary {
   flex: 2;
-  background: var(--brand);
-  color: var(--txt-on-brand);
+  background: color-mix(in srgb, var(--project-primary) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--project-primary) 50%, transparent);
+  color: color-mix(in srgb, var(--project-primary) 90%, var(--txt));
 }
 
 .mobile-link--primary:active {
-  background: var(--brand-dk);
+  background: color-mix(in srgb, var(--project-primary) 28%, transparent);
 }
 
 .mobile-link--secondary {
   flex: 1;
   background: transparent;
   color: var(--txt-soft);
-  border: 1px solid var(--brd);
+  border: 1px solid color-mix(in srgb, var(--project-primary) 50%, transparent);
 }
 
 .mobile-link--secondary:active {
@@ -239,6 +242,6 @@
 }
 
 .mobile-dot.is-active {
-  background: var(--brand);
+  background: var(--project-primary);
   transform: scale(1.3);
 }

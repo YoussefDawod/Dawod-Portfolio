@@ -27,8 +27,25 @@ export const MAX_DPR = 1.5;
 /** Default Field-of-View für 3D-Projektionen */
 export const FOV = 600;
 
-/** Goldener Winkel (normiert auf TAU) — gleichmäßige Spiralverteilung */
-export const GOLDEN_ANGLE_NORM = 3 - Math.sqrt(5);
-
 /** Anzahl der Tiefenebenen für Orbit/Float-Tokens */
 export const ORBIT_LAYERS = 3;
+
+// =============================================================================
+// PHASE 1 — GLOBALE TEMPO-DISZIPLIN (ruhig, gleichmäßig, harmonisch)
+// =============================================================================
+
+/**
+ * Globaler Tempo-Multiplikator.
+ * Alle Drift-, Orbit-, Stream- und Connection-Geschwindigkeiten werden mit
+ * diesem Faktor multipliziert. < 1 = ruhiger.
+ */
+export const TEMPO_SCALE = 0.7;
+
+/**
+ * Inhalts-Respekt-Maske: Tokens, deren Mittelpunkt < CONTENT_MASK_PADDING_NORM
+ * von einer Content-Bounding-Box entfernt liegen, werden in der Opacity gedimmt.
+ * Werte normiert auf Canvas (0..1). Faktoren ergeben weichen Falloff.
+ */
+export const CONTENT_MASK_PADDING_NORM = 0.05;
+export const CONTENT_MASK_FADE_NORM = 0.06;
+export const CONTENT_MASK_MIN_OPACITY = 0.18;

@@ -1,30 +1,23 @@
 /* ============================================================================
-   ABOUT SECTION — Layout (Phase 3)
-   ============================================================================
-   Flächenlogik, Abstände, Grid-Systeme, responsive Breakpoints.
-   Komponentenspezifisches Styling liegt in den jeweiligen CSS-Dateien.
+   ABOUT SECTION — Layout
    ============================================================================ */
 
 /* ============================================================================
-   DESKTOP (Default)
+   DESKTOP (Default ≥ 1025px) — Horizontale 3-Slide-Ansicht
    ============================================================================ */
 
 .about {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  min-height: 150vh;
-  padding: clamp(2rem, 3vh, 3rem) clamp(2rem, 6vw, 7rem);
-  gap: clamp(5rem, 7vh, 8rem);
-  color: var(--txt);
   position: relative;
-  text-align: justify;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: var(--txt);
 }
 
-/* --- Dot-Grid Background Layer --- */
-.about-dot-grid {
+/* --- Dot-Grid Background Layer (auf der Section selbst, nicht im inneren div) ---
+   Nur <section id="about"> bekommt das Grid; Ghost-Sections bleiben leer. */
+section#about::before {
+  content: "";
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -35,76 +28,135 @@
     transparent 1px
   );
   background-size: 28px 28px;
-  /* Oben stärker, rechts leicht abgeschwächt, nach unten transparent */
+  /* Wie Home, aber vertikal gespiegelt:
+       1) Vertikal: oben 100%, unten 50%   → linke Spalte: 100%→50%, rechte Spalte: 100%→50%
+       2) Radial nur unten rechts auf 0   → zieht BR-Ecke auf 0%, alle anderen unberührt
+     Ergebnis: TL=100%, TR=100%, BL=50%, BR=0%. */
   mask-image:
-    linear-gradient(to bottom, black 0%, black 35%, transparent 85%),
-    linear-gradient(to right, black 0%, black 80%, transparent 100%);
+    linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 100%),
+    radial-gradient(ellipse 70% 70% at 100% 100%, transparent 0%, rgba(0,0,0,1) 75%);
   mask-composite: intersect;
   -webkit-mask-image:
-    linear-gradient(to bottom, black 0%, black 35%, transparent 85%),
-    linear-gradient(to right, black 0%, black 60%, transparent 100%);
+    linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 100%),
+    radial-gradient(ellipse 70% 70% at 100% 100%, transparent 0%, rgba(0,0,0,1) 75%);
   -webkit-mask-composite: source-in;
 }
 
-/* --- Alle Content-Blöcke über dem Dot-Grid --- */
-.about > *:not(.about-dot-grid) {
+/* Light Mode: Dots deutlich stärker sichtbar */
+:root[data-theme="light"] section#about::before {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--brand) 32%, transparent) 1px,
+    transparent 1px
+  );
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) section#about::before {
+    background-image: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--brand) 32%, transparent) 1px,
+      transparent 1px
+    );
+  }
+}
+
+/* --- Slide-Track (verschiebt sich per JS-Transform) --- */
+.about-track {
+  display: flex;
+  flex-direction: row;
+  width: 400vw;
+  height: 100%;
+  will-change: transform;
+  transition: transform var(--dur-3) var(--ease-glide);
+}
+
+/* --- Einzelner Slide --- */
+.about-slide {
   position: relative;
   z-index: 1;
+  flex: 0 0 100vw;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(3rem, 6vh, 5rem) clamp(2rem, 6vw, 7rem);
+  overflow-y: auto;
+}
+
+/* Innerer Container — sorgt für einheitliche Inner-Breite & vertikalen Rhythmus */
+.about-slide__inner {
   width: 100%;
-  max-width: 1100px;
+  max-width: var(--container-narrow);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.75rem, 3.5vh, 2.75rem);
+}
+
+.about-slide__inner--narrow {
+  max-width: 880px;
+}
+
+/* Slide-Header (Eyebrow + Titel) — gemeinsam für Slide 2/3/4 */
+.about-slide__head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.about-slide__eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--fs-eyebrow);
+  font-weight: 500;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.about-slide__title {
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: var(--ls-tight);
+  color: var(--txt);
+  margin: 0;
+}
+
+.about-slide__body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Slide 1 — Einleitung: großer Hero-Header, kein Stretch */
+.about-slide--header .about-slide__inner {
+  max-width: 980px;
+  gap: 0;
+}
+
+/* Slide 2 — Werdegang (Timeline isoliert, zentriert) */
+.about-slide--timeline {
+  align-items: center;
+  justify-content: center;
+}
+
+/* Slide 3 — Prinzipien (3-Spalten Grid) */
+.about-slide--principles {
+  align-items: center;
+  justify-content: center;
+}
+
+/* Slide 4 — Stack & KI (Skills + AI als Akzent-Streifen) */
+.about-slide--stack {
+  align-items: center;
+  justify-content: center;
 }
 
 /* ============================================================================
-   SCROLL-REVEAL — Block-Level Animations
-   ============================================================================
-   Jeder Block hat seinen eigenen IntersectionObserver. Erst wenn
-   .block-visible gesetzt wird, laufen die Animationen.
-   Cards / Skills: Stagger via --stagger Custom Property.
-   Timeline hat einen eigenen internen Observer.
+   PRINCIPLES & SKILLS — Layout (Base)
    ============================================================================ */
 
-/* Startzustand: unsichtbar */
-.about .section-header,
-.about-principles > div,
-.about .about-ai,
-.about-skills > div {
-  opacity: 0;
-  transform: translateY(14px);
-}
-
-/* --- SectionHeader --- */
-.block-visible > .section-header {
-  animation: fadeUp 0.8s ease forwards;
-}
-
-/* --- Principles Cards mit Stagger --- */
-.about-principles.block-visible > div {
-  animation: fadeUp 0.7s ease forwards;
-  animation-delay: calc(var(--stagger, 0) * 0.15s);
-}
-
-/* --- AI-Highlight --- */
-.about-ai.block-visible {
-  animation: fadeUp 0.8s ease forwards;
-}
-
-/* --- Skills Gruppen mit Stagger --- */
-.about-skills.block-visible > div {
-  animation: fadeUp 0.7s ease forwards;
-  animation-delay: calc(var(--stagger, 0) * 0.15s);
-}
-
-.about-skills .skill-badge-row {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.about-skills.block-visible .skill-badge-row {
-  animation: fadeUp 0.45s ease forwards;
-  animation-delay: calc(var(--stagger, 0) * 0.18s + var(--badge-stagger, 0) * 0.08s + 0.18s);
-}
-
-/* --- Block 2: Prinzipien (3 gleiche Spalten) --- */
+/* Block 2: Prinzipien (3 gleiche Spalten) */
 .about-principles {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -117,7 +169,7 @@
   width: 100%;
 }
 
-/* --- Block 3: Skills (3 gleiche Spalten) --- */
+/* Block 3: Skills (3 gleiche Spalten) */
 .about-skills {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -130,26 +182,203 @@
   width: 100%;
 }
 
+/* AI als Akzent-Streifen unter den Skills */
+.about-ai {
+  width: 100%;
+}
+
+/* --- Slide-Dots Navigation --- */
+.about-dots {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.about-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: color-mix(in srgb, var(--txt) 30%, transparent);
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--dur-1) var(--ease-micro), transform var(--dur-1) var(--ease-micro);
+}
+
+.about-dot--active {
+  background: var(--brand);
+  transform: scale(1.4);
+}
+
 /* ============================================================================
-   MOBILE (≤ 1024px)
+   SCROLL-REVEAL — State-driven Transitions (Vor- UND Rückwärts)
+   ============================================================================
+   Jeder Slide trägt ein data-state Attribut:
+     - "active": gerade sichtbar          → Inhalte zentriert & sichtbar
+     - "prev"  : liegt links vom Active   → Inhalte sind nach LINKS rausgeglitten
+     - "next"  : liegt rechts vom Active  → Inhalte warten RECHTS offstage
+   Beim Wechsel interpoliert CSS sauber zwischen diesen drei Zuständen — damit
+   gleitet jedes Element bei Vor- und Rückwärtsnavigation auf der korrekten
+   Seite rein und auf der korrekten Seite raus.
+
+   Stagger-Strategie:
+     - Eintritt: gestaffelt (--stagger * --stagger-step) → ruhiger Aufbau
+     - Austritt: ohne Delay → schneller, klarer Abgang
+   ============================================================================ */
+
+/* Animierbare Elemente innerhalb jedes Slides — gemeinsame Basis-Transition */
+.about-slide :is(
+  .section-header,
+  .about-slide__head,
+  .about-principles > div,
+  .about-skills > div,
+  .about-ai
+) {
+  transition:
+    opacity var(--dur-2) var(--ease-soft),
+    transform var(--dur-2) var(--ease-soft);
+  will-change: opacity, transform;
+}
+
+/* --- "prev": offstage links (nach Verlassen oder vor Eintritt von rechts) -- */
+.about-slide[data-state="prev"] :is(
+  .section-header,
+  .about-slide__head,
+  .about-principles > div,
+  .about-skills > div,
+  .about-ai
+) {
+  opacity: 0;
+  transform: translate3d(-32px, 0, 0);
+}
+
+/* --- "next": offstage rechts ---------------------------------------------- */
+.about-slide[data-state="next"] :is(
+  .section-header,
+  .about-slide__head,
+  .about-principles > div,
+  .about-skills > div,
+  .about-ai
+) {
+  opacity: 0;
+  transform: translate3d(32px, 0, 0);
+}
+
+/* --- "active": sichtbar mit gestaffeltem Eintritt ------------------------- */
+.about-slide[data-state="active"] :is(
+  .section-header,
+  .about-slide__head,
+  .about-principles > div,
+  .about-skills > div,
+  .about-ai
+) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-duration: var(--dur-3);
+  transition-delay: calc(var(--stagger, 0) * var(--stagger-step) + 60ms);
+}
+
+/* Slide-Head soll zuerst da sein → eigener kleiner Lead-Delay, kein Stagger. */
+.about-slide[data-state="active"] > .about-slide__inner > .about-slide__head {
+  transition-delay: 40ms;
+}
+
+/* --- Reduced Motion: alle Transitions abschalten -------------------------- */
+/* Spezifität-Hack: [data-state] matcht jeden Wert und ist damit gleich
+   spezifisch wie [data-state="active"] → gewinnt per Source-Order ohne
+   !important. */
+@media (prefers-reduced-motion: reduce) {
+  .about-slide[data-state] :is(
+    .section-header,
+    .about-slide__head,
+    .about-principles > div,
+    .about-skills > div,
+    .about-ai
+  ) {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ============================================================================
+   MOBILE (≤ 1024px) — Vertikales normales Scroll-Layout
    ============================================================================ */
 @media (max-width: 1024px) {
   .about {
-    min-height: 100svh;
-    padding: 1rem clamp(1rem, 4vw, 1.5rem) clamp(2rem, 4vh, 3rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: auto;
+    overflow: visible;
+    padding: 0 clamp(1rem, 4vw, 1.5rem) clamp(2rem, 4vh, 3rem);
     gap: clamp(3rem, 4vh, 4rem);
   }
 
-  .about > *:not(.about-dot-grid) {
+  /* Track "ausblenden" — Kinder fließen direkt in .about.
+     Hinweis: transform-Inline-Style wird in About.jsx nur auf Desktop gesetzt,
+     deshalb hier kein Override nötig. */
+  .about-track {
+    display: contents;
+    width: auto;
+    height: auto;
+    transition: none;
+  }
+
+  /* Alle Slides: normaler Blöcke im vertikalen Fluss */
+  .about-slide {
+    flex: unset;
+    width: 100%;
+    height: auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    overflow: visible;
+  }
+
+  /* Inner-Wrap auf Mobile: volle Breite */
+  .about-slide__inner,
+  .about-slide__inner--narrow {
+    max-width: 100%;
+    gap: clamp(1.25rem, 2.5vh, 1.75rem);
+  }
+
+  .about-slide__title {
+    font-size: clamp(1.4rem, 5vw, 1.9rem);
+  }
+
+  /* Dots ausblenden */
+  .about-dots {
+    display: none;
+  }
+
+  /* Alle direkten Kinder: korrekte z-index-Basis */
+  .about > * {
+    position: relative;
+    z-index: 1;
+    width: 100%;
     max-width: 100%;
   }
 
+  /* Principles — horizontaler Snap-Scroll auf Mobile.
+     Source-Order (Mobile MQ am Dateiende) gewinnt über Desktop-Regeln,
+     deshalb keine !important nötig. */
   .about-principles {
-    min-width: 100vw;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: row;
+    height: auto;
     overflow-x: auto;
+    overflow-y: visible;
+    gap: clamp(0.75rem, 2vw, 1rem);
     scroll-snap-type: x mandatory;
-    gap: clamp(0.6rem, 2vw, 0.9rem);
-    padding: 1.5rem;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -160,13 +389,30 @@
   }
 
   .about-principles > div {
-    flex: 0 0 85%;
-    scroll-snap-align: center;
-    min-width: 240px;
+    flex: 0 0 100%;
+    scroll-snap-align: start;
   }
 
+  /* Skills — 1 Spalte */
   .about-skills {
     grid-template-columns: 1fr;
     gap: clamp(0.8rem, 2vw, 1rem);
   }
+
+  /* Mobile-Override: data-state ignorieren — alle Slide-Inhalte sind sichtbar.
+     Vertikaler Fluss braucht kein State-Driven-Reveal.
+     [data-state] hat dieselbe Spezifität wie [data-state="active"] → kein
+     !important nötig. */
+  .about-slide[data-state] :is(
+    .section-header,
+    .about-slide__head,
+    .about-principles > div,
+    .about-skills > div,
+    .about-ai
+  ) {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
+

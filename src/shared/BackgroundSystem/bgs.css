@@ -28,16 +28,13 @@
   will-change: transform, opacity, clip-path;
 }
 
-/* Glow Ring hinter dem Bild */
+/* Glow Ring — deaktiviert */
 .bgs-image-glow {
   position: fixed;
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle,
-    color-mix(in srgb, var(--brand) 15%, transparent) 0%,
-    color-mix(in srgb, var(--brand) 6%, transparent) 50%,
-    transparent 75%);
+  background: none;
   will-change: transform, opacity;
 }

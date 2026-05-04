@@ -1,14 +1,6 @@
 import { useEffect } from 'react';
 
-/**
- * useSwipe — Touch-Swipe Detection für Mobile Navigation
- *
- * @param {React.RefObject} ref       - Ref auf das zu beobachtende Element
- * @param {object}          options
- * @param {Function}        options.onSwipeLeft   - Callback: Swipe nach links
- * @param {Function}        options.onSwipeRight  - Callback: Swipe nach rechts
- * @param {number}          options.threshold     - Mindest-Swipe-Distanz in px (default: 60)
- */
+// Touch-Swipe für Mobile-Navigation (threshold in px)
 export function useSwipe(ref, { onSwipeLeft, onSwipeRight, threshold = 60 } = {}) {
   useEffect(() => {
     const el = ref?.current;

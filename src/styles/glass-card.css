@@ -15,10 +15,13 @@
   padding: clamp(1rem, 2.5vw, 1.6rem);
   background: color-mix(in srgb, var(--card-accent, var(--brand)) var(--card-bg-mix, 5%), transparent);
   border: 1px solid color-mix(in srgb, var(--card-accent, var(--brand)) 25%, transparent);
-  border-radius: 10px;
+  border-radius: var(--r-md);
   backdrop-filter: blur(6px);
   box-shadow: var(--card-glow, none);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  transition:
+    border-color var(--dur-1) var(--ease-micro),
+    box-shadow   var(--dur-1) var(--ease-micro),
+    transform    var(--dur-1) var(--ease-micro);
 }
 
 .glass-card:hover {

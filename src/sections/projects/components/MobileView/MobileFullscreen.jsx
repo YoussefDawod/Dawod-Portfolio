@@ -1,12 +1,8 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { IoClose, IoChevronBack, IoReload, IoOpenOutline } from 'react-icons/io5';
 import IframeScaler from '../BrowserPreview/IframeScaler.jsx';
+import { getDomain } from '../../projectsUtils.js';
 import './mobileFullscreen.css';
-
-function getDomain(url) {
-  if (!url) return '—';
-  try { return new URL(url).hostname; } catch { return url; }
-}
 
 function MobileFullscreen({ project, onClose }) {
   const iframeRef = useRef(null);
@@ -23,14 +19,14 @@ function MobileFullscreen({ project, onClose }) {
   }, [onClose]);
 
   const handleBack = useCallback(() => {
-    try { iframeRef.current?.contentWindow?.history.back(); } catch {}
+    try { iframeRef.current?.contentWindow?.history.back(); } catch { /* cross-origin: noop */ }
   }, []);
 
   const handleReload = useCallback(() => {
     try {
       const iframe = iframeRef.current;
-      if (iframe) iframe.src = iframe.src;
-    } catch {}
+      if (iframe) { const src = iframe.src; iframe.src = src; }
+    } catch { /* cross-origin: noop */ }
   }, []);
 
   const handleOpenInBrowser = useCallback(() => {
@@ -38,7 +34,13 @@ function MobileFullscreen({ project, onClose }) {
   }, [project.liveUrl]);
 
   return (
-    <div className="mfs-overlay" role="dialog" aria-label="Vollbild-Vorschau" aria-modal="true">
+    <div
+      className="mfs-overlay"
+      role="dialog"
+      aria-label="Vollbild-Vorschau"
+      aria-modal="true"
+      style={{ '--project-primary': project.primaryColor }}
+    >
       {/* --- Top Bar ------------------------------------ */}
       <div className="mfs-topbar">
         <button className="mfs-close" onClick={onClose}><IoClose /> Schließen</button>

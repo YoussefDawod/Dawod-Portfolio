@@ -1,49 +1,101 @@
-/* ================================================
-   BROWSER PREVIEW — Rechte Seite im Desktop-Split
-   ================================================ */
+/* browserPreview.css — Stabiler Browser-Frame, Inhalt wechselt per iframe */
 
 .browser-preview {
-  padding: clamp(1.5rem, 2vw, 2rem) clamp(2rem, 3vw, 3rem) clamp(2rem, 3vw, 2.5rem);
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   min-height: 0;
+  height: 100%;
+  border-radius: 18px;
   overflow: hidden;
-
-  /* Transition-Hooks (Phase 3) */
-  opacity: 1;
-  transform: scale(1);
+  background:
+    linear-gradient(
+      155deg,
+      color-mix(in srgb, var(--project-primary) 12%, transparent) 0%,
+      color-mix(in srgb, var(--project-primary) 5%, transparent) 50%,
+      transparent 100%
+    );
+  border: 1px solid color-mix(in srgb, var(--project-primary) 28%, transparent);
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+  /* box-shadow/filter/transform: von projects.css gesteuert */
   transition:
-    opacity 0.15s ease,
-    transform 0.15s ease;
+    border-color var(--dur-3) var(--ease-soft),
+    background   var(--dur-3) var(--ease-soft);
 }
 
-.browser-preview.is-leaving {
-  opacity: 0;
-  transform: scale(0.98);
+.browser-preview::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--project-primary) 50%,
+    transparent 100%
+  );
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 2;
 }
 
-/* --- Browser Frame ------------------------------------- */
+/* --- Browser Frame — Inneres Padding für den eigentlichen Frame ---- */
 .browser-frame {
+  position: relative;
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
   background: var(--surf);
-  border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--brd));
-  border-radius: 8px;
-  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--project-primary) 22%, var(--brd));
+  border-radius: 16px;
+  transition: border-color var(--dur-2) var(--ease-soft);
+  box-shadow:
+      12px 22px 70px -34px color-mix(in srgb, var(--project-primary) 28%, transparent),
+      5px 10px 36px -22px rgba(0, 0, 0, 0.2),
+      inset 1px 1px 0 0 color-mix(in srgb, #fff 8%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--project-primary) 6%, transparent);
+}
+
+/* --- Color-Pulse beim Project-Switch ------------------- */
+.browser-frame__pulse {
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 3;
+  border: 2px solid color-mix(in srgb, var(--project-primary) 60%, transparent);
+  box-shadow:
+    0 0 0 0 color-mix(in srgb, var(--project-primary) 50%, transparent),
+    0 0 80px 0 color-mix(in srgb, var(--project-primary) 50%, transparent);
+  opacity: 0;
+  animation: browserFramePulse 700ms var(--ease-glide) forwards;
+}
+
+@keyframes browserFramePulse {
+  0%   { opacity: 0;   transform: scale(0.985); }
+  35%  { opacity: 1;   transform: scale(1.005); }
+  100% { opacity: 0;   transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .browser-frame__pulse { animation: none; opacity: 0; }
 }
 
 /* --- Toolbar ------------------------------------------- */
 .browser-toolbar {
   height: 38px;
   flex-shrink: 0;
-  background: color-mix(in srgb, var(--brand) 8%, var(--brd));
-  border-bottom: 1px solid color-mix(in srgb, var(--brand) 18%, var(--brd));
+  background: color-mix(in srgb, var(--project-primary) 10%, var(--bg-alt, var(--brd)));
+  border-bottom: 1px solid color-mix(in srgb, var(--project-primary) 25%, var(--brd));
+  border-radius: 16px 16px 0 0;
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 0 12px;
+  transition: background var(--dur-2) var(--ease-soft), border-color var(--dur-2) var(--ease-soft);
 }
 
 /* --- Nav-Buttons (Zurück / Vorwärts / Reload) ---------- */
@@ -71,26 +123,27 @@
 }
 
 .browser-nav-btn:hover {
-  background: color-mix(in srgb, var(--brand) 12%, transparent);
-  color: var(--txt);
+  background: color-mix(in srgb, var(--project-primary) 18%, transparent);
+  color: color-mix(in srgb, var(--project-primary) 70%, var(--txt));
 }
 
 .browser-nav-btn:active {
-  background: color-mix(in srgb, var(--brand) 20%, transparent);
+  background: color-mix(in srgb, var(--project-primary) 28%, transparent);
 }
 
 .browser-url {
   flex: 1;
-  background: var(--bg-alt);
-  border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--brd));
+  background: color-mix(in srgb, var(--project-primary) 5%, var(--bg-alt));
+  border: 1px solid color-mix(in srgb, var(--project-primary) 22%, var(--brd));
   border-radius: 4px;
   padding: 4px 10px;
   font-size: 11px;
   font-family: 'JetBrains Mono', monospace;
-  color: var(--txt-soft);
+  color: color-mix(in srgb, var(--project-primary) 50%, var(--txt-soft));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: background var(--dur-2) var(--ease-soft), border-color var(--dur-2) var(--ease-soft), color var(--dur-2) var(--ease-soft);
 }
 
 /* --- Content Area -------------------------------------- */
@@ -100,6 +153,7 @@
   position: relative;
   overflow: hidden;
   background: var(--surf);
+  border-radius: 0 0 16px 16px;
 }
 
 /* --- Skeleton Loader ----------------------------------- */
@@ -121,7 +175,7 @@
   background: linear-gradient(
     90deg,
     var(--surf-hi) 25%,
-    color-mix(in srgb, var(--project-primary, var(--brand)) 12%, var(--surf-hi)) 50%,
+    color-mix(in srgb, var(--project-primary) 12%, var(--surf-hi)) 50%,
     var(--surf-hi) 75%
   );
   background-size: 600px 100%;
@@ -133,13 +187,13 @@
 .skeleton-line--short  { height: 10px; width: 25%; }
 .skeleton-block        { flex: 1; max-height: 200px; border-radius: 6px; }
 
+@keyframes skeletonShimmer {
+  from { background-position: -600px 0; }
+  to   { background-position:  600px 0; }
+}
+
 /* --- Reduced motion ------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
-  .browser-preview {
-    transition: opacity 0.15s ease;
-    transform: none !important;
-  }
-
   .skeleton-line,
   .skeleton-block {
     animation: none;

@@ -12,29 +12,39 @@ import {
     BREAKPOINTS,
 } from '../../shared/core.js';
 
-const CONNECTION_LIFETIME = 4.0;
+const CONNECTION_LIFETIME = 5.0; // 2× longer → 2× slower visual pulse
 const MOUSE_RADIUS = 0.25; // Interaction radius
+
+// Anteil der neu gespawnten Connections, die in einer Akzentfarbe (statt
+// neutralem Border-Ton) erscheinen. Niedrig halten — dadurch wirken die
+// gelegentlichen Farb-Akzente wie kurze "Funken" im sonst ruhigen Grid.
+const ACCENT_CONNECTION_CHANCE = 0.3;
+
+// Phase 1: Projects fühlte sich zu langsam an. Eigener Multiplikator
+// auf den globalen TRANSITION_SPEED, damit Grid + Connections schneller
+// erscheinen als z.B. die ruhigen Home/About-Übergänge.
+const PROJECTS_TRANSITION_BOOST = 1.7;
 
 function getResponsiveConfig() {
   const width = typeof window !== 'undefined' ? window.innerWidth : 1024;
   if (width < BREAKPOINTS.DESKTOP) {
     return {
-      gridSpacing: 0.14, // Tighter grid for more points on mobile (was 0.19)
-      maxConnections: 8, // Increased from 6
-      connectionChance: 0.01
+      gridSpacing: 0.14,
+      maxConnections: 8,
+      connectionChance: 0.0035 // halved from 0.007
     };
   }
   if (width < BREAKPOINTS.WIDE) {
     return {
-      gridSpacing: 0.13, // Tighter (was 0.16)
-      maxConnections: 10, // Increased from 9
-      connectionChance: 0.012
+      gridSpacing: 0.13,
+      maxConnections: 10,
+      connectionChance: 0.004 // halved from 0.008
     };
   }
   return {
-    gridSpacing: 0.12, // Tighter (was 0.15)
-    maxConnections: 14, // Increased from 12
-    connectionChance: 0.015
+    gridSpacing: 0.12,
+    maxConnections: 14,
+    connectionChance: 0.005 // halved from 0.010
   };
 }
 
@@ -111,10 +121,15 @@ export function createProjectsForms(options = {}) {
   };
 }
 
-export function updateProjectsForms(state, deltaTime = 0.016, scrollProgress = 0, mouseX = 0.5, mouseY = 0.5) {
+export function updateProjectsForms(state, deltaTime = 0.016, scrollProgress = 0, mouseX = 0.5, mouseY = 0.5, options = {}) {
   const dt = Math.max(ANIMATION_CONFIG.MIN_DELTA_TIME, Math.min(deltaTime, ANIMATION_CONFIG.MAX_DELTA_TIME));
   const colors = getThemeColors();
   const config = state.config || getResponsiveConfig();
+
+  /* Optional: aktuell gehoverte Project-Card-Farbe (#hex). Wenn gesetzt,
+     spawnen ~70 % der neuen Connections in dieser Farbe statt in
+     primary/accent — visuelles Echo der Card-Auswahl. */
+  const hoverColor = options.cardHoverColor || null;
   
   // Scroll effect: Shift grid slightly basierend auf scrollProgress
   const scrollShiftY = scrollProgress * 0.1;
@@ -123,7 +138,7 @@ export function updateProjectsForms(state, deltaTime = 0.016, scrollProgress = 0
   state.points.forEach(p => {
     // Transition
     if (p.transitionProgress < 1) {
-      p.transitionProgress += dt * ANIMATION_CONFIG.TRANSITION_SPEED;
+      p.transitionProgress += dt * ANIMATION_CONFIG.TRANSITION_SPEED * PROJECTS_TRANSITION_BOOST;
       if (p.transitionProgress > 1) p.transitionProgress = 1;
       
       const t = EASE_OUT_CUBIC(p.transitionProgress);
@@ -150,9 +165,9 @@ export function updateProjectsForms(state, deltaTime = 0.016, scrollProgress = 0
     const dist = Math.sqrt(dx*dx + dy*dy);
     
     if (dist < MOUSE_RADIUS) {
-      p.hover = Math.min(1, p.hover + dt * 1.5); // Slower hover in
+      p.hover = Math.min(1, p.hover + dt * 0.75); // halved hover-in speed
     } else {
-      p.hover = Math.max(0, p.hover - dt);
+      p.hover = Math.max(0, p.hover - dt * 0.5); // halved hover-out speed
     }
   });
 
@@ -178,12 +193,25 @@ export function updateProjectsForms(state, deltaTime = 0.016, scrollProgress = 0
       
       if (neighbors.length > 0) {
         const p2 = neighbors[Math.floor(Math.random() * neighbors.length)];
+
+        // Farb-Auswahl:
+        // - Card-Hover aktiv → 70 % Project-Color, 30 % neutral
+        // - Sonst             → 30 % Akzent (primary/accent), 70 % neutral
+        let connColor;
+        if (hoverColor && Math.random() < 0.7) {
+          connColor = hoverColor;
+        } else if (Math.random() < ACCENT_CONNECTION_CHANCE) {
+          connColor = Math.random() > 0.5 ? colors.primary : colors.accent;
+        } else {
+          connColor = colors.border;
+        }
+
         state.connections.push({
           p1,
           p2,
           life: 0,
           maxLife: CONNECTION_LIFETIME * (0.8 + Math.random() * 0.4),
-          color: Math.random() > 0.5 ? colors.primary : colors.accent
+          color: connColor,
         });
       }
     }
@@ -203,5 +231,5 @@ export function updateProjectsForms(state, deltaTime = 0.016, scrollProgress = 0
   return state;
 }
 
-// Re-export draw & convert from dedicated module
-export { drawProjectsForms, convertProjectsToAbout } from './draw.js';
+// Re-export draw from dedicated module
+export { drawProjectsForms } from './draw.js';

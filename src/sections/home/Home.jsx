@@ -1,22 +1,19 @@
-import Typewriter from "./components/Typewriter/Typewriter.jsx";
-import { hero, cta } from "./homeData.js";
-import "./home.css";
+import Typewriter from './components/Typewriter/Typewriter.jsx';
+import { hero, cta } from './homeData.js';
+import './home.css';
 
 function Home() {
   return (
     <div className="home">
-      <div className="home-dot-grid" />
       <div className="home-glow" />
-
       <div className="home-content">
         <span className="eyebrow">{hero.eyebrow}</span>
         <h1 className="hero-title">
-          {hero.firstName}<br className="title-break" />{" "}
+          {hero.firstName}
+          <br className="title-break" />{' '}
           <span className="hero-highlight">{hero.lastName}</span>
         </h1>
-        <p className="hero-hook">
-          {hero.hook}
-        </p>
+        <p className="hero-hook">{hero.hook}</p>
 
         <Typewriter />
 

@@ -1,11 +1,11 @@
-/**
- * Home Section — Image Configuration & Styling
+﻿/**
+ * Home Section â€” Image Configuration & Styling
  * =============================================
- * Zentrale Datei für ALLES was das Profilbild betrifft:
- * - Viewport/Responsive Werte (Größe, Position)
+ * Zentrale Datei fÃ¼r ALLES was das Profilbild betrifft:
+ * - Viewport/Responsive Werte (GrÃ¶ÃŸe, Position)
  * - Shadow & Glow Konfiguration
  * - Filter (Blur, Drop-Shadow)
- * - Parallax-Stärke
+ * - Parallax-StÃ¤rke
  */
 
 // =============================================================================
@@ -24,53 +24,53 @@ function getDevice() {
 // =============================================================================
 
 /**
- * Zentrale Größen-Konfiguration für Orbit und Profilbild.
+ * Zentrale GrÃ¶ÃŸen-Konfiguration fÃ¼r Orbit und Profilbild.
  *
- * Architektur: Virtueller Container → Kind-Elemente mit Prozent.
+ * Architektur: Virtueller Container â†’ Kind-Elemente mit Prozent.
  *
- *  container    — Virtuelles Eltern-Element (Prozent vom Viewport)
- *                 Definiert den verfügbaren Platz. Wächst/schrumpft mit dem Viewport.
+ *  container    â€” Virtuelles Eltern-Element (Prozent vom Viewport)
+ *                 Definiert den verfÃ¼gbaren Platz. WÃ¤chst/schrumpft mit dem Viewport.
  *
- *  orbitCenterX/Y — Orbit-Zentrum RELATIV zum Container (0-1)
- *  orbitRadius    — Orbit-Radius RELATIV zu min(container.w, container.h)
- *  imageRadius    — Bild-Radius RELATIV zu min(container.w, container.h)
- *  imageOffsetX/Y — Bild-Versatz RELATIV zum Container min-Dimension
+ *  orbitCenterX/Y â€” Orbit-Zentrum RELATIV zum Container (0-1)
+ *  orbitRadius    â€” Orbit-Radius RELATIV zu min(container.w, container.h)
+ *  imageRadius    â€” Bild-Radius RELATIV zu min(container.w, container.h)
+ *  imageOffsetX/Y â€” Bild-Versatz RELATIV zum Container min-Dimension
  *
- * Ergebnis: Position UND Größe skalieren mit demselben Container
- *           → immer gleicher Anschnitt, immer gleiche relative Position.
+ * Ergebnis: Position UND GrÃ¶ÃŸe skalieren mit demselben Container
+ *           â†’ immer gleicher Anschnitt, immer gleiche relative Position.
  */
 export const IMAGE_CONFIG = {
     desktop: {
-        container: { left: 0.22, top: 0, width: 1.0, height: 1.0 },
-        orbitCenterX: 0.55,   // 55% der Container-Breite
-        orbitCenterY: 0.50,   // 50% der Container-Höhe (vertikal mittig)
-        orbitRadius:  0.34,   // 30% von min(container.w, container.h)
-        imageRadius:  0.34,   // 30% von min(container.w, container.h)
+        container: { left: 0.22, top: 0.05, width: 1.0, height: 1.0 },
+        orbitCenterX: 0.60,   // 55% der Container-Breite
+        orbitCenterY: 0.50,   // 50% der Container-HÃ¶he (vertikal mittig)
+        orbitRadius:  0.30,   // 30% von min(container.w, container.h)
+        imageRadius:  0.40,   // 30% von min(container.w, container.h)
         imageOffsetX: 0.00,   // Bild-Versatz relativ zu cMin
-        imageOffsetY: 0.03,   // Bild leicht nach unten relativ zu cMin
+        imageOffsetY: 0.00,   // Bild leicht nach unten relativ zu cMin
     },
     mobile: {
-        container: { left: 0.00, top: 0.01, width: 1.0, height: 0.5 },
+        container: { left: 0.00, top: 0.08, width: 1.0, height: 0.5 },
         orbitCenterX: 0.50,   // Horizontal mittig
         orbitCenterY: 0.50,   // Vertikal mittig im Container
         orbitRadius:  0.35,   // 35% von min(container.w, container.h)
-        imageRadius:  0.35,   // 35% von min(container.w, container.h)
+        imageRadius:  0.48,   // 35% von min(container.w, container.h)
         imageOffsetX: 0.00,
-        imageOffsetY: -0.02,
+        imageOffsetY: 0.00,
     },
 };
 
-/** Bildradius relativ zum Viewport — Fallback wenn kein Container-Rect verfügbar */
+/** Bildradius relativ zum Viewport â€” Fallback wenn kein Container-Rect verfÃ¼gbar */
 export function getImageRadius() {
     return getDevice() === 'mobile' ? 0.30 : 0.22;
 }
 
-/** Bildzentrum — Fallback wenn kein Container-Rect verfügbar */
+/** Bildzentrum â€” Fallback wenn kein Container-Rect verfÃ¼gbar */
 export function getImageCenter() {
     return getDevice() === 'mobile' ? { x: 0.5, y: 0.25 } : { x: 0.75, y: 0.5 };
 }
 
-/** Aspekt-Ratio des Quellbilds (Breite / Höhe) */
+/** Aspekt-Ratio des Quellbilds (Breite / HÃ¶he) */
 export const IMAGE_ASPECT = 877 / 1364;
 
 /** Bildbreite als Faktor des sizePx (Kreisdurchmesser) */
@@ -85,20 +85,20 @@ export const PARALLAX = {
 };
 
 // =============================================================================
-// DROP-SHADOW — Eleganter Gold-Glow statt harter Box-Shadow
+// DROP-SHADOW â€” Eleganter Gold-Glow statt harter Box-Shadow
 // =============================================================================
 
 /**
- * Gibt den CSS filter-String für das Profilbild zurück.
+ * Gibt den CSS filter-String fÃ¼r das Profilbild zurÃ¼ck.
  * Wird sowohl vom CSS-Default als auch vom JS-Blur-Pfad genutzt.
  *
  * Design-Prinzip:
- *   - Weicher, warmer Gold-Schein (brand-Farbe mit niedriger Opazität)
- *   - Mehrere Ebenen mit zunehmendem Radius für natürlichen Falloff
- *   - Kein harter schwarzer Schatten — alles farbig und diffus
+ *   - Weicher, warmer Gold-Schein (brand-Farbe mit niedriger OpazitÃ¤t)
+ *   - Mehrere Ebenen mit zunehmendem Radius fÃ¼r natÃ¼rlichen Falloff
+ *   - Kein harter schwarzer Schatten â€” alles farbig und diffus
  */
 export const IMAGE_SHADOWS = {
-    /** CSS drop-shadow Kette für .bgs-profile-front (Ruhezustand, kein Blur) */
+    /** CSS drop-shadow Kette fÃ¼r .bgs-profile-front (Ruhezustand, kein Blur) */
     css: [
         'drop-shadow(0 4px 6px rgba(245, 168, 0, 0.20))',
         'drop-shadow(0 8px 8px rgba(245, 168, 0, 0.12))',
@@ -107,7 +107,7 @@ export const IMAGE_SHADOWS = {
 
     /**
      * JS filter-String: Blur + Schatten kombiniert.
-     * @param {number} blurPx — aktuelle Blur-Stärke in px
+     * @param {number} blurPx â€” aktuelle Blur-StÃ¤rke in px
      */
     withBlur(blurPx) {
         return [
@@ -123,18 +123,18 @@ export const IMAGE_SHADOWS = {
 // GLOW RING (hinter dem Bild)
 // =============================================================================
 
-export const GLOW = {
+const GLOW = {
     /** Extra px um den Ring herum */
     sizeOffset: 40,
 
-    /** Puls-Geschwindigkeit (Multiplikator für performance.now) */
+    /** Puls-Geschwindigkeit (Multiplikator fÃ¼r performance.now) */
     pulseSpeed: 0.0008,
 
     /** Puls-Basis und Amplitude: opacity = base + sin(...) * amplitude */
     pulseBase: 0.75,
     pulseAmplitude: 0.15,
 
-    /** CSS background für den Glow-Ring */
+    /** CSS background fÃ¼r den Glow-Ring */
     background: `radial-gradient(circle,
         color-mix(in srgb, var(--brand) 15%, transparent) 0%,
         color-mix(in srgb, var(--brand) 6%, transparent) 50%,
@@ -146,8 +146,8 @@ export const GLOW = {
 // =============================================================================
 
 /**
- * Berechnet die CSS linear-gradient Masken für Front (Kopf) und Behind (Body).
- * @param {number} splitPct — Prozent-Position des Splits
+ * Berechnet die CSS linear-gradient Masken fÃ¼r Front (Kopf) und Behind (Body).
+ * @param {number} splitPct â€” Prozent-Position des Splits
  */
 export function getMaskGradients(splitPct) {
     const fadeStart = splitPct - 10;
@@ -163,6 +163,11 @@ export function getMaskGradients(splitPct) {
 // =============================================================================
 
 export const LERP_RATES = {
-    inHome:  { opacity: 0.10, scale: 0.10, blur: 0.10 },
-    leaving: { opacity: 0.35, scale: 0.35, blur: 0.35 },
+    // Symmetrisch zur leaving-Rate \u2192 Bild f\u00e4dt beim Snap-Wrap (Contact\u2192Home)
+    // genauso schnell ein, wie es beim Verlassen verschwindet. Ohne diese
+    // Symmetrie bleibt nach dem 680 ms Snap noch ein ~500 ms Bild-Lerp,
+    // der sich als \u201eVerz\u00f6gerung\u201c anf\u00fchlt.
+    inHome:  { opacity: 0.30, scale: 0.18, blur: 0.18 },
+    // Phase 1: schÃ¤rferer, sauberer Cut beim Verlassen von Home
+    leaving: { opacity: 0.55, scale: 0.40, blur: 0.40 },
 };

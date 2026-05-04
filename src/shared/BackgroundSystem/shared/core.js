@@ -1,5 +1,5 @@
-/**
- * BackgroundSystem — Core Constants, Colors & Responsive Utilities
+﻿/**
+ * BackgroundSystem â€” Core Constants, Colors & Responsive Utilities
  */
 
 export const TAU = Math.PI * 2;
@@ -18,6 +18,7 @@ export const EASE_OUT_CUBIC = (t) => 1 - Math.pow(1 - t, 3);
 export const DEFAULT_COLORS = {
     pri: "#F5A800",   // Brand (Goldgelb)
     pri2: "#E8720C",  // Highlight (Bernstein)
+    c3:  "#FFC74F",   // BGS-Farbe 3 (Champagne) â€” warme dritte Token-Farbe
     acc: "#1A2233",   // Accent (Navy)
     acc2: "#E8720C",  // Accent 2 (Bernstein)
     neu: "#1C1A14",   // Neutral (Tiefschwarz)
@@ -35,7 +36,8 @@ export const DEFAULT_COLORS = {
 // =============================================================================
 
 export const ANIMATION_CONFIG = {
-    TRANSITION_SPEED: 1.5,
+    // 1.47 â‰ˆ 0.68 s pro Section-Ãœbergang. Synchron zur Snap-Dauer.
+    TRANSITION_SPEED: 1.47,
     FADE_SPEED: 2.0,
     SCROLL_PROGRESS_MULTIPLIER: 2.5,
     MOUSE_PARALLAX_STRENGTH: 0.03,
@@ -47,13 +49,45 @@ export const ANIMATION_CONFIG = {
 export const BREAKPOINTS = { DESKTOP: 1025, WIDE: 1200 };
 
 // =============================================================================
-// THEME COLORS — Liest CSS Custom Properties, cached Ergebnis
+// THEME COLORS â€” Liest CSS Custom Properties, cached Ergebnis
 // =============================================================================
 
 let cachedThemeColors = null;
+let cachedThemeMode = null;
+
+/** Aktueller Theme-Modus: 'light' | 'dark'. */
+function getThemeMode() {
+    if (typeof document === 'undefined') return 'dark';
+    const attr = document.documentElement.getAttribute('data-theme');
+    if (attr === 'light' || attr === 'dark') return attr;
+    if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: light)').matches) {
+        return 'light';
+    }
+    return 'dark';
+}
+
+/**
+ * Globaler Alpha-Multiplikator fÃ¼rs BGS.
+ * Light-Mode: gedÃ¤mpft (0.55) damit BGS auf hellem Grund nicht knallt.
+ * Dark-Mode: voll (1.0).
+ */
+export function getThemeBGSAlpha() {
+    return getThemeMode() === 'light' ? 0.55 : 1.0;
+}
+
+/** Cache invalidieren â€” wird vom ThemeProvider beim Theme-Wechsel aufgerufen. */
+function clearThemeColorCache() {
+    cachedThemeColors = null;
+    cachedThemeMode = null;
+}
+
+if (typeof window !== 'undefined') {
+    window.addEventListener('yd-theme-change', clearThemeColorCache);
+}
 
 export function getThemeColors(forceRefresh = false) {
-    if (cachedThemeColors && !forceRefresh) return cachedThemeColors;
+    const mode = getThemeMode();
+    if (cachedThemeColors && !forceRefresh && cachedThemeMode === mode) return cachedThemeColors;
     if (typeof window === 'undefined') return DEFAULT_COLORS;
 
     try {
@@ -63,6 +97,7 @@ export function getThemeColors(forceRefresh = false) {
         cachedThemeColors = {
             primary:  get('--brand', DEFAULT_COLORS.pri),
             primary2: get('--hi', DEFAULT_COLORS.pri2),
+            c3:       get('--bgs-c3', DEFAULT_COLORS.c3),
             accent:   get('--accent', DEFAULT_COLORS.acc),
             accent2:  get('--hi', DEFAULT_COLORS.acc2),
             neutral:  get('--neu', DEFAULT_COLORS.neu),
@@ -73,6 +108,7 @@ export function getThemeColors(forceRefresh = false) {
             text:     get('--txt', DEFAULT_COLORS.txt),
             muted:    get('--txt-soft', DEFAULT_COLORS.mut),
             border:   get('--brd', DEFAULT_COLORS.bor),
+            mode,
             // Legacy / Short Aliases
             pri:  get('--brand', DEFAULT_COLORS.pri),
             pri2: get('--hi', DEFAULT_COLORS.pri2),
@@ -85,6 +121,7 @@ export function getThemeColors(forceRefresh = false) {
             mut:  get('--txt-soft', DEFAULT_COLORS.mut),
             bor:  get('--brd', DEFAULT_COLORS.bor),
         };
+        cachedThemeMode = mode;
         return cachedThemeColors;
     } catch {
         return DEFAULT_COLORS;
@@ -92,7 +129,7 @@ export function getThemeColors(forceRefresh = false) {
 }
 
 // =============================================================================
-// COLOR KEY RESOLUTION (unterstützt alte + neue Keys)
+// COLOR KEY RESOLUTION (unterstÃ¼tzt alte + neue Keys)
 // =============================================================================
 
 const COLOR_KEY_MAP = {
@@ -111,16 +148,34 @@ export function getColor(colors, key, fallback = DEFAULT_COLORS.pri) {
 }
 
 // =============================================================================
+// PER-TOKEN COLOR DISTRIBUTION
+// =============================================================================
+//
+// Drei Farben â€” pri (Brand), pri2 (Hi/Bernstein), c3 (Champagne) â€” werden so
+// auf die Tokens verteilt, dass jede Orbit-/Linien-Gruppe alle drei Farben
+// in gleicher Anzahl bekommt (statt einer Farbe pro Gruppe).
+//
+// Token i: group = i % 3 (Ring/Linie), indexInGroup = floor(i / 3).
+// Hue-Key  = TOKEN_COLOR_KEYS[indexInGroup % 3]  â†’ rotiert *innerhalb* der Gruppe.
+
+const TOKEN_COLOR_KEYS = ['pri', 'pri2', 'c3'];
+
+export function getTokenColorKey(index) {
+    const indexInGroup = Math.floor(index / 3);
+    return TOKEN_COLOR_KEYS[indexInGroup % TOKEN_COLOR_KEYS.length];
+}
+
+// =============================================================================
 // RESPONSIVE HELPERS
 // =============================================================================
 
-export function getDeviceType() {
+function getDeviceType() {
     if (typeof window === 'undefined') return 'desktop';
     return window.innerWidth < BREAKPOINTS.DESKTOP ? 'mobile' : 'desktop';
 }
 
 export function getResponsiveTokenCount() {
-    return getDeviceType() === 'mobile' ? 20 : 55;
+    return getDeviceType() === 'mobile' ? 30 : 45;
 }
 
 export function getResponsiveScale() {
@@ -143,11 +198,6 @@ export function getResponsiveCircleTokenScale() {
 
 export function clampNormalized(value, margin = 0.05) {
     return Math.max(margin, Math.min(1 - margin, value));
-}
-
-export function distanceNormalized(x1, y1, x2, y2) {
-    const dx = x2 - x1, dy = y2 - y1;
-    return Math.sqrt(dx * dx + dy * dy);
 }
 
 export function randomInRange(min, max) {

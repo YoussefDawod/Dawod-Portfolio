@@ -1,24 +1,22 @@
-/* ================================================
-   CONTACT DATA — Zentrale Inhaltsdatei
+﻿/* ================================================
+   CONTACT DATA â€” Zentrale Inhaltsdatei
    ================================================ */
 
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 
-export const recipient = {
+const recipient = {
   email: 'dawod@yellowdeveloper.de',
 };
 
 export const header = {
   title: "Let's",
   highlight: 'Connect',
-  subtitle:
-    'Haben Sie eine Idee oder ein Projekt? Lassen Sie uns gemeinsam etwas Großartiges entwickeln.',
 };
 
 export const info = {
-  heading: 'Kontaktkanäle',
+  heading: 'KontaktkanÃ¤le',
   location: 'Germany',
-  text: 'Ich bin immer offen für spannende Gespräche über Webentwicklung, neue Technologien oder Projektanfragen.',
+  text: 'Ich bin aktiv auf Jobsuche und freue mich Ã¼ber Anfragen zu Festanstellungen, Freelance-Projekten oder einem kurzen KennenlerngesprÃ¤ch.',
 };
 
 export const socials = [
@@ -44,7 +42,7 @@ export const socials = [
 
 /**
  * Form-Felder mit Validierungs-Regeln und Akzentfarben.
- * `accent` referenziert eine CSS-Variable aus styles/colors.css —
+ * `accent` referenziert eine CSS-Variable aus styles/colors.css â€”
  * jedes Feld bekommt im Focus-State seine eigene Farbe.
  */
 export const formFields = [
@@ -65,7 +63,7 @@ export const formFields = [
     validate: (v) =>
       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
         ? null
-        : 'Bitte eine gültige Email-Adresse.',
+        : 'Bitte eine gÃ¼ltige Email-Adresse.',
   },
   {
     id: 'message',
@@ -81,24 +79,24 @@ export const formFields = [
 
 /**
  * DSGVO-Einwilligungs-Checkbox.
- * `linkHref` jetzt Platzhalter — bei fertiger Datenschutzseite anpassen.
+ * `linkHref` jetzt Platzhalter â€” bei fertiger Datenschutzseite anpassen.
  */
 export const consentField = {
   id: 'consent',
-  label: 'Ich stimme der Verarbeitung meiner personenbezogenen Daten gemäß der\u00A0',
-  linkText: 'Datenschutzerklärung',
+  label: 'Ich stimme der Verarbeitung meiner personenbezogenen Daten gemÃ¤ÃŸ der\u00A0',
+  linkText: 'DatenschutzerklÃ¤rung',
   linkHref: '/datenschutz',
   labelEnd: '\u00A0zu.*',
-  footnote: '* Daten werden ausschließlich zur Beantwortung Ihrer Anfrage verwendet.',
-  errorText: 'Bitte akzeptiere die Datenschutzerklärung.',
+  footnote: '* Daten werden ausschlieÃŸlich zur Beantwortung Ihrer Anfrage verwendet.',
+  errorText: 'Bitte akzeptiere die DatenschutzerklÃ¤rung.',
 };
 
 export const submitText = {
   idleLabel: 'Nachricht Senden',
-  sendingLabel: 'Wird gesendet …',
-  successToast: 'Nachricht gesendet — vielen Dank!',
-  errorToast: 'Senden fehlgeschlagen. Bitte später erneut versuchen.',
-  validationToast: 'Bitte prüfe die markierten Felder.',
+  sendingLabel: 'Wird gesendet â€¦',
+  successToast: 'Nachricht gesendet â€” vielen Dank!',
+  errorToast: 'Senden fehlgeschlagen. Bitte spÃ¤ter erneut versuchen.',
+  validationToast: 'Bitte prÃ¼fe die markierten Felder.',
 };
 
 /**
@@ -108,6 +106,6 @@ export const submitText = {
 export const web3forms = {
   endpoint: 'https://api.web3forms.com/submit',
   accessKey: import.meta.env.VITE_WEB3FORMS_KEY ?? '',
-  subject: 'Neue Nachricht über Portfolio',
+  subject: 'Neue Nachricht Ã¼ber Portfolio',
   fromName: 'Portfolio Kontaktformular',
 };

@@ -9,20 +9,32 @@
 }
 
 /* ============================================================================
-   DOT-GRID — Subtiles Punkt-Raster (CSS, kein Canvas)
+   DOT-GRID — Subtiles Punkt-Raster auf der Section selbst (CSS, kein Canvas)
+   Nur die echte <section id="home"> bekommt das Grid; Ghost-Sections bleiben leer.
    ============================================================================ */
-.home-dot-grid {
+section#home::before {
+  content: "";
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: -3;
   background-image: radial-gradient(
     circle,
     color-mix(in srgb, var(--brand) var(--home-dot-opacity, 18%), transparent) 1px,
     transparent 1px
   );
   background-size: 28px 28px;
-  mask-image: radial-gradient(ellipse 80% 80% at 30% 50%, black 40%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 30% 50%, black 40%, transparent 100%);
+  /* 2D-Verlauf via zwei Masken + intersect (Minimum-Alpha pro Pixel):
+       1) Vertikal: unten 100%, oben 50%   → linke Spalte: 100%→50%, rechte Spalte: 100%→50%
+       2) Radial nur oben rechts auf 0   → zieht TR-Ecke auf 0%, alle anderen unberührt
+     Ergebnis: BL=100%, BR=100%, TL=50%, TR=0%, flüssig dazwischen interpoliert. */
+  mask-image:
+    linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 100%),
+    radial-gradient(ellipse 70% 70% at 100% 0%, transparent 0%, rgba(0,0,0,1) 75%);
+  mask-composite: intersect;
+  -webkit-mask-image:
+    linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 100%),
+    radial-gradient(ellipse 70% 70% at 100% 0%, transparent 0%, rgba(0,0,0,1) 75%);
+  -webkit-mask-composite: source-in;
   pointer-events: none;
 }
 
@@ -71,7 +83,7 @@
 
 /* --- Eyebrow --- */
 .eyebrow {
-  font-size: clamp(12px, 2.4vw, 32px);
+  font-size: clamp(10px, 1.3vw, 18px);
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -83,7 +95,7 @@
 /* --- Headline --- */
 .hero-title {
   font-weight: 700;
-  font-size: clamp(36px, 10.4vw, 140px);
+  font-size: clamp(36px, 10.4vw, 112px);
   line-height: 1.08;
   color: var(--txt);
   opacity: 0;
@@ -92,7 +104,7 @@
 
 /* --- "Dawod." Highlight — gleicher Effekt wie "Connect" im Contact --- */
 .hero-highlight {
-  font-size: clamp(36px, 11.1vw, 160px);
+  font-size: clamp(36px, 11.1vw, 112px);
   color: transparent;
   -webkit-text-stroke: 1px var(--txt-brand);
   position: relative;
@@ -160,17 +172,17 @@
 }
 
 .btn.primary:hover {
-  background: var(--btn-brand-hover);
-  border-color: var(--btn-brand-hover);
+  background: var(--btn-brand);
+  border-color: var(--btn-brand);
   transform: translateY(-2px);
-  box-shadow: var(--glow-lg);
+  box-shadow: 0 0 16px var(--glow-brand), 0 0 40px var(--glow-brand-soft), 0 0 80px var(--glow-hi-soft);
 }
 
 .btn.ghost {
   background: transparent;
   border: none;
   color: color-mix(in srgb, var(--txt) 45%, transparent);
-  font-size: clamp(13px, 2.4vw, 32px);
+  font-size: clamp(13px, 1.6vw, 22px);
   font-weight: 500;
   padding: 0;
   cursor: pointer;
@@ -198,7 +210,7 @@
 /* ============================================================================
    MOBILE (< 1024px) — Vertical Stack
    ============================================================================ */
-@media (max-width: 1023px) {
+@media (max-width: 1024px) {
   .home {
     padding: 1rem;
     flex-direction: column;
@@ -206,7 +218,7 @@
     text-align: center;
   }
 
-  .home-dot-grid {
+  section#home::before {
     mask-image: linear-gradient(to bottom, transparent 20%, black 65%);
     -webkit-mask-image: linear-gradient(to bottom, transparent 20%, black 65%);
     background-size: 26px 26px;

@@ -11,9 +11,6 @@
    ========================================= */
 
 html {
-  scroll-behavior: smooth;
-  /* Scrollbar ausblenden (IE/Edge/Firefox) */
-  -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
@@ -36,9 +33,67 @@ main {
   flex-direction: column;
 }
 
-/* Einheitlicher Navbar-Abstand */
+/* Einheitlicher Navbar-Abstand (Token-basiert) */
 main > section {
-  padding-top: 5rem;
+  padding-top: var(--navbar-h);
+  /* Positionierungs-Kontext: schützt absolut platzierte Kinder
+     (z.B. .home-glow, ::before-Dot-Grids) davor, ans ICB zu fallen.
+     Wichtig für Ghost-Sections — ohne dies würden Hintergrund-Layer
+     der ersten Section am Dokument-Anfang erscheinen. */
+  position: relative;
+}
+
+/* =========================================
+   DESKTOP — JS-gesteuertes Scroll-Snapping
+   (usePageSnap Hook in HomePage.jsx)
+   Sections: feste 100dvh, overflow hidden
+   ========================================= */
+@media (min-width: 1025px) {
+  main > section {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  /* Ghost-Sections: identisches Layout, aber keine Interaktion */
+  main > section.ghost-section {
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+/* Mobile: Ghost-Sections ausblenden — kein extra Scroll-Raum */
+@media (max-width: 1024px) {
+  main > section.ghost-section {
+    display: none;
+  }
+}
+
+/* =========================================
+   SKIP-LINK — Accessibility (Tab → „Zum Inhalt“)
+   ========================================= */
+.skip-link {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  padding: 0.65rem 1rem;
+  background: var(--brand-md);
+  color: var(--txt-on-brand);
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-150%);
+  transition: transform var(--dur-1) var(--ease-soft);
+  z-index: 9999;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
 }
 
 /* =========================================

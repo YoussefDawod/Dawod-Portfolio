@@ -1,194 +1,152 @@
-/* =========================================================
-   FORM FIELD — Floating Label, animierte Underline + Glow
-   --field-accent kommt per Inline-Style aus contactData.
+﻿/* =========================================================
+   FIELD — Editorial floating-label, hairline
    ========================================================= */
 
-.form-field {
+.field {
   position: relative;
   width: 100%;
   --field-accent: var(--focus);
+  padding-bottom: var(--space-1);
 }
 
-/* Inneres Wrapper für Glow ohne Layout-Shift */
-.form-field__inner {
-  position: relative;
-}
-
-.form-field__control {
+.field__control {
   width: 100%;
-  padding: 1.15rem 0 0.65rem;
-  font-size: 1rem;
+  padding: var(--space-3) 0 var(--space-1);
+  font-size: 1.05rem;
   color: var(--txt);
   background: transparent;
   border: none;
-  border-bottom: 1px solid var(--brd);
+  border-bottom: 1px solid color-mix(in srgb, var(--txt-soft) 22%, transparent);
   outline: none;
   font-family: inherit;
   resize: none;
   transition: border-color 0.3s ease;
 }
 
-.form-field__control:disabled {
+.field__control:disabled {
   color: var(--disabled-txt);
   cursor: not-allowed;
 }
 
-.form-field__label {
+.field__label {
   position: absolute;
-  top: 1.15rem;
+  top: var(--space-3);
   left: 0;
   pointer-events: none;
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--txt-soft);
   letter-spacing: 0.01em;
   transition:
-    top 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
-    font-size 0.28s ease,
-    color 0.28s ease,
-    letter-spacing 0.28s ease,
-    transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+    top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    font-size 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    letter-spacing 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    color 0.3s ease;
 }
 
-/* Floating-Label aktiv: Focus oder ausgefüllt */
-.form-field__control:focus ~ .form-field__label,
-.form-field__control:not(:placeholder-shown) ~ .form-field__label {
-  top: -0.4rem;
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
+.field__control:focus ~ .field__label,
+.field__control:not(:placeholder-shown) ~ .field__label {
+  top: 0;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--field-accent);
-  transform: translateY(0);
 }
 
-/* Underline — Track (ruhend) */
-.form-field__line {
+/* Underline-Layer: Track + Fill */
+.field__line {
   position: absolute;
-  bottom: 0;
   left: 0;
   right: 0;
-  height: 2px;
-  background: transparent;
+  bottom: var(--space-1);
+  height: 1px;
+  pointer-events: none;
   overflow: hidden;
 }
 
-/* Underline — Fill (animiert) */
-.form-field__line::after {
+.field__line::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    var(--field-accent),
-    color-mix(in srgb, var(--field-accent) 30%, transparent)
-  );
+  background: var(--field-accent);
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.form-field__control:focus ~ .form-field__line::after,
-.form-field__control:not(:placeholder-shown) ~ .form-field__line::after {
+.field__control:focus ~ .field__line::after,
+.field__control:not(:placeholder-shown) ~ .field__line::after {
   transform: scaleX(1);
 }
 
-/* Akzent-Punkt links (Statusindikator) */
-.form-field__dot {
-  position: absolute;
-  bottom: -3px;
-  left: 0;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--field-accent);
-  transform: scale(0);
-  transform-origin: center;
-  box-shadow: 0 0 12px var(--field-accent);
-  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1.4);
-}
-
-.form-field__control:focus ~ .form-field__dot {
-  transform: scale(1);
-}
-
-/* Glow-Aura beim Focus */
-.form-field:focus-within {
-  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--field-accent) 22%, transparent));
-}
-
-/* Counter (rechts unten, optional) */
-.form-field__counter {
+/* Counter */
+.field__counter {
   position: absolute;
   right: 0;
-  bottom: -1.4rem;
+  bottom: -1.3rem;
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
   color: var(--txt-soft);
   opacity: 0;
   transition: opacity 0.3s ease, color 0.3s ease;
 }
 
-.form-field:focus-within .form-field__counter,
-.form-field--has-value .form-field__counter {
+.field:focus-within .field__counter,
+.field--has-value .field__counter {
   opacity: 0.85;
 }
 
-.form-field__counter--limit {
+.field__counter--limit {
   color: var(--err);
   opacity: 1;
 }
 
-/* Error-State */
-.form-field--error .form-field__control {
-  border-bottom-color: var(--err);
+/* Error — border-bottom neutral; roter field__line-Balken kommuniziert Fehler */
+.field--error .field__control {
+  border-bottom-color: transparent;
 }
 
-.form-field--error .form-field__label {
+.field--error .field__label {
   color: var(--err);
 }
 
-.form-field--error .form-field__line::after {
-  background: linear-gradient(
-    90deg,
-    var(--err),
-    color-mix(in srgb, var(--err) 35%, transparent)
-  );
+.field--error .field__line::after {
+  background: var(--err);
   transform: scaleX(1);
 }
 
-.form-field--error .form-field__dot {
-  background: var(--err);
-  box-shadow: 0 0 12px var(--err);
-  transform: scale(1);
-}
-
-.form-field__error {
+.field__error {
   display: block;
-  margin-top: 0.7rem;
+  margin-top: var(--space-1);
   font-size: 0.78rem;
   color: var(--err);
   letter-spacing: 0.02em;
 }
 
-@media (max-width: 1023px) {
-  .form-field__control {
-    /* iOS: 16px verhindert Auto-Zoom */
+@media (max-width: 1024px) {
+  .field__control {
+    /* iOS: 16px gegen Auto-Zoom */
     font-size: 16px;
-    padding: 0.95rem 0 0.5rem;
-  }
-  .form-field__label {
-    font-size: 0.9rem;
-    top: 0.95rem;
+    padding: var(--space-3) 0 var(--space-1);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .form-field__control,
-  .form-field__label,
-  .form-field__line::after,
-  .form-field__dot,
-  .form-field__counter {
+  .field__control,
+  .field__label,
+  .field__line::after,
+  .field__counter {
     transition: none;
   }
+}
+
+/* Autofill — Browser-Grau unterdrücken */
+.field__control:-webkit-autofill,
+.field__control:-webkit-autofill:hover,
+.field__control:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--bg) inset;
+  -webkit-text-fill-color: var(--txt);
+  caret-color: var(--txt);
+  transition: background-color 5000s ease-in-out 0s;
 }

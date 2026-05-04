@@ -1,23 +1,4 @@
-/* ================================================
-   PROJECTS DATA — Zentrale Inhaltsdatei für die Projects Section
-   ================================================
-
-   Schema pro Projekt:
-   ┌─────────────────┬───────────────────────────────────────────────────────┐
-   │ id              │ Einzigartiger Slug (kebab-case)                       │
-   │ num             │ Anzeige-Nummer als String: '01', '02', ...            │
-   │ category        │ Kategorie-Label (Großbuchstaben), nur Mobile sichtbar │
-   │ title           │ Projekt-Titel                                         │
-   │ tech            │ Array von { name, icon, color } — wie aboutData       │
-   │ description     │ Kurzbeschreibung, max 3 Sätze                         │
-   │ primaryColor    │ Hex-Farbe passend zum Projekt/Stack (Thumbnail-Tint)  │
-   │ liveUrl         │ https://... — Live Demo URL (null = deaktiviert)      │
-   │ githubUrl       │ https://... — GitHub URL   (null = deaktiviert)       │
-   └─────────────────┴───────────────────────────────────────────────────────┘
-
-   Hinweis: liveUrl wird als iframe src verwendet. Das Hosting-Projekt muss
-   X-Frame-Options erlauben. Solange null, wird ein Placeholder angezeigt.
-================================================ */
+// Projektdaten — Schema: id, num, category, title, tech, description, primaryColor, liveUrl, githubUrl
 
 import {
   SiReact, SiVite, SiSass, SiExpress, SiMongodb,
@@ -69,7 +50,7 @@ export const projectsData = [
   {
     id:           'flavorfind',
     num:          '03',
-    category:     'PWA',
+    category:     'LIFESTYLE & FOOD',
     title:        'FlavorFind',
     tech:         [
       { name: 'React',        icon: SiReact,        color: '#61DAFB' },

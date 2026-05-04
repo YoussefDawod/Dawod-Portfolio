@@ -1,15 +1,13 @@
 /* =========================================================
-   CONSENT CHECKBOX — DSGVO-Einwilligungs-Checkbox
-   Passend zu lebendigem Form-Design.
+   CONSENT CHECKBOX — Minimal, hairline-styled
    ========================================================= */
 
 .consent-checkbox {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: var(--space-1);
 }
 
-/* Echtes Input visuell versteckt, aber screenreader-zugänglich */
 .consent-checkbox__input {
   position: absolute;
   width: 1px;
@@ -23,9 +21,10 @@
 }
 
 .consent-checkbox__label {
+  position: relative;
   display: flex;
   align-items: flex-start;
-  gap: 0.85rem;
+  gap: var(--space-2);
   cursor: pointer;
   user-select: none;
 }
@@ -35,93 +34,66 @@
   cursor: not-allowed;
 }
 
-/* Benutzerdefinierte Box */
+/* Custom Box */
 .consent-checkbox__box {
   position: relative;
   flex-shrink: 0;
-  width: 1.3rem;
-  height: 1.3rem;
-  margin-top: 0.05rem;
-  border: 1.5px solid var(--brd);
-  border-radius: 5px;
-  background: color-mix(in srgb, var(--surf) 50%, transparent);
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.2rem;
+  border: 1px solid color-mix(in srgb, var(--txt-soft) 35%, transparent);
+  border-radius: 3px;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition:
-    border-color 0.3s ease,
-    background 0.3s ease,
-    box-shadow 0.3s ease,
-    transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1.4);
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1.4);
 }
 
 .consent-checkbox__label:hover .consent-checkbox__box {
-  border-color: color-mix(in srgb, var(--brand) 50%, var(--brd));
-  transform: scale(1.05);
+  border-color: var(--txt-brand);
 }
 
-/* Checked-State */
 .consent-checkbox__input:checked + .consent-checkbox__box {
-  background: linear-gradient(135deg, var(--brand), var(--hi));
-  border-color: transparent;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 20%, transparent),
-    0 0 16px color-mix(in srgb, var(--brand) 35%, transparent);
+  background: var(--brand);
+  border-color: var(--brand);
 }
 
-/* Focus-Ring vom echten Input auf Box übertragen */
 .consent-checkbox__input:focus-visible + .consent-checkbox__box {
   outline: 2px solid var(--focus);
   outline-offset: 3px;
 }
 
-/* Haken */
 .consent-checkbox__check {
-  font-size: 0.7rem;
+  font-size: 0.55rem;
   color: var(--txt-on-brand);
   animation: consent-check-pop 0.25s cubic-bezier(0.2, 0.8, 0.2, 1.4);
 }
 
 @keyframes consent-check-pop {
-  0%   { transform: scale(0.3) rotate(-15deg); opacity: 0; }
-  70%  { transform: scale(1.2) rotate(0);      opacity: 1; }
-  100% { transform: scale(1)   rotate(0);      opacity: 1; }
+  0%   { transform: scale(0.3); opacity: 0; }
+  70%  { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1);   opacity: 1; }
 }
 
-/* Label-Text */
 .consent-checkbox__text {
-  font-size: 0.83rem;
+  font-size: 0.78rem;
   color: var(--txt-soft);
   line-height: 1.55;
 }
 
-/* Datenschutz-Link */
 .consent-checkbox__link {
   position: relative;
-  color: var(--txt-brand);
+  color: var(--txt);
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.25s ease;
-}
-
-.consent-checkbox__link::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -2px;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0.4);
-  transform-origin: left center;
-  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  border-bottom: 1px solid color-mix(in srgb, var(--txt-brand) 50%, transparent);
+  transition: color 0.25s ease, border-color 0.25s ease;
 }
 
 .consent-checkbox__link:hover {
-  color: var(--btn-hi);
-}
-
-.consent-checkbox__link:hover::after {
-  transform: scaleX(1);
+  color: var(--txt-brand);
+  border-color: var(--txt-brand);
 }
 
 .consent-checkbox__link:focus-visible {
@@ -130,22 +102,19 @@
   border-radius: 2px;
 }
 
-/* Error-State */
 .consent-checkbox--error .consent-checkbox__box {
   border-color: var(--err);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--err) 18%, transparent);
 }
 
 .consent-checkbox__error {
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   color: var(--err);
-  padding-left: calc(1.3rem + 0.85rem);
+  padding-left: calc(1.05rem + var(--space-2));
 }
 
 @media (prefers-reduced-motion: reduce) {
   .consent-checkbox__box,
-  .consent-checkbox__check,
-  .consent-checkbox__link::after {
+  .consent-checkbox__check {
     transition: none;
     animation: none;
   }

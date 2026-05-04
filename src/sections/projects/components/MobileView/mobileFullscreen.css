@@ -1,8 +1,5 @@
-/* ================================================
-   MOBILE FULLSCREEN — Zustand 2: Vollbild Preview
-   ================================================ */
+/* mobileFullscreen.css — Vollbild-Preview Overlay */
 
-/* --- Overlay ------------------------------------------- */
 .mfs-overlay {
   position: fixed;
   inset: 0;
@@ -49,7 +46,7 @@
 }
 
 .mfs-close:active {
-  background: color-mix(in srgb, var(--brand) 12%, transparent);
+  background: color-mix(in srgb 12%, transparent);
 }
 
 .mfs-url {
@@ -103,12 +100,13 @@
 }
 
 .mfs-btn--primary {
-  background: var(--brand);
-  color: var(--txt-on-brand);
+  background: color-mix(in srgb, var(--project-primary) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--project-primary) 55%, transparent);
+  color: color-mix(in srgb, var(--project-primary) 95%, var(--txt));
 }
 
 .mfs-btn--primary:active {
-  background: var(--brand-dk);
+  background: color-mix(in srgb, var(--project-primary) 30%, transparent);
 }
 
 /* --- Reduced motion ------------------------------------ */

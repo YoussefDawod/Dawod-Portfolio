@@ -25,28 +25,23 @@
 }
 
 /* ================================================
-   KEYFRAMES
+   LIGHT MODE — wird via [data-theme="light"] aktiv
 ================================================ */
 
-@keyframes glow-pulse {
-  0%, 100% {
-    box-shadow: 0 0 10px var(--glow-brand-soft);
-  }
-  50% {
-    box-shadow: 0 0 20px var(--glow-brand), 0 0 30px var(--glow-brand-subtle);
-  }
+:root[data-theme="light"] {
+  --glow-brand: color-mix(in srgb, var(--brand) 50%, transparent);
+  --glow-brand-soft: color-mix(in srgb, var(--brand) 25%, transparent);
+  --glow-brand-subtle: color-mix(in srgb, var(--brand) 8%, transparent);
+  --glow-hi: color-mix(in srgb, var(--hi) 40%, transparent);
+  --glow-hi-soft: color-mix(in srgb, var(--hi) 20%, transparent);
 }
 
-/* ================================================
-   LIGHT MODE
-================================================ */
-
 @media (prefers-color-scheme: light) {
-  :root {
-    --glow-brand: color-mix(in srgb, var(--brand) 30%, transparent);
-    --glow-brand-soft: color-mix(in srgb, var(--brand) 12%, transparent);
-    --glow-brand-subtle: color-mix(in srgb, var(--brand) 5%, transparent);
-    --glow-hi: color-mix(in srgb, var(--hi) 25%, transparent);
-    --glow-hi-soft: color-mix(in srgb, var(--hi) 12%, transparent);
+  :root:not([data-theme]) {
+    --glow-brand: color-mix(in srgb, var(--brand) 50%, transparent);
+    --glow-brand-soft: color-mix(in srgb, var(--brand) 25%, transparent);
+    --glow-brand-subtle: color-mix(in srgb, var(--brand) 8%, transparent);
+    --glow-hi: color-mix(in srgb, var(--hi) 40%, transparent);
+    --glow-hi-soft: color-mix(in srgb, var(--hi) 20%, transparent);
   }
 }

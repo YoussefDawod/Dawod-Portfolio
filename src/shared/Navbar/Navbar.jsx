@@ -17,7 +17,7 @@ const Navbar = () => {
   useEffect(() => {
     const onScroll = () => {
       const mid = window.scrollY + window.innerHeight / 2;
-      let current = navItems[0].id;
+      let current = null;
       for (const item of navItems) {
         const el = document.getElementById(item.id);
         if (el && mid >= el.offsetTop && mid < el.offsetTop + el.offsetHeight) {
@@ -25,18 +25,32 @@ const Navbar = () => {
           break;
         }
       }
-      setActiveSection(current);
+      // current ist null wenn wir gerade in einer Ghost-Section sind (Wrap-Animation)
+      // → nicht updaten, damit der aktuelle Wert stehen bleibt
+      if (current) setActiveSection(current);
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  /* ── page-section-change: sofortiges Update beim Wrap-Jump ───── */
+  useEffect(() => {
+    const handler = (e) => setActiveSection(e.detail.id);
+    window.addEventListener('page-section-change', handler);
+    return () => window.removeEventListener('page-section-change', handler);
+  }, []);
+
   /* ── Close mobile menu on outside click ────────────────────── */
   // Menü schließt nur über YD-Button (kein Auto-Close)
 
   const scrollTo = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    if (window.innerWidth > 1024) {
+      // Desktop: usePageSnap übernimmt die Animation
+      window.dispatchEvent(new CustomEvent('page-snap-go', { detail: { id } }));
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (

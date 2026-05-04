@@ -1,0 +1,152 @@
+/* ================================================
+   LEGAL PAGES — Impressum, Datenschutz, 404
+   ================================================
+   Zurückhaltend aber harmonisch zum Projekt-Design:
+   warmer Hintergrund, dezente Brand-Akzente, klare Typografie.
+================================================ */
+
+.legal-page {
+  min-height: 100dvh;
+  padding: calc(var(--navbar-h) + var(--space-4)) clamp(1.25rem, 5vw, 3rem) var(--space-6);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.legal-page__inner {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-top: var(--space-5);
+}
+
+.legal-page__eyebrow {
+  font-size: var(--fs-eyebrow);
+  font-weight: 600;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--txt-brand);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.legal-page__eyebrow::before {
+  content: '';
+  width: 1.5rem;
+  height: 1px;
+  background: color-mix(in srgb, var(--brand) 60%, transparent);
+}
+
+.legal-page h1 {
+  font-size: var(--fs-h1);
+  line-height: 1.05;
+  letter-spacing: var(--ls-tight);
+  color: var(--txt);
+  font-weight: 700;
+}
+
+.legal-page h2 {
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  color: var(--txt);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid color-mix(in srgb, var(--brand) 15%, transparent);
+  letter-spacing: 0.005em;
+}
+
+.legal-page__section {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  border-radius: var(--r-md);
+  border: 1px solid color-mix(in srgb, var(--brand) 18%, transparent);
+  background:
+    linear-gradient(
+      155deg,
+      color-mix(in srgb, var(--brand) 6%, transparent) 0%,
+      color-mix(in srgb, var(--brand) 2%, transparent) 50%,
+      transparent 100%
+    );
+  backdrop-filter: blur(8px) saturate(1.1);
+  -webkit-backdrop-filter: blur(8px) saturate(1.1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.legal-page__section::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--brand) 50%, transparent) 50%,
+    transparent 100%
+  );
+  border-radius: var(--r-md) var(--r-md) 0 0;
+  pointer-events: none;
+}
+
+.legal-page p,
+.legal-page li {
+  font-size: var(--fs-body);
+  line-height: 1.75;
+  color: var(--txt-soft);
+}
+
+.legal-page strong {
+  color: var(--txt);
+  font-weight: 600;
+}
+
+.legal-page a {
+  color: var(--txt-brand);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--brand) 35%, transparent);
+  transition: border-color var(--dur-1) var(--ease-micro), color var(--dur-1) var(--ease-micro);
+}
+
+.legal-page a:hover {
+  color: var(--brand);
+  border-bottom-color: var(--brand);
+}
+
+.legal-page ul {
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.legal-page__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: var(--space-4);
+  align-self: flex-start;
+}
+
+/* ── 404 ── */
+.legal-page--404 .legal-page__inner {
+  text-align: center;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.legal-page--404 .legal-page__code {
+  font-size: var(--fs-display);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: var(--ls-tight);
+  background: var(--grad-warm);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

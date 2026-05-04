@@ -1,6 +1,5 @@
 /* =========================================================
-   LOCATION BADGE — Pill mit pulsierendem grünen Dot
-   Verbesserte Glow-Aura und smoother Pulse.
+   LOCATION BADGE — Pill mit pulsierendem Dot (bleibt erhalten)
    ========================================================= */
 
 .location-badge {
@@ -42,7 +41,6 @@
   box-shadow: 0 0 8px color-mix(in srgb, var(--ok) 75%, transparent);
 }
 
-/* Innerer Kern (statisch hell) */
 .location-badge__dot::before {
   content: '';
   position: absolute;
@@ -51,7 +49,6 @@
   background: color-mix(in srgb, var(--ok) 30%, white);
 }
 
-/* Äußerer Pulse-Ring */
 .location-badge__dot::after {
   content: '';
   position: absolute;

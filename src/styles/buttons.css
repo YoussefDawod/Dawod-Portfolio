@@ -1,0 +1,88 @@
+/* ================================================
+   BUTTONS — Basis-Klasse + drei Varianten
+   ================================================
+
+   Nutzung:
+     <button class="btn btn--solid">Senden</button>
+     <a class="btn btn--ghost">Mehr lesen</a>
+     <button class="btn btn--outline">Abbrechen</button>
+
+   Custom-Properties (optional):
+     --btn-accent  → Akzentfarbe (default: --brand-md)
+================================================ */
+
+.btn {
+  --btn-accent: var(--brand-md);
+  --btn-fg:     var(--txt);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.4rem;
+  font-family: inherit;
+  font-size: var(--fs-body);
+  font-weight: 600;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--btn-fg);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  outline: none;
+  transition:
+    background-color var(--dur-1) var(--ease-micro),
+    border-color     var(--dur-1) var(--ease-micro),
+    color            var(--dur-1) var(--ease-micro),
+    box-shadow       var(--dur-1) var(--ease-micro),
+    transform        var(--dur-1) var(--ease-micro);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Solid: warmer Gold, vollflächig ─────────── */
+.btn--solid {
+  background: var(--btn-accent);
+  color: var(--txt-on-brand);
+  border-color: var(--btn-accent);
+  box-shadow: var(--shadow-brand);
+}
+
+.btn--solid:hover {
+  background: color-mix(in srgb, var(--btn-accent) 85%, white);
+  transform: translateY(-1px);
+}
+
+/* ── Ghost: nur Text + Icon, weicher Hover ───── */
+.btn--ghost {
+  color: var(--txt);
+}
+
+.btn--ghost:hover {
+  color: var(--btn-accent);
+  background: color-mix(in srgb, var(--btn-accent) 8%, transparent);
+}
+
+/* ── Outline: Hairline, Fill-In bei Hover ────── */
+.btn--outline {
+  color: var(--btn-accent);
+  border-color: color-mix(in srgb, var(--btn-accent) 55%, transparent);
+}
+
+.btn--outline:hover {
+  color: var(--txt-on-brand);
+  background: var(--btn-accent);
+  border-color: var(--btn-accent);
+}

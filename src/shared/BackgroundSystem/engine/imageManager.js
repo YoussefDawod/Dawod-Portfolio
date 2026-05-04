@@ -4,8 +4,6 @@
  * Konfiguration kommt aus sections/home/image.js
  */
 
-import { BREAKPOINTS } from '../shared/core.js';
-
 import {
     getImageCenter,
     getImageRadius,
@@ -13,7 +11,6 @@ import {
     IMAGE_WIDTH_FACTOR,
     PARALLAX,
     IMAGE_SHADOWS,
-    GLOW,
     getMaskGradients,
     LERP_RATES,
 } from '../sections/home/image.js';
@@ -56,7 +53,9 @@ export function lerpImageState(state, targets, inHome) {
     state.scale  += (targets.targetScale  - state.scale)  * rates.scale;
     state.blur   += (targets.targetBlur   - state.blur)   * rates.blur;
 
-    if (state.opacity < 0.01) state.opacity = 0;
+    // Phase 1: außerhalb Home harter Snap, damit kein Nachschimmer.
+    if (!inHome && state.opacity < 0.05) state.opacity = 0;
+    else if (state.opacity < 0.01) state.opacity = 0;
 }
 
 // =============================================================================
@@ -103,37 +102,30 @@ export function applyImageStyles(refs, state, orientation, mouse, cssWidth, cssH
     const transform = `translate(calc(-50% + ${offsetX.toFixed(1)}px), calc(-50% - ${shiftUp.toFixed(1)}px + ${offsetY.toFixed(1)}px)) scale(${state.scale.toFixed(4)})`;
     const masks = getMaskGradients(splitPct);
 
-    // Image-Fade Maske (nur auf Mobile: unten→oben)
-    const isMobile = cssWidth < BREAKPOINTS.DESKTOP;
-    const fadeMask = isMobile
-        ? 'linear-gradient(to bottom, black 50%, transparent 92%)'
-        : null;
-
-    const frontMask  = fadeMask ? `${fadeMask}, ${masks.front}`  : masks.front;
-    const behindMask = fadeMask ? `${fadeMask}, ${masks.behind}` : masks.behind;
-
-    // maskComposite nur bei mehreren Layern (Mobile: fadeMask + split-mask)
-    const compositeProps = fadeMask ? {
-        maskComposite: 'intersect',
-        WebkitMaskComposite: 'source-in',
-    } : {};
-
-    // Front Layer (Kopf)
+    // Front Layer — Kopf, vor Canvas (z-index 1)
     Object.assign(imageRef.style, {
         left: posLeft, top: posTop, width: `${imgWidth}px`, height: 'auto',
         opacity: state.opacity.toFixed(3), transform,
-        maskImage: frontMask,
-        webkitMaskImage: frontMask,
-        ...compositeProps,
+        maskImage: masks.front,
+        webkitMaskImage: masks.front,
+        maskComposite: '',
+        WebkitMaskComposite: '',
     });
 
-    // Behind Layer (Body)
+    // Behind Layer — Körper, hinter Canvas (z-index -2)
+    // clip-path: circle auf den Orbit-Ring zugeschnitten — alles außerhalb unsichtbar
+    const orbitRadiusPx = container?.orbitRadiusPx ?? sizePx / 2;
+    const clipCx = Math.round(imgWidth / 2.05);
+    const clipCy = Math.round(imgHeight / 2.75 + shiftUp);
+    const clipPath = `circle(${Math.round(orbitRadiusPx)}px at ${clipCx}px ${clipCy}px)`;
     Object.assign(imageBehindRef.style, {
         left: posLeft, top: posTop, width: `${imgWidth}px`, height: 'auto',
         opacity: state.opacity.toFixed(3), transform,
-        maskImage: behindMask,
-        webkitMaskImage: behindMask,
-        ...compositeProps,
+        maskImage: masks.behind,
+        webkitMaskImage: masks.behind,
+        maskComposite: '',
+        WebkitMaskComposite: '',
+        clipPath,
     });
 
     // Filter: Blur + eleganter Drop-Shadow
@@ -146,14 +138,6 @@ export function applyImageStyles(refs, state, orientation, mouse, cssWidth, cssH
         imageBehindRef.style.filter = '';
     }
 
-    // Glow (Puls via JS, damit kein CSS-Animation-Override)
-    const glowSize = sizePx + GLOW.sizeOffset;
-    const pulse = state.opacity > 0
-        ? GLOW.pulseBase + Math.sin(performance.now() * GLOW.pulseSpeed) * GLOW.pulseAmplitude
-        : 0;
-    Object.assign(glowRef.style, {
-        left: `${centerPx.x}px`, top: `${centerPx.y}px`,
-        width: `${glowSize}px`, height: `${glowSize}px`,
-        opacity: (state.opacity * pulse).toFixed(3),
-    });
+    // Glow deaktiviert
+    glowRef.style.opacity = '0';
 }

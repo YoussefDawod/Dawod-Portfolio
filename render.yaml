@@ -6,6 +6,12 @@ services:
     staticPublishPath: ./dist
     pullRequestPreviewsEnabled: true
     headers:
+      # Hashed build artefacts (Vite) — aggressiv cachen, immutable
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      # Alles andere (index.html, robots, sitemap, favicon) — kein Cache,
+      # damit Deploys sofort sichtbar sind.
       - path: /*
         name: Cache-Control
         value: no-cache

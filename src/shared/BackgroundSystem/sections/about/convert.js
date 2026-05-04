@@ -2,20 +2,7 @@
 // Konvertierungsfunktionen für About-Section Übergänge
 
 import { ORBIT_SPEED_BASE, computeOrbitAngle } from '../home/tokens.js';
-import { ORBIT_LAYERS } from '../../shared/constants.js';
-
-// =============================================================================
-// CONVERT ABOUT → PROJECTS (Chaos → Grid)
-// =============================================================================
-
-export function convertAboutToProjects(aboutTokens = []) {
-    return aboutTokens.map((token) => ({
-        x: token.renderX ?? token.driftX ?? 0.5,
-        y: token.renderY ?? 0.5,
-        renderX: token.renderX ?? 0.5,
-        renderY: token.renderY ?? 0.5,
-    }));
-}
+import { ORBIT_LAYERS, TEMPO_SCALE } from '../../shared/constants.js';
 
 // =============================================================================
 // CONVERT ABOUT → HOME (Chaos → Orbit)
@@ -28,17 +15,19 @@ export function convertAboutToHome(aboutTokens = []) {
         const orbitLayer = index % ORBIT_LAYERS;
         return {
             ...token,
-            // Aktuelle Chaos-Position → Start für Re-Formation
+            // Aktuelle Position als Lerp-Start (kein Sprung in die Mitte!)
             transitionStartX: token.renderX,
             transitionStartY: token.renderY,
+            transitionProgress: 0,
 
             // Orbit-Ziel berechnen
             orbitAngle: computeOrbitAngle(index, count, orbitLayer),
-            orbitSpeed: (ORBIT_SPEED_BASE + Math.random() * 0.05) * (orbitLayer % 2 === 0 ? 1 : -1),
+            orbitSpeed: ORBIT_SPEED_BASE * (orbitLayer % 2 === 0 ? 1 : -1) * TEMPO_SCALE,
             orbitLayer,
 
-            // Formation neu starten (sofort, Token sind schon sichtbar)
-            formationProgress: 0,
+            // Formation überspringen — Tokens sind schon sichtbar.
+            // Sie gleiten direkt von ihrer About-Position auf den Orbit.
+            formationProgress: 1,
             spawnDelay: 0,
             spawned: true,
             dissolveProgress: 0,

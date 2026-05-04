@@ -1,61 +1,101 @@
 /* ============================================================================
-   SECTION HEADER — Label + Headline + Begleittext
+   SECTION HEADER — Slide 1 Hero (Editorial-Layout)
+   ============================================================================
+   Reihenfolge: Eyebrow → Headline → Kicker (mit Akzentlinie) → Body
+   Body-Text: linksbündig in fest zentriertem Container — wirkt edel & ruhig.
    ============================================================================ */
 
 .section-header {
-  text-align: justify;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 5vh, 2.75rem);
 }
 
-.section-header .section-headline {
-  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--txt);
-  margin-bottom: 1rem;
-  text-align: left;
-}
-
-.section-header .section-subtitle {
-  font-size: clamp(1rem, 1.4vw, 1.8rem);
+/* --- Eyebrow ("// Über mich") --- */
+.section-header .section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--fs-eyebrow);
   font-weight: 500;
-  color: var(--txt-brand);
-  letter-spacing: 0.04em;
-  margin-bottom: 1.25rem;
-  margin-left: 0;
-  margin-right: 0;
-  max-width: none;
-  text-align: left;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+/* --- Headline --- */
+.section-header .section-headline {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: var(--ls-tight);
+  color: var(--txt);
+  text-align: justify;
+}
+
+/* --- Kicker (unter Headline) — dezent, mit kurzer Brand-Linie davor.
+       Inline-Flex, damit die Akzentlinie optisch an den Text bindet. */
+.section-header .section-subtitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(0.85rem, 1.1vw, 2rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--brand);
+  margin: 0;
+}
+
+.section-subtitle__rule {
+  display: inline-block;
+  width: clamp(1.5rem, 3vw, 2.5rem);
+  height: 1px;
+  background: color-mix(in srgb, var(--brand) 75%, transparent);
+  flex-shrink: 0;
+}
+
+/* --- Body — eigener Container, klare Trennung zur Hero-Spitze. */
+.section-body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.85rem, 1.4vh, 1.15rem);
 }
 
 .section-header .section-text {
-  font-size: clamp(0.95rem, 1.6vw, 1.6rem);
-  line-height: 1.7;
+  font-size: clamp(1rem, 1.29vw, 2rem);
+  line-height: 1.85;
   color: var(--txt-soft);
-  text-align: left;
+  text-align: justify;
 }
 
-.section-header .section-text:last-of-type {
-  margin-bottom: 0;
-}
-
-.section-header .section-text + .section-text {
-  margin-top: 0.75rem;
-}
-
-/* Brand-Highlight für einzelne Wörter */
+/* Brand-Highlight für einzelne Wörter in der Headline */
 .highlight-brand {
   color: var(--txt-brand);
 }
 
-/* --- Mobile --- */
+/* ============================================================================
+   MOBILE
+   ============================================================================ */
 @media (max-width: 1024px) {
+  .section-header {
+    gap: clamp(1rem, 2vh, 1.4rem);
+    max-width: 100%;
+  }
+
   .section-header .section-headline {
-    font-size: clamp(1.5rem, 5.5vw, 2rem);
+    font-size: clamp(1.65rem, 6.5vw, 2.2rem);
+  }
+
+  .section-header .section-subtitle {
+    font-size: clamp(0.8rem, 2.6vw, 0.95rem);
+    gap: 0.65rem;
+  }
+
+  .section-body {
+    max-width: 100%;
   }
 
   .section-header .section-text {
-    font-size: clamp(1rem, 1.8vw, 1.4rem);
-    text-align: justify;
+    font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+    line-height: 1.75;
   }
 }
